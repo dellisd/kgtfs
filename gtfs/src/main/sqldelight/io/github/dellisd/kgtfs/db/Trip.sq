@@ -1,0 +1,24 @@
+import kotlin.Int;
+
+CREATE TABLE Trip (
+    route_id TEXT NOT NULL,
+    service_id TEXT NOT NULL,
+    trip_id TEXT PRIMARY KEY NOT NULL,
+    trip_headsign TEXT,
+    direction_id INTEGER AS Int,
+    block_id TEXT,
+    shape_id TEXT
+);
+
+insert:
+INSERT INTO Trip VALUES (?, ?, ?, ?, ?, ?, ?);
+
+getAll:
+SELECT * FROM Trip;
+
+getByStopId:
+SELECT * FROM Trip
+WHERE trip_id IN (
+    SELECT trip_id FROM StopTime
+    WHERE stop_id = ?
+);

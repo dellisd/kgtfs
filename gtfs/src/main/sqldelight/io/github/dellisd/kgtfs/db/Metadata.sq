@@ -1,0 +1,23 @@
+import java.time.Instant;
+
+CREATE TABLE Metadata (
+    source TEXT NOT NULL PRIMARY KEY,
+    last_updated INTEGER AS Instant NOT NULL
+);
+
+insert:
+INSERT INTO Metadata VALUES (?, ?);
+
+get:
+SELECT * FROM Metadata;
+
+clear {
+    DELETE FROM Calendar;
+    DELETE FROM CalendarDate;
+    DELETE FROM Route;
+    DELETE FROM Shape;
+    DELETE FROM Stop;
+    DELETE FROM StopTime;
+    DELETE FROM Trip;
+    DELETE FROM Metadata;
+}

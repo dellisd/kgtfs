@@ -1,0 +1,23 @@
+import kotlin.Boolean;
+
+CREATE TABLE Calendar (
+    service_id TEXT PRIMARY KEY,
+    monday INTEGER AS Boolean NOT NULL,
+    tuesday INTEGER AS Boolean NOT NULL,
+    wednesday INTEGER AS Boolean NOT NULL,
+    thursday INTEGER AS Boolean NOT NULL,
+    friday INTEGER AS Boolean NOT NULL,
+    saturday INTEGER AS Boolean NOT NULL,
+    sunday INTEGER AS Boolean NOT NULL,
+    start_date TEXT NOT NULL,
+    end_date TEXT NOT NULL
+);
+
+insert:
+INSERT INTO Calendar VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getById:
+SELECT * FROM Calendar WHERE service_id = ?;
+
+getByDate:
+SELECT * FROM Calendar WHERE :date >= start_date AND :date <= end_date;

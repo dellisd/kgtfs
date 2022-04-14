@@ -1,0 +1,17 @@
+CREATE TABLE Shape(
+    shape_id TEXT NOT NULL,
+    shape_pt_lat REAL NOT NULL,
+    shape_pt_lon REAL NOT NULL,
+    shape_pt_sequence INTEGER NOT NULL
+);
+
+CREATE INDEX shape_idx ON Shape (shape_id, shape_pt_sequence);
+
+getAll:
+SELECT * FROM Shape;
+
+getById:
+SELECT * FROM Shape WHERE shape_id = ? ORDER BY shape_pt_sequence ASC;
+
+insert:
+INSERT INTO Shape VALUES (?, ?, ?, ?);

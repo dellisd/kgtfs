@@ -1,0 +1,31 @@
+import kotlin.Int;
+
+CREATE TABLE Stop (
+    stop_id TEXT PRIMARY KEY,
+    stop_code TEXT,
+    stop_name TEXT,
+    stop_desc TEXT,
+    stop_lat REAL,
+    stop_lon REAL,
+    zone_id TEXT,
+    stop_url TEXT,
+    location_type INTEGER AS Int
+);
+
+insert:
+INSERT INTO Stop VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+getAll:
+SELECT * FROM Stop;
+
+getById:
+SELECT * FROM Stop WHERE stop_id = ?;
+
+getByCode:
+SELECT * FROM Stop WHERE stop_code = ?;
+
+getByTripId:
+SELECT Stop.* FROM Stop
+JOIN StopTime ON Stop.stop_id = StopTime.stop_id
+WHERE StopTime.trip_id = ?
+ORDER BY StopTime.stop_sequence;

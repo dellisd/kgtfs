@@ -1,0 +1,30 @@
+import kotlin.Int;
+
+CREATE TABLE StopTime (
+    trip_id TEXT NOT NULL,
+    arrival_time TEXT NOT NULL,
+    departure_time TEXT NOT NULL,
+    stop_id TEXT NOT NULL,
+    stop_sequence INTEGER AS Int NOT NULL,
+    pickup_type INTEGER AS Int,
+    drop_off_type INTEGER AS Int
+);
+
+insert:
+INSERT INTO StopTime VALUES (?, ?, ?, ?, ?, ?, ?);
+
+getAll:
+SELECT * FROM StopTime;
+
+getRange:
+SELECT * FROM StopTime WHERE arrival_time >= ? AND arrival_time <= ?;
+
+getStopTimesByShapeId:
+
+SELECT * FROM StopTime
+JOIN Stop ON Stop.stop_id = StopTime.stop_id
+WHERE trip_id = (
+    SELECT trip_id FROM Trip
+    WHERE shape_id = ?
+)
+ORDER BY stop_sequence ASC;

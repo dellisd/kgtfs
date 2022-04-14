@@ -1,0 +1,13 @@
+import kotlin.Int;
+
+CREATE TABLE CalendarDate (
+    service_id TEXT NOT NULL,
+    date TEXT NOT NULL,
+    exception_type INTEGER AS Int NOT NULL
+);
+
+insert:
+INSERT INTO CalendarDate VALUES (?, ?, ?);
+
+getByDate:
+SELECT * FROM CalendarDate WHERE date = ?;
