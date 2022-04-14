@@ -4,7 +4,10 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import kotlin.script.experimental.api.EvaluationResult
 import kotlin.script.experimental.api.ResultWithDiagnostics
+import kotlin.script.experimental.api.ScriptAcceptedLocation
 import kotlin.script.experimental.api.ScriptDiagnostic
+import kotlin.script.experimental.api.acceptedLocations
+import kotlin.script.experimental.api.ide
 import kotlin.script.experimental.host.toScriptSource
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
 import kotlin.script.experimental.jvm.jvm
@@ -18,6 +21,9 @@ class GtfsScriptHost {
         val compilationConfiguration = createJvmCompilationConfigurationFromTemplate<GtfsScript> {
             jvm {
                 dependenciesFromCurrentContext(wholeClasspath = true)
+            }
+            ide {
+                acceptedLocations(ScriptAcceptedLocation.Everywhere)
             }
         }
 

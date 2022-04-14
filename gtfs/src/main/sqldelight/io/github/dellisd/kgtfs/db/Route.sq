@@ -1,11 +1,12 @@
-import kotlin.Int;
+import io.github.dellisd.kgtfs.domain.model.Route;
+import io.github.dellisd.kgtfs.domain.model.RouteId;
 
 CREATE TABLE Route (
-    route_id TEXT NOT NULL PRIMARY KEY,
+    route_id TEXT AS RouteId NOT NULL PRIMARY KEY,
     route_short_name TEXT,
     route_long_name TEXT,
     route_desc TEXT,
-    route_type INTEGER AS Int,
+    route_type INTEGER AS Route.Type NOT NULL,
     route_url TEXT,
     route_color TEXT,
     route_text_color TEXT

@@ -1,7 +1,10 @@
+import io.github.dellisd.kgtfs.domain.model.ServiceId;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import kotlin.Boolean;
 
 CREATE TABLE Calendar (
-    service_id TEXT PRIMARY KEY,
+    service_id TEXT AS ServiceId PRIMARY KEY,
     monday INTEGER AS Boolean NOT NULL,
     tuesday INTEGER AS Boolean NOT NULL,
     wednesday INTEGER AS Boolean NOT NULL,
@@ -9,8 +12,8 @@ CREATE TABLE Calendar (
     friday INTEGER AS Boolean NOT NULL,
     saturday INTEGER AS Boolean NOT NULL,
     sunday INTEGER AS Boolean NOT NULL,
-    start_date TEXT NOT NULL,
-    end_date TEXT NOT NULL
+    start_date TEXT AS LocalDate NOT NULL,
+    end_date TEXT AS LocalDate NOT NULL
 );
 
 insert:

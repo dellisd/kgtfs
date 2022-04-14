@@ -2,13 +2,13 @@ package io.github.dellisd.kgtfs.domain
 
 import io.github.dellisd.kgtfs.db.GtfsDatabase
 import io.github.dellisd.kgtfs.di.ScriptScope
-import io.github.dellisd.kgtfs.domain.csv.Calendar
-import io.github.dellisd.kgtfs.domain.csv.CalendarDate
-import io.github.dellisd.kgtfs.domain.csv.Route
-import io.github.dellisd.kgtfs.domain.csv.Shape
-import io.github.dellisd.kgtfs.domain.csv.Stop
-import io.github.dellisd.kgtfs.domain.csv.StopTime
-import io.github.dellisd.kgtfs.domain.csv.Trip
+import io.github.dellisd.kgtfs.domain.model.Calendar
+import io.github.dellisd.kgtfs.domain.model.CalendarDate
+import io.github.dellisd.kgtfs.domain.model.Route
+import io.github.dellisd.kgtfs.domain.model.Shape
+import io.github.dellisd.kgtfs.domain.model.Stop
+import io.github.dellisd.kgtfs.domain.model.StopTime
+import io.github.dellisd.kgtfs.domain.model.Trip
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.onDownload
@@ -153,13 +153,13 @@ public class GtfsLoader(private val database: GtfsDatabase) {
                 calendars.forEach {
                     database.calendarQueries.insert(
                         it.serviceId,
-                        it.monday == 1,
-                        it.tuesday == 1,
-                        it.wednesday == 1,
-                        it.thursday == 1,
-                        it.friday == 1,
-                        it.saturday == 1,
-                        it.sunday == 1,
+                        it.monday,
+                        it.tuesday,
+                        it.wednesday,
+                        it.thursday,
+                        it.friday,
+                        it.saturday,
+                        it.sunday,
                         it.startDate,
                         it.endDate
                     )

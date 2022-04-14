@@ -1,9 +1,12 @@
 package io.github.dellisd.kgtfs.dsl
 
 import io.github.dellisd.kgtfs.db.GtfsDatabase
-import io.github.dellisd.kgtfs.db.Route
-import io.github.dellisd.kgtfs.db.Stop
-import io.github.dellisd.kgtfs.db.Trip
+import io.github.dellisd.kgtfs.db.RouteMapper
+import io.github.dellisd.kgtfs.db.StopMapper
+import io.github.dellisd.kgtfs.db.TripMapper
+import io.github.dellisd.kgtfs.domain.model.Route
+import io.github.dellisd.kgtfs.domain.model.Stop
+import io.github.dellisd.kgtfs.domain.model.Trip
 import me.tatarka.inject.annotations.Inject
 
 @Inject
@@ -12,23 +15,23 @@ public class TaskDsl(public val stops: StopDsl, public val calendar: CalendarDsl
      * List of all routes that service a given stop
      */
     public val Stop.routes: List<Route>
-        get() = database.routeQueries.getByStopId(this.stop_id).executeAsList()
+        get() = database.routeQueries.getByStopId(this.id, RouteMapper).executeAsList()
 
     /**
      * List of all trips that stop at a given stop
      */
     public val Stop.trips: List<Trip>
-        get() = database.tripQueries.getByStopId(this.stop_id).executeAsList()
+        get() = database.tripQueries.getByStopId(this.id, TripMapper).executeAsList()
 
     /**
      * Get all stops in a given trip, in ascending order
      */
     public val Trip.stops: List<Stop>
-        get() = database.stopQueries.getByTripId(this.trip_id).executeAsList()
+        get() = database.stopQueries.getByTripId(this.id, StopMapper).executeAsList()
 
     /**
      * Get the route for a given trip
      */
     public val Trip.route: Route
-        get() = database.routeQueries.getById(this.route_id).executeAsOne()
+        get() = database.routeQueries.getById(this.routeId, RouteMapper).executeAsOne()
 }

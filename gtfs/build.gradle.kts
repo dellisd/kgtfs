@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.bundles.ktor.client)
     implementation(libs.bundles.sqldelight)
     implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.csv)
     implementation(libs.logback)
 }

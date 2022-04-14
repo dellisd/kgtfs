@@ -1,8 +1,11 @@
+import io.github.dellisd.kgtfs.domain.model.ServiceId;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import kotlin.Int;
 
 CREATE TABLE CalendarDate (
-    service_id TEXT NOT NULL,
-    date TEXT NOT NULL,
+    service_id TEXT AS ServiceId NOT NULL,
+    date TEXT AS LocalDate NOT NULL,
     exception_type INTEGER AS Int NOT NULL
 );
 

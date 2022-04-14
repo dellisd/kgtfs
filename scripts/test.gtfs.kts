@@ -5,13 +5,13 @@ kgtfs {
         val stop = stops.getByCode("7225").first()
 
         stop.routes.forEach {
-            println("Route: ${it.route_id}")
+            println("Route: ${it.id}")
         }
 
         val trip = stop.trips.first()
-        println("Trip: ${trip.trip_id}, Route: ${trip.route.route_short_name}")
+        println("Trip: ${trip.id}, Route: ${trip.route.shortName}")
         trip.stops.forEach {
-            println("Stop: ${it.stop_name}")
+            println("Stop: ${it.name}")
         }
 
         println(calendar.today().map { it.service_id })

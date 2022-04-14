@@ -1,10 +1,12 @@
+import io.github.dellisd.kgtfs.domain.model.StopId;
+import io.github.dellisd.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
 CREATE TABLE StopTime (
-    trip_id TEXT NOT NULL,
+    trip_id TEXT AS TripId NOT NULL,
     arrival_time TEXT NOT NULL,
     departure_time TEXT NOT NULL,
-    stop_id TEXT NOT NULL,
+    stop_id TEXT AS StopId NOT NULL,
     stop_sequence INTEGER AS Int NOT NULL,
     pickup_type INTEGER AS Int,
     drop_off_type INTEGER AS Int

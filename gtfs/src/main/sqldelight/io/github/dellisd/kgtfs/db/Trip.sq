@@ -1,9 +1,12 @@
+import io.github.dellisd.kgtfs.domain.model.RouteId;
+import io.github.dellisd.kgtfs.domain.model.ServiceId;
+import io.github.dellisd.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
 CREATE TABLE Trip (
-    route_id TEXT NOT NULL,
-    service_id TEXT NOT NULL,
-    trip_id TEXT PRIMARY KEY NOT NULL,
+    route_id TEXT AS RouteId NOT NULL,
+    service_id TEXT AS ServiceId NOT NULL,
+    trip_id TEXT AS TripId PRIMARY KEY NOT NULL,
     trip_headsign TEXT,
     direction_id INTEGER AS Int,
     block_id TEXT,

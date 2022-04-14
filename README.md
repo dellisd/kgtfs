@@ -17,14 +17,14 @@ kgtfs {
 
         // Print every route at the selected stop
         stop.routes.forEach {
-            println("Route: ${it.route_id}")
+            println("Route: ${it.id}")
         }
 
         // Get the sequence of stops for a route from the selected stop
         val trip = stop.trips.first()
-        println("Trip: ${trip.trip_id}, Route: ${trip.route.route_short_name}")
+        println("Trip: ${trip.id}, Route: ${trip.route.shortName}")
         trip.stops.forEach {
-            println("Stop: ${it.stop_name}")
+            println("Stop: ${it.name}")
         }
 
         // Get all of today's Calendar service ids

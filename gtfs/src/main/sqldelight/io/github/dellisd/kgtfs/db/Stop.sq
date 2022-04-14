@@ -1,7 +1,8 @@
-import kotlin.Int;
+import io.github.dellisd.kgtfs.domain.model.Stop;
+import io.github.dellisd.kgtfs.domain.model.StopId;
 
 CREATE TABLE Stop (
-    stop_id TEXT PRIMARY KEY,
+    stop_id TEXT AS StopId PRIMARY KEY,
     stop_code TEXT,
     stop_name TEXT,
     stop_desc TEXT,
@@ -9,7 +10,7 @@ CREATE TABLE Stop (
     stop_lon REAL,
     zone_id TEXT,
     stop_url TEXT,
-    location_type INTEGER AS Int
+    location_type INTEGER AS Stop.LocationType
 );
 
 insert:

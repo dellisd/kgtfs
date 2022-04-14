@@ -3,16 +3,15 @@ package io.github.dellisd.kgtfs.dsl
 import io.github.dellisd.kgtfs.db.Calendar
 import io.github.dellisd.kgtfs.db.GtfsDatabase
 import me.tatarka.inject.annotations.Inject
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @Inject
 public class CalendarDsl(private val database: GtfsDatabase) {
-    public fun onDate(time: OffsetDateTime): Set<Calendar> {
-        val dateString = time.format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-
+    public fun onDate(time: LocalDate): Set<Calendar> {
         val exceptions =
-            database.calendarDateQueries.getByDate(dateString).executeAsList().associateBy { it.service_id }
+            database.calendarDateQueries.getByDate(time).executeAsList().associateBy { it.service_id }
 
         val predicate = when (time.dayOfWeek.value) {
             1 -> Calendar::monday
@@ -24,7 +23,7 @@ public class CalendarDsl(private val database: GtfsDatabase) {
             else -> Calendar::sunday
         }
 
-        val calendars = database.calendarQueries.getByDate(dateString).executeAsList()
+        val calendars = database.calendarQueries.getByDate(time).executeAsList()
 
         return calendars
             .filter { predicate(it) || exceptions[it.service_id]?.exception_type == 1 }
@@ -32,5 +31,5 @@ public class CalendarDsl(private val database: GtfsDatabase) {
             .toSet()
     }
 
-    public fun today(): Set<Calendar> = onDate(OffsetDateTime.now())
+    public fun today(): Set<Calendar> = onDate(LocalDate.now())
 }
