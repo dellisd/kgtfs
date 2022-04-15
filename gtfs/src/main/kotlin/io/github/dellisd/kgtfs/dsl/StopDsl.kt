@@ -7,6 +7,7 @@ import io.github.dellisd.kgtfs.domain.model.StopId
 import me.tatarka.inject.annotations.Inject
 
 @Inject
+@GtfsDsl
 public class StopDsl(private val database: GtfsDatabase) {
     public fun getAll(): List<Stop> =
         database.stopQueries.getAll(StopMapper).executeAsList()

@@ -7,6 +7,7 @@ import io.github.dellisd.kgtfs.domain.model.RouteId
 import me.tatarka.inject.annotations.Inject
 
 @Inject
+@GtfsDsl
 public class RouteDsl(private val database: GtfsDatabase) {
     public fun getAll(): List<Route> = database.routeQueries.getAll(RouteMapper).executeAsList()
 

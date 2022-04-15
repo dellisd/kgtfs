@@ -8,6 +8,7 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @Inject
+@GtfsDsl
 public class CalendarDsl(private val database: GtfsDatabase) {
     public fun onDate(time: LocalDate): Set<Calendar> {
         val exceptions =

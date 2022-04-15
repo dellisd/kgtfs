@@ -7,6 +7,9 @@ import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.net.URI
 
+@DslMarker
+public annotation class GtfsDsl
+
 public fun gtfs(source: String, dbPath: String = "gtfs.db", scope: StaticGtfsScope.() -> Unit) {
     val asUri = URI(source)
     val scheme = asUri.scheme ?: ""

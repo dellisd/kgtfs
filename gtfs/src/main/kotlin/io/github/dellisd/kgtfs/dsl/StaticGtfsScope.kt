@@ -13,6 +13,7 @@ import io.github.dellisd.kgtfs.domain.model.Trip
 import me.tatarka.inject.annotations.Inject
 
 @Inject
+@GtfsDsl
 public class StaticGtfsScope(
     public val stops: StopDsl,
     public val calendar: CalendarDsl,
