@@ -14,6 +14,7 @@ import io.github.dellisd.kgtfs.db.RouteIdAdapter
 import io.github.dellisd.kgtfs.db.RouteTypeAdapter
 import io.github.dellisd.kgtfs.db.ServiceIdAdapter
 import io.github.dellisd.kgtfs.db.Shape
+import io.github.dellisd.kgtfs.db.ShapeIdAdapter
 import io.github.dellisd.kgtfs.db.Stop
 import io.github.dellisd.kgtfs.db.StopIdAdapter
 import io.github.dellisd.kgtfs.db.StopTime
@@ -21,7 +22,7 @@ import io.github.dellisd.kgtfs.db.Trip
 import io.github.dellisd.kgtfs.db.TripIdAdapter
 import io.github.dellisd.kgtfs.db.migrateIfNeeded
 import io.github.dellisd.kgtfs.domain.GtfsLoader
-import io.github.dellisd.kgtfs.dsl.TaskDsl
+import io.github.dellisd.kgtfs.dsl.StaticGtfsScope
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
@@ -45,16 +46,22 @@ internal abstract class ScriptComponent(private val dbPath: String = "gtfs.db") 
                 IntColumnAdapter,
                 IntColumnAdapter
             ),
-            TripAdapter = Trip.Adapter(RouteIdAdapter, ServiceIdAdapter, TripIdAdapter, IntColumnAdapter),
+            TripAdapter = Trip.Adapter(
+                RouteIdAdapter,
+                ServiceIdAdapter,
+                TripIdAdapter,
+                IntColumnAdapter,
+                ShapeIdAdapter
+            ),
             MetadataAdapter = Metadata.Adapter(InstantColumnAdapter),
             CalendarAdapter = Calendar.Adapter(ServiceIdAdapter, LocalDateAdapter, LocalDateAdapter),
             CalendarDateAdapter = CalendarDate.Adapter(ServiceIdAdapter, LocalDateAdapter, IntColumnAdapter),
             RouteAdapter = Route.Adapter(RouteIdAdapter, RouteTypeAdapter),
-            ShapeAdapter = Shape.Adapter(TripIdAdapter, IntColumnAdapter)
+            ShapeAdapter = Shape.Adapter(ShapeIdAdapter, IntColumnAdapter)
         )
     }
 
     abstract val gtfsLoader: GtfsLoader
 
-    abstract fun taskDsl(): TaskDsl
+    abstract fun taskDsl(): StaticGtfsScope
 }

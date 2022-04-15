@@ -8,5 +8,5 @@ import kotlin.script.experimental.api.defaultImports
 abstract class GtfsScript
 
 object GtfsScriptConfiguration : ScriptCompilationConfiguration({
-    defaultImports("io.github.dellisd.kgtfs.dsl.kgtfs")
+    defaultImports("io.github.dellisd.kgtfs.dsl.gtfs")
 })

@@ -1,8 +1,9 @@
+import io.github.dellisd.kgtfs.domain.model.ShapeId;
 import io.github.dellisd.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
 CREATE TABLE Shape(
-    shape_id TEXT AS TripId NOT NULL,
+    shape_id TEXT AS ShapeId NOT NULL,
     shape_pt_lat REAL NOT NULL,
     shape_pt_lon REAL NOT NULL,
     shape_pt_sequence INTEGER AS Int NOT NULL
@@ -18,3 +19,11 @@ SELECT * FROM Shape WHERE shape_id = ? ORDER BY shape_pt_sequence ASC;
 
 insert:
 INSERT INTO Shape VALUES (?, ?, ?, ?);
+
+getByRouteId:
+SELECT * FROM Shape
+WHERE shape_id IN (
+    SELECT DISTINCT shape_id
+    FROM Trip WHERE route_id = ?
+)
+ORDER BY shape_id, shape_pt_sequence;

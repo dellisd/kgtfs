@@ -1,5 +1,6 @@
 import io.github.dellisd.kgtfs.domain.model.RouteId;
 import io.github.dellisd.kgtfs.domain.model.ServiceId;
+import io.github.dellisd.kgtfs.domain.model.ShapeId;
 import io.github.dellisd.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
@@ -10,7 +11,7 @@ CREATE TABLE Trip (
     trip_headsign TEXT,
     direction_id INTEGER AS Int,
     block_id TEXT,
-    shape_id TEXT
+    shape_id TEXT AS ShapeId
 );
 
 insert:

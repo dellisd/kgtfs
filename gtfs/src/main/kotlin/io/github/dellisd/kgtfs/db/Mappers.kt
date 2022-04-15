@@ -3,6 +3,8 @@ package io.github.dellisd.kgtfs.db
 import io.github.dellisd.kgtfs.domain.model.Route
 import io.github.dellisd.kgtfs.domain.model.RouteId
 import io.github.dellisd.kgtfs.domain.model.ServiceId
+import io.github.dellisd.kgtfs.domain.model.Shape
+import io.github.dellisd.kgtfs.domain.model.ShapeId
 import io.github.dellisd.kgtfs.domain.model.Stop
 import io.github.dellisd.kgtfs.domain.model.StopId
 import io.github.dellisd.kgtfs.domain.model.Trip
@@ -28,6 +30,10 @@ internal val RouteMapper =
     }
 
 internal val TripMapper =
-    { route_id: RouteId, service_id: ServiceId, trip_id: TripId, trip_headsign: String?, direction_id: Int?, block_id: String?, shape_id: String? ->
+    { route_id: RouteId, service_id: ServiceId, trip_id: TripId, trip_headsign: String?, direction_id: Int?, block_id: String?, shape_id: ShapeId? ->
         Trip(route_id, service_id, trip_id, trip_headsign, null, direction_id, block_id, shape_id)
     }
+
+internal val ShapeMapper = { shape_id: ShapeId, shape_pt_lat: Double, shape_pt_lon: Double, shape_pt_sequence: Int ->
+    Shape(shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence)
+}

@@ -4,6 +4,7 @@ import app.cash.sqldelight.ColumnAdapter
 import io.github.dellisd.kgtfs.domain.model.Route
 import io.github.dellisd.kgtfs.domain.model.RouteId
 import io.github.dellisd.kgtfs.domain.model.ServiceId
+import io.github.dellisd.kgtfs.domain.model.ShapeId
 import io.github.dellisd.kgtfs.domain.model.Stop
 import io.github.dellisd.kgtfs.domain.model.StopId
 import io.github.dellisd.kgtfs.domain.model.TripId
@@ -40,6 +41,12 @@ internal object ServiceIdAdapter : ColumnAdapter<ServiceId, String> {
     override fun decode(databaseValue: String): ServiceId = ServiceId(databaseValue)
 
     override fun encode(value: ServiceId): String = value.value
+}
+
+internal object ShapeIdAdapter : ColumnAdapter<ShapeId, String> {
+    override fun decode(databaseValue: String): ShapeId = ShapeId(databaseValue)
+
+    override fun encode(value: ShapeId): String = value.value
 }
 
 internal object LocationTypeAdapter : ColumnAdapter<Stop.LocationType, Long> {

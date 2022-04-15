@@ -15,6 +15,9 @@ CREATE TABLE Route (
 insert:
 INSERT INTO Route VALUES (?, ?, ?, ?, ?, ?, ?, ?);
 
+getAll:
+SELECT * FROM Route;
+
 getById:
 SELECT * FROM Route WHERE route_id = ?;
 

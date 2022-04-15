@@ -18,7 +18,7 @@ public data class Trip(
     @SerialName("trip_short_name") val shortName: String? = null,
     @SerialName("direction_id") val directionId: Int? = null,
     @SerialName("block_id") val blockId: String? = null,
-    @SerialName("shape_id") val shapeId: String? = null,
+    @SerialName("shape_id") val shapeId: ShapeId? = null,
     @SerialName("wheelchair_accessible") val wheelchairAccessible: Int? = null,
     @SerialName("bikes_allowed") val bikesAllowed: Boolean? = null
 )
