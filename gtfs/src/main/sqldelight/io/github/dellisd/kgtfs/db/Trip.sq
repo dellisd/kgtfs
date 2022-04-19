@@ -20,6 +20,9 @@ INSERT INTO Trip VALUES (?, ?, ?, ?, ?, ?, ?);
 getAll:
 SELECT * FROM Trip;
 
+getById:
+SELECT * FROM Trip WHERE trip_id = ?;
+
 getByStopId:
 SELECT * FROM Trip
 WHERE trip_id IN (

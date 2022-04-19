@@ -4,11 +4,14 @@ import io.github.dellisd.kgtfs.db.GtfsDatabase
 import io.github.dellisd.kgtfs.db.RouteMapper
 import io.github.dellisd.kgtfs.db.ShapeMapper
 import io.github.dellisd.kgtfs.db.StopMapper
+import io.github.dellisd.kgtfs.db.StopTimeMapper
 import io.github.dellisd.kgtfs.db.TripMapper
 import io.github.dellisd.kgtfs.domain.model.Route
 import io.github.dellisd.kgtfs.domain.model.Shape
 import io.github.dellisd.kgtfs.domain.model.ShapeId
 import io.github.dellisd.kgtfs.domain.model.Stop
+import io.github.dellisd.kgtfs.domain.model.StopId
+import io.github.dellisd.kgtfs.domain.model.StopTime
 import io.github.dellisd.kgtfs.domain.model.Trip
 import me.tatarka.inject.annotations.Inject
 
@@ -17,6 +20,8 @@ import me.tatarka.inject.annotations.Inject
 public class StaticGtfsScope(
     public val stops: StopDsl,
     public val calendar: CalendarDsl,
+    public val stopTimes: StopTimeDsl,
+    public val trips: TripDsl,
     private val database: GtfsDatabase
 ) {
     /**
@@ -36,6 +41,16 @@ public class StaticGtfsScope(
      */
     public val Trip.stops: List<Stop>
         get() = database.stopQueries.getByTripId(this.id, StopMapper).executeAsList()
+
+    /**
+     * Get all stop times in a given trip, in ascending order
+     */
+    public val Trip.stopTimes: List<StopTime>
+        get() = database.stopTimeQueries.getByTripId(this.id, StopTimeMapper).executeAsList()
+
+
+    public fun Trip.timeAtStop(stop: StopId): StopTime =
+        database.stopTimeQueries.getByTripIdAtStop(this.id, stop, StopTimeMapper).executeAsOne()
 
     /**
      * Get the route for a given trip
