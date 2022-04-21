@@ -1,7 +1,26 @@
 package io.github.dellisd.raptor.db
 
+import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import org.slf4j.LoggerFactory
+
+internal fun getDatabase(path: String): RaptorDatabase = JdbcSqliteDriver("jdbc:sqlite:$path").let { driver ->
+    migrateIfNeeded(driver)
+    RaptorDatabase(
+        driver,
+        RouteAdapter = Route.Adapter(RouteIdAdapter),
+        StopAdapter = Stop.Adapter(StopIdAdapter),
+        StopTimeAdapter = StopTime.Adapter(
+            TripIdAdapter,
+            StopIdAdapter,
+            GtfsTimeAdapter,
+            IntColumnAdapter
+        ),
+        TripAdapter = Trip.Adapter(TripIdAdapter, RouteIdAdapter),
+        RouteAtStopAdapter = RouteAtStop.Adapter(StopIdAdapter, RouteIdAdapter, IntColumnAdapter),
+        TransferAdapter = Transfer.Adapter(StopIdAdapter, StopIdAdapter, FeatureAdapter)
+    )
+}
 
 private const val versionPragma = "user_version"
 

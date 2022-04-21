@@ -10,6 +10,8 @@ import io.github.dellisd.kgtfs.domain.model.StopId
 import io.github.dellisd.kgtfs.domain.model.TripId
 import io.github.dellisd.kgtfs.dsl.gtfs
 import io.github.dellisd.raptor.RaptorDataProvider
+import io.github.dellisd.raptor.db.executeAsSet
+import io.github.dellisd.raptor.db.getDatabase
 import io.github.dellisd.raptor.models.GtfsTime
 import io.github.dellisd.raptor.models.StopTime
 import io.github.dellisd.raptor.models.Transfer
@@ -21,7 +23,7 @@ import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
 import org.slf4j.LoggerFactory
 
-class InMemoryProvider(source: String) : RaptorDataProvider {
+public class InMemoryProvider(source: String, cache: String = "") : RaptorDataProvider {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val routesAtStop: MutableMap<StopId, MutableSet<RouteId>> = mutableMapOf()
     private val stopsAlongRoute: MutableMap<RouteId, List<StopId>> = mutableMapOf()
@@ -32,59 +34,97 @@ class InMemoryProvider(source: String) : RaptorDataProvider {
 
     init {
         logger.info("Initializing InMemoryProvider")
-        gtfs(source, dbPath = "gtfs.db") {
-            // TODO: Update day as needed
-            val today = calendar.today().map { it.serviceId }.toSet()
-            logger.info("Today's calendars: $today")
 
-            logger.info("Computing unique trip sequences")
-            val allTimes = stopTimes.getAll()
-            val sequences = uniqueTripSequences(
-                allTimes,
-                trips.getAll()
-                    .associateBy { it.id }
-                    .filter { (_, trip) -> trip.serviceId in today }) // Only trips from today
+        if (cache.isNotEmpty()) {
+            loadIndicesFromCache(cache)
+        } else {
+            buildIndicesFromSource(source)
+        }
+    }
 
-            logger.info("Loading stop and route info")
-            // Get all stop times grouped by trip
-            allTimes.groupBy { it.tripId }
-                .mapValuesTo(stopTimesForTrip) { (_, times) ->
-                    times.mapIndexed { index, time ->
-                        StopTime(time.stopId, GtfsTime(time.arrivalTime), index)
-                    }
+    private fun buildIndicesFromSource(source: String) = gtfs(source, dbPath = "gtfs.db") {
+        logger.info("Building indices from $source")
+        // TODO: Update day as needed
+        val today = calendar.today().map { it.serviceId }.toSet()
+        logger.debug("Today's calendars: $today")
+
+        logger.debug("Computing unique trip sequences")
+        val allTimes = stopTimes.getAll()
+        val sequences = uniqueTripSequences(
+            allTimes,
+            trips.getAll()
+                .associateBy { it.id }
+                .filter { (_, trip) -> trip.serviceId in today }) // Only trips from today
+
+        logger.debug("Loading stop and route info")
+        // Get all stop times grouped by trip
+        allTimes.groupBy { it.tripId }
+            .mapValuesTo(stopTimesForTrip) { (_, times) ->
+                times.mapIndexed { index, time ->
+                    StopTime(time.stopId, GtfsTime(time.arrivalTime), index)
                 }
-
-            // Deal with stop sequences
-            sequences.forEach { (route, sequence, trips) ->
-                trips.forEach { (_, stops) ->
-                    stops.forEach { time ->
-                        routesAtStop.getOrPut(time.stopId, ::mutableSetOf).add(route)
-                    }
-                }
-                stopsAlongRoute[route] = sequence
-                tripsForRoute[route] = trips.keys
             }
 
-            logger.info("Computing footpath estimates")
-            val allStops = stops.getAll()
-            // Compute estimates of footpath transfers
-            val tree = RTree.create(
-                allStops
-                    .map { EntryDefault.entry(it.id, Geometries.pointGeographic(it.longitude!!, it.latitude!!)) })
+        // Deal with stop sequences
+        sequences.forEach { (route, sequence, trips) ->
+            trips.forEach { (_, stops) ->
+                stops.forEach { time ->
+                    routesAtStop.getOrPut(time.stopId, ::mutableSetOf).add(route)
+                }
+            }
+            stopsAlongRoute[route] = sequence
+            tripsForRoute[route] = trips.keys
+        }
 
-            allStops.associateTo(transfers) { stop ->
-                val results = tree.search(
-                    Geometries.circle(
-                        stop.longitude!!,
-                        stop.latitude!!,
-                        convertLength(500.0, to = Units.Degrees)
-                    )
+        logger.debug("Computing footpath estimates")
+        val allStops = stops.getAll()
+        // Compute estimates of footpath transfers
+        val tree = RTree.create(
+            allStops
+                .map { EntryDefault.entry(it.id, Geometries.pointGeographic(it.longitude!!, it.latitude!!)) })
+
+        allStops.associateTo(transfers) { stop ->
+            val results = tree.search(
+                Geometries.circle(
+                    stop.longitude!!,
+                    stop.latitude!!,
+                    convertLength(500.0, to = Units.Degrees)
                 )
-                val stopPosition = lngLat(stop.longitude!!, stop.latitude!!)
-                stop.id to results.asSequence().filter { it.value() != stop.id }.map { entry ->
-                    val point = lngLat(entry.geometry().x(), entry.geometry().y())
-                    Transfer(stop.id, entry.value(), distance(stopPosition, point, Units.Meters))
-                }.toSet()
+            )
+            val stopPosition = lngLat(stop.longitude!!, stop.latitude!!)
+            stop.id to results.asSequence().filter { it.value() != stop.id }.map { entry ->
+                val point = lngLat(entry.geometry().x(), entry.geometry().y())
+                Transfer(stop.id, entry.value(), distance(stopPosition, point, Units.Meters), null)
+            }.toSet()
+        }
+    }
+
+    private fun loadIndicesFromCache(cache: String) {
+        logger.info("Loading indices from $cache")
+        val database = getDatabase(cache)
+
+        logger.debug("Loading routes at stops and transfers at stop")
+        database.stopQueries.getAll().executeAsList().forEach { stop ->
+            val set = database.routeAtStopQueries.getByStop(stop) { _, route, _ -> route }.executeAsSet()
+            routesAtStop[stop] = set.toMutableSet()
+
+            val transfersAtStop = database.transferQueries.getByOrigin(stop, ::Transfer).executeAsSet()
+            transfers[stop] = transfersAtStop
+        }
+
+        logger.debug("Loading stops along route and trips for route")
+        database.routeQueries.getAll().executeAsList().forEach { route ->
+            val stops = database.routeAtStopQueries.getByRoute(route) { stop, _, _ -> stop }.executeAsList()
+            stopsAlongRoute[route] = stops
+
+            val trips = database.tripQueries.getByRoute(route) { trip, _ -> trip }.executeAsSet()
+            tripsForRoute[route] = trips
+            trips.forEach { trip ->
+                val stopTimes = database.stopTimeQueries.getByTrip(trip) { _, stop, arrival, sequence ->
+                    StopTime(stop, arrival, sequence)
+                }.executeAsList()
+
+                stopTimesForTrip[trip] = stopTimes
             }
         }
     }

@@ -6,3 +6,6 @@ CREATE TABLE Stop (
 
 insert:
 INSERT INTO Stop VALUES (?);
+
+getAll:
+SELECT * FROM Stop;

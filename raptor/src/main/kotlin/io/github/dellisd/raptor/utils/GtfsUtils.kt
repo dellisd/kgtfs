@@ -10,7 +10,7 @@ import java.util.PriorityQueue
 
 private val digest = MessageDigest.getInstance("SHA-256")
 
-fun uniqueTripSequences(
+internal fun uniqueTripSequences(
     stopTimes: List<StopTime>,
     trips: Map<TripId, Trip>
 ): List<TripSequence<Map<TripId, List<StopTime>>>> {
@@ -44,7 +44,7 @@ fun uniqueTripSequences(
     return unique.values.toList()
 }
 
-data class TripSequence<out M : Map<TripId, List<StopTime>>>(
+internal data class TripSequence<out M : Map<TripId, List<StopTime>>>(
     val route: RouteId,
     val sequence: List<StopId>,
     val trips: M

@@ -15,8 +15,8 @@ import io.github.dellisd.raptor.utils.takeLastWhileInclusive
 import java.time.Duration
 import java.time.LocalDateTime
 
-class Raptor(private val provider: RaptorDataProvider, val walkingSpeed: Double = 1.4) {
-    fun journeys(origin: StopId, destination: StopId, time: LocalDateTime): List<Journey> {
+public class Raptor(private val provider: RaptorDataProvider, public val walkingSpeed: Double = 1.4) {
+    public fun journeys(origin: StopId, destination: StopId, time: LocalDateTime): List<Journey> {
         // Earliest arrival times for a stop in the k-th round
         val labels = mutableListOf<MutableMap<StopId, GtfsTime>>()
         labels.add(mutableMapOf(origin to time.toGtfsTime()))

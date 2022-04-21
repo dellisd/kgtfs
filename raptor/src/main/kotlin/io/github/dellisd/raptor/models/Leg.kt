@@ -4,16 +4,16 @@ import io.github.dellisd.kgtfs.domain.model.StopId
 import io.github.dellisd.kgtfs.domain.model.TripId
 import java.time.Duration
 
-sealed class Leg(open val from: StopId, open val to: StopId)
+public sealed class Leg(public open val from: StopId, public open val to: StopId)
 
-data class TransferLeg(
+public data class TransferLeg(
     override val from: StopId,
     override val to: StopId,
     val duration: Duration,
     val distance: Double
 ) : Leg(from, to)
 
-data class RouteLeg(
+public data class RouteLeg(
     override val from: StopId,
     override val to: StopId,
     val trip: TripId

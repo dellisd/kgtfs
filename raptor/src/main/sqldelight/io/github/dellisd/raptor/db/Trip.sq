@@ -11,3 +11,6 @@ CREATE INDEX idx_trip_route_id ON Trip (route_id, id);
 
 insert:
 INSERT INTO Trip VALUES (?, ?);
+
+getByRoute:
+SELECT * FROM Trip WHERE route_id = ?;

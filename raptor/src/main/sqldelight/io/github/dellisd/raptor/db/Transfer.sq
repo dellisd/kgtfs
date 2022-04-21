@@ -1,10 +1,11 @@
 import io.github.dellisd.kgtfs.domain.model.StopId;
+import io.github.dellisd.spatialk.geojson.Feature;
 
--- TODO: Add Geometry to Transfer table
 CREATE TABLE Transfer (
     origin TEXT AS StopId NOT NULL,
     destination TEXT AS StopId NOT NULL,
     distance REAL NOT NULL,
+    geometry TEXT AS Feature,
     FOREIGN KEY (origin) REFERENCES Stop(id),
     FOREIGN KEY (destination) REFERENCES Stop(id)
 );
@@ -12,7 +13,13 @@ CREATE TABLE Transfer (
 CREATE INDEX idx_transfer ON Transfer (origin, destination);
 
 insert:
-INSERT INTO Transfer VALUES (?, ?, ?);
+INSERT INTO Transfer VALUES (?, ?, ?, ?);
 
 getByOrigin:
 SELECT * FROM Transfer WHERE origin = ?;
+
+getByPair:
+SELECT * FROM Transfer WHERE origin = ? AND destination = ?;
+
+getAll:
+SELECT * FROM Transfer;

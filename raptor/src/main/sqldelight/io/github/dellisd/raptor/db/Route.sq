@@ -6,3 +6,6 @@ CREATE TABLE Route (
 
 insert:
 INSERT INTO Route VALUES (?);
+
+getAll:
+SELECT * FROM Route;

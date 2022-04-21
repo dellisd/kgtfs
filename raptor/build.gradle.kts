@@ -9,6 +9,10 @@ repositories {
     google()
 }
 
+kotlin {
+    explicitApi()
+}
+
 dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.kotlinx.serialization.core)
