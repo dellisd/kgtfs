@@ -1,0 +1,18 @@
+import io.github.dellisd.kgtfs.domain.model.StopId;
+
+-- TODO: Add Geometry to Transfer table
+CREATE TABLE Transfer (
+    origin TEXT AS StopId NOT NULL,
+    destination TEXT AS StopId NOT NULL,
+    distance REAL NOT NULL,
+    FOREIGN KEY (origin) REFERENCES Stop(id),
+    FOREIGN KEY (destination) REFERENCES Stop(id)
+);
+
+CREATE INDEX idx_transfer ON Transfer (origin, destination);
+
+insert:
+INSERT INTO Transfer VALUES (?, ?, ?);
+
+getByOrigin:
+SELECT * FROM Transfer WHERE origin = ?;

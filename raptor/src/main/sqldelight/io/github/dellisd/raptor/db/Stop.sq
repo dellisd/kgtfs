@@ -1,0 +1,8 @@
+import io.github.dellisd.kgtfs.domain.model.StopId;
+
+CREATE TABLE Stop (
+    id TEXT AS StopId PRIMARY KEY
+);
+
+insert:
+INSERT INTO Stop VALUES (?);
