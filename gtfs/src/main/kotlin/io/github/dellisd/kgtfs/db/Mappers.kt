@@ -1,5 +1,6 @@
 package io.github.dellisd.kgtfs.db
 
+import io.github.dellisd.kgtfs.domain.model.CalendarDate
 import io.github.dellisd.kgtfs.domain.model.Route
 import io.github.dellisd.kgtfs.domain.model.RouteId
 import io.github.dellisd.kgtfs.domain.model.ServiceId
@@ -7,8 +8,10 @@ import io.github.dellisd.kgtfs.domain.model.Shape
 import io.github.dellisd.kgtfs.domain.model.ShapeId
 import io.github.dellisd.kgtfs.domain.model.Stop
 import io.github.dellisd.kgtfs.domain.model.StopId
+import io.github.dellisd.kgtfs.domain.model.StopTime
 import io.github.dellisd.kgtfs.domain.model.Trip
 import io.github.dellisd.kgtfs.domain.model.TripId
+import java.time.LocalDate
 
 internal val StopMapper =
     { stop_id: StopId, stop_code: String?, stop_name: String?, stop_desc: String?, stop_lat: Double?, stop_lon: Double?, zone_id: String?, stop_url: String?, location_type: Stop.LocationType? ->
@@ -37,3 +40,35 @@ internal val TripMapper =
 internal val ShapeMapper = { shape_id: ShapeId, shape_pt_lat: Double, shape_pt_lon: Double, shape_pt_sequence: Int ->
     Shape(shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence)
 }
+
+internal val CalendarMapper =
+    { service_id: ServiceId, monday: Boolean, tuesday: Boolean, wednesday: Boolean, thursday: Boolean, friday: Boolean, saturday: Boolean, sunday: Boolean, start_date: LocalDate, end_date: LocalDate ->
+        io.github.dellisd.kgtfs.domain.model.Calendar(
+            service_id,
+            monday,
+            tuesday,
+            wednesday,
+            thursday,
+            friday,
+            saturday,
+            sunday,
+            start_date,
+            end_date
+        )
+    }
+
+internal val CalendarDateMapper =
+    { service_id: ServiceId, date: LocalDate, exception_type: Int -> CalendarDate(service_id, date, exception_type) }
+
+internal val StopTimeMapper =
+    { trip_id: TripId, arrival_time: String, departure_time: String, stop_id: StopId, stop_sequence: Int, pickup_type: Int?, drop_off_type: Int? ->
+        StopTime(
+            trip_id,
+            arrival_time,
+            departure_time,
+            stop_id,
+            stop_sequence,
+            pickupType = pickup_type,
+            dropOffType = drop_off_type
+        )
+    }

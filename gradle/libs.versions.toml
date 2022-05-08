@@ -8,6 +8,8 @@ kotlin-inject = "0.4.1"
 kotlin-scripting-common = { module = "org.jetbrains.kotlin:kotlin-scripting-common", version.ref = "kotlin" }
 kotlin-scripting-jvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
 kotlin-scripting-jvmHost = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm-host", version.ref = "kotlin" }
+kotlin-scripting-dependencies-core = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies", version.ref = "kotlin" }
+kotlin-scripting-dependencies-maven = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies-maven", version.ref = "kotlin" }
 
 kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
 kotlinx-serialization-csv = "de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:2.0.0"
@@ -15,6 +17,7 @@ kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 
 sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-adapters = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqldelight" }
@@ -26,6 +29,9 @@ logback = "ch.qos.logback:logback-classic:1.2.11"
 
 clikt = "com.github.ajalt.clikt:clikt:3.4.0"
 
+spatialk-turf = "io.github.dellisd.spatialk:turf:0.2.1"
+rtree = "com.github.davidmoten:rtree2:0.9.1"
+
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -33,6 +39,6 @@ sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 ksp = { id = "com.google.devtools.ksp", version = "1.6.20-1.0.5" }
 
 [bundles]
-kotlin-scripting = ["kotlin-scripting-common", "kotlin-scripting-jvm", "kotlin-scripting-jvmHost"]
-ktor-client = ["ktor-client-core", "ktor-client-cio"]
+kotlin-scripting = ["kotlin-scripting-common", "kotlin-scripting-jvm", "kotlin-scripting-jvmHost", "kotlin-scripting-dependencies-core", "kotlin-scripting-dependencies-maven"]
+ktor-client = ["ktor-client-core", "ktor-client-cio", "ktor-client-okhttp"]
 sqldelight = ["sqldelight-driver-sqlite", "sqldelight-adapters"]

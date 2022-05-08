@@ -1,18 +1,19 @@
 package io.github.dellisd.kgtfs.dsl
 
-import io.github.dellisd.kgtfs.db.Calendar
+import io.github.dellisd.kgtfs.db.CalendarDateMapper
+import io.github.dellisd.kgtfs.db.CalendarMapper
 import io.github.dellisd.kgtfs.db.GtfsDatabase
+import io.github.dellisd.kgtfs.domain.model.Calendar
 import me.tatarka.inject.annotations.Inject
 import java.time.LocalDate
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @Inject
 @GtfsDsl
 public class CalendarDsl(private val database: GtfsDatabase) {
     public fun onDate(time: LocalDate): Set<Calendar> {
         val exceptions =
-            database.calendarDateQueries.getByDate(time).executeAsList().associateBy { it.service_id }
+            database.calendarDateQueries.getByDate(time, CalendarDateMapper).executeAsList()
+                .associateBy { it.serviceId }
 
         val predicate = when (time.dayOfWeek.value) {
             1 -> Calendar::monday
@@ -24,11 +25,12 @@ public class CalendarDsl(private val database: GtfsDatabase) {
             else -> Calendar::sunday
         }
 
-        val calendars = database.calendarQueries.getByDate(time).executeAsList()
+        val calendars =
+            database.calendarQueries.getByDate(time, CalendarMapper).executeAsList()
 
         return calendars
-            .filter { predicate(it) || exceptions[it.service_id]?.exception_type == 1 }
-            .filter { exceptions[it.service_id]?.exception_type != 2 }
+            .filter { predicate(it) || exceptions[it.serviceId]?.exceptionType == 1 }
+            .filter { exceptions[it.serviceId]?.exceptionType != 2 }
             .toSet()
     }
 

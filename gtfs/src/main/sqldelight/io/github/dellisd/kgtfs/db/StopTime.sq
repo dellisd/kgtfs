@@ -12,17 +12,27 @@ CREATE TABLE StopTime (
     drop_off_type INTEGER AS Int
 );
 
+CREATE INDEX idx_stop_time ON StopTime(trip_id, stop_sequence);
+
 insert:
 INSERT INTO StopTime VALUES (?, ?, ?, ?, ?, ?, ?);
 
 getAll:
 SELECT * FROM StopTime;
 
+getByTripId:
+SELECT * FROM StopTime
+WHERE trip_id = ?
+ORDER BY stop_sequence;
+
+getByTripIdAtStop:
+SELECT * FROM StopTime
+WHERE trip_id = ? AND stop_id = ?;
+
 getRange:
 SELECT * FROM StopTime WHERE arrival_time >= ? AND arrival_time <= ?;
 
 getStopTimesByShapeId:
-
 SELECT * FROM StopTime
 JOIN Stop ON Stop.stop_id = StopTime.stop_id
 WHERE trip_id = (

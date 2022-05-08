@@ -1,0 +1,11 @@
+import io.github.dellisd.kgtfs.domain.model.RouteId;
+
+CREATE TABLE Route (
+    id TEXT AS RouteId PRIMARY KEY
+);
+
+insert:
+INSERT INTO Route VALUES (?);
+
+getAll:
+SELECT * FROM Route;

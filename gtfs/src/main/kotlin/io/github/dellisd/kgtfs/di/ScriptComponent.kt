@@ -31,7 +31,7 @@ import me.tatarka.inject.annotations.Provides
 internal abstract class ScriptComponent(private val dbPath: String = "gtfs.db") {
     @Provides
     @ScriptScope
-    fun provideDatabase(): GtfsDatabase = JdbcSqliteDriver("jdbc:sqlite:$dbPath").use { driver ->
+    fun provideDatabase(): GtfsDatabase = JdbcSqliteDriver("jdbc:sqlite:$dbPath").let { driver ->
         migrateIfNeeded(driver)
         GtfsDatabase(
             driver,
