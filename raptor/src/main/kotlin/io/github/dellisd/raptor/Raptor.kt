@@ -82,7 +82,13 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                         labels[k][transfer.to] = arrivalTime
                         // Record this leg of the trip
                         connections.getOrPut(transfer.to, ::mutableMapOf)[k] =
-                            TransferLeg(transfer.from, transfer.to, transfer.duration, transfer.distance)
+                            TransferLeg(
+                                transfer.from,
+                                transfer.to,
+                                transfer.duration,
+                                transfer.distance,
+                                transfer.geometry
+                            )
 
                         toBeMarked.add(transfer.to)
                     }

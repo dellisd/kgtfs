@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    application
 }
 
 group = "io.github.dellisd.kgtfs"
@@ -12,7 +13,9 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.kotlin.scripting)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.clikt)
     implementation(libs.logback)
     implementation(project(":gtfs"))
+    implementation(project(":raptor"))
 }

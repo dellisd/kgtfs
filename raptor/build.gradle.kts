@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.rtree)
     implementation(libs.logback)
     implementation(libs.bundles.sqldelight)
+    implementation(libs.bundles.ktor.client)
     implementation(project(":gtfs"))
 }
 
