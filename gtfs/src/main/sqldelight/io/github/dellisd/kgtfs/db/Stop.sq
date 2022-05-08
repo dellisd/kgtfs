@@ -1,5 +1,5 @@
-import io.github.dellisd.kgtfs.domain.model.Stop;
-import io.github.dellisd.kgtfs.domain.model.StopId;
+import ca.derekellis.kgtfs.domain.model.Stop;
+import ca.derekellis.kgtfs.domain.model.StopId;
 
 CREATE TABLE Stop (
     stop_id TEXT AS StopId PRIMARY KEY,

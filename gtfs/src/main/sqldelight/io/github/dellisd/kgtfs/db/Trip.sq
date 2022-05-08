@@ -1,7 +1,7 @@
-import io.github.dellisd.kgtfs.domain.model.RouteId;
-import io.github.dellisd.kgtfs.domain.model.ServiceId;
-import io.github.dellisd.kgtfs.domain.model.ShapeId;
-import io.github.dellisd.kgtfs.domain.model.TripId;
+import ca.derekellis.kgtfs.domain.model.RouteId;
+import ca.derekellis.kgtfs.domain.model.ServiceId;
+import ca.derekellis.kgtfs.domain.model.ShapeId;
+import ca.derekellis.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
 CREATE TABLE Trip (

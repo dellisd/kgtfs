@@ -1,0 +1,16 @@
+import ca.derekellis.kgtfs.domain.model.RouteId;
+import ca.derekellis.kgtfs.domain.model.TripId;
+
+CREATE TABLE Trip (
+    id TEXT AS TripId PRIMARY KEY,
+    route_id TEXT AS RouteId NOT NULL,
+    FOREIGN KEY (route_id) REFERENCES Route(id)
+);
+
+CREATE INDEX idx_trip_route_id ON Trip (route_id, id);
+
+insert:
+INSERT INTO Trip VALUES (?, ?);
+
+getByRoute:
+SELECT * FROM Trip WHERE route_id = ?;

@@ -1,5 +1,5 @@
-import io.github.dellisd.kgtfs.domain.model.StopId;
-import io.github.dellisd.kgtfs.domain.model.TripId;
+import ca.derekellis.kgtfs.domain.model.StopId;
+import ca.derekellis.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
 CREATE TABLE StopTime (

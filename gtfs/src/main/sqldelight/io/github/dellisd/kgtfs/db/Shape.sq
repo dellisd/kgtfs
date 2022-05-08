@@ -1,5 +1,4 @@
-import io.github.dellisd.kgtfs.domain.model.ShapeId;
-import io.github.dellisd.kgtfs.domain.model.TripId;
+import ca.derekellis.kgtfs.domain.model.ShapeId;
 import kotlin.Int;
 
 CREATE TABLE Shape(

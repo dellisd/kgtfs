@@ -1,0 +1,11 @@
+import ca.derekellis.kgtfs.domain.model.StopId;
+
+CREATE TABLE Stop (
+    id TEXT AS StopId PRIMARY KEY
+);
+
+insert:
+INSERT INTO Stop VALUES (?);
+
+getAll:
+SELECT * FROM Stop;

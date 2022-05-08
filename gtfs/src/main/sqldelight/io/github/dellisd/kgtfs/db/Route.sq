@@ -1,5 +1,5 @@
-import io.github.dellisd.kgtfs.domain.model.Route;
-import io.github.dellisd.kgtfs.domain.model.RouteId;
+import ca.derekellis.kgtfs.domain.model.Route;
+import ca.derekellis.kgtfs.domain.model.RouteId;
 
 CREATE TABLE Route (
     route_id TEXT AS RouteId NOT NULL PRIMARY KEY,

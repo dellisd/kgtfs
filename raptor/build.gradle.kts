@@ -30,6 +30,6 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 
 sqldelight {
     database("RaptorDatabase") {
-        packageName = "io.github.dellisd.raptor.db"
+        packageName = "ca.derekellis.kgtfs.raptor.db"
     }
 }
