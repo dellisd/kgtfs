@@ -21,6 +21,7 @@ import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
 import io.github.dellisd.spatialk.turf.Units
 import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 
 public class InMemoryProvider(source: String, cache: String = "") : RaptorDataProvider {
@@ -38,11 +39,14 @@ public class InMemoryProvider(source: String, cache: String = "") : RaptorDataPr
         if (cache.isNotEmpty()) {
             loadIndicesFromCache(cache)
         } else {
-            buildIndicesFromSource(source)
+            // TODO: Delegate the suspension to somewhere else
+            runBlocking {
+                buildIndicesFromSource(source)
+            }
         }
     }
 
-    private fun buildIndicesFromSource(source: String) = gtfs(source, dbPath = "gtfs.db") {
+    private suspend fun buildIndicesFromSource(source: String) = gtfs(source, dbPath = "gtfs.db") {
         logger.info("Building indices from $source")
         // TODO: Update day as needed
         val today = calendar.today().map { it.serviceId }.toSet()

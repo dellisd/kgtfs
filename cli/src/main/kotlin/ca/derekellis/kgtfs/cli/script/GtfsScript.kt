@@ -27,7 +27,7 @@ import kotlin.script.experimental.jvm.jvm
 abstract class GtfsScript
 
 object GtfsScriptConfiguration : ScriptCompilationConfiguration({
-    defaultImports("io.github.dellisd.kgtfs.dsl.gtfs")
+    defaultImports("ca.derekellis.kgtfs.dsl.gtfs", "kotlinx.coroutines.runBlocking")
     defaultImports(DependsOn::class, Repository::class)
 
     jvm {

@@ -33,7 +33,7 @@ public class SqliteProvider(dbPath: String) : RaptorDataProvider {
         }
     }
 
-    public fun build(source: String): Unit = gtfs(source, dbPath = "") {
+    public suspend fun build(source: String): Unit = gtfs(source, dbPath = "") {
         // TODO: Handle different days
         val today = calendar.today().map { it.serviceId }.toSet()
         logger.info("Using calendars: $today")

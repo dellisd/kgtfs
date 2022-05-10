@@ -48,7 +48,7 @@ public annotation class RaptorCacheDsl
  * @param transferSearchDistance The max distance stops should be searched for when building transfers
  */
 @RaptorCacheDsl
-public fun RaptorCacheBuilder(
+public suspend fun RaptorCacheBuilder(
     source: String,
     cache: String,
     transfers: (Stop, List<Stop>) -> List<Transfer> = DefaultTransferMapper,
