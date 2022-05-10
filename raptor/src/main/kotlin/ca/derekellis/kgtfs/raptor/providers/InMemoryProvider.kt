@@ -9,13 +9,13 @@ import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.domain.model.TripId
 import ca.derekellis.kgtfs.dsl.gtfs
+import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.executeAsSet
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
-import ca.derekellis.kgtfs.raptor.utils.uniqueTripSequences
 import io.github.dellisd.spatialk.geojson.dsl.lngLat
 import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
 import io.github.dellisd.spatialk.turf.Units
@@ -54,11 +54,7 @@ public class InMemoryProvider(source: String, cache: String = "") : RaptorDataPr
 
         logger.debug("Computing unique trip sequences")
         val allTimes = stopTimes.getAll()
-        val sequences = uniqueTripSequences(
-            allTimes,
-            trips.getAll()
-                .associateBy { it.id }
-                .filter { (_, trip) -> trip.serviceId in today }) // Only trips from today
+        val sequences = uniqueTripSequences(today)
 
         logger.debug("Loading stop and route info")
         // Get all stop times grouped by trip

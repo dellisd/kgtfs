@@ -5,10 +5,10 @@ import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
 import ca.derekellis.kgtfs.domain.model.Stop
 import ca.derekellis.kgtfs.dsl.gtfs
+import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
-import ca.derekellis.kgtfs.raptor.utils.uniqueTripSequences
 import io.github.dellisd.spatialk.geojson.Position
 import io.github.dellisd.spatialk.geojson.dsl.feature
 import io.github.dellisd.spatialk.geojson.dsl.lineString
@@ -62,12 +62,7 @@ public suspend fun RaptorCacheBuilder(
     logger.info("Using calendars: $today")
 
     logger.info("Computing unique trip sequences")
-    val allTimes = stopTimes.getAll()
-    val sequences = uniqueTripSequences(
-        allTimes,
-        trips.getAll()
-            .associateBy { it.id }
-            .filter { (_, trip) -> trip.serviceId in today }) // Only trips from today
+    val sequences = uniqueTripSequences(today)
 
     logger.info("Loading stop and route info")
     database.transaction {

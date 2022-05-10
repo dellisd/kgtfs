@@ -40,3 +40,10 @@ WHERE trip_id = (
     WHERE shape_id = ?
 )
 ORDER BY stop_sequence ASC;
+
+getByServiceId:
+SELECT * FROM StopTime
+WHERE trip_id IN (
+    SELECT trip_id FROM Trip
+    WHERE service_id IN ?
+);

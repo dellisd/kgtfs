@@ -29,3 +29,6 @@ WHERE trip_id IN (
     SELECT trip_id FROM StopTime
     WHERE stop_id = ?
 );
+
+getByServiceId:
+SELECT * FROM Trip WHERE service_id IN ?;
