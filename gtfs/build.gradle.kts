@@ -30,6 +30,8 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.csv)
     implementation(libs.logback)
+
+    api(libs.spatialk.turf)
 }
 
 sqldelight {
