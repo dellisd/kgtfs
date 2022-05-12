@@ -15,6 +15,6 @@ public class StopTimeDsl(private val database: GtfsDatabase) {
     public fun getByServiceId(serviceIds: Set<ServiceId>): List<StopTime> =
         database.stopTimeQueries.getByServiceId(serviceIds, StopTimeMapper).executeAsList()
 
-    public fun getByStopId(stopId: StopId): List<StopTime> =
-        database.stopTimeQueries.getByStopId(stopId, StopTimeMapper).executeAsList()
+    public fun getByStopId(stopId: StopId, serviceIds: Set<ServiceId>): List<StopTime> =
+        database.stopTimeQueries.getByStopId(stopId, serviceIds, StopTimeMapper).executeAsList()
 }

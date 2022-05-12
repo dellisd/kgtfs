@@ -51,4 +51,8 @@ WHERE trip_id IN (
 getByStopId:
 SELECT * FROM StopTime
 WHERE stop_id = ?
-ORDER BY stop_sequence ASC;
+AND trip_id IN (
+    SELECT trip_id FROM Trip
+    WHERE service_id IN ?
+)
+ORDER BY arrival_time ASC;

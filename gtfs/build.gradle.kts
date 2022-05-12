@@ -3,10 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.publishing)
 }
-
-group = "io.github.dellisd.kgtfs"
-version = "0.1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()

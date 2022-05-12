@@ -24,7 +24,7 @@ public data class GtfsTime(val hour: Int, val minute: Int, val second: Int) : Co
         GtfsTime(hour + duration.toHoursPart(), minute + duration.toMinutesPart(), second + duration.toSecondsPart())
 
     public operator fun minus(other: GtfsTime): Duration =
-        Duration.ofSeconds(((inSeconds) - (other.inSeconds)).toLong())
+        Duration.ofSeconds((inSeconds - other.inSeconds).toLong())
 
     private val inSeconds: Int
         get() = hour * 60 * 60 + minute * 60 + second
