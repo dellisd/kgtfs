@@ -10,8 +10,8 @@ import java.net.URI
 public annotation class GtfsDsl
 
 @GtfsDsl
-public suspend fun gtfs(source: String, dbPath: String = "gtfs.db", block: StaticGtfsScope.() -> Unit) {
-    Gtfs(source, dbPath).invoke(block)
+public suspend fun <R> gtfs(source: String, dbPath: String = "gtfs.db", block: StaticGtfsScope.() -> R): R {
+    return Gtfs(source, dbPath).invoke(block)
 }
 
 @GtfsDsl
@@ -45,11 +45,7 @@ public class Gtfs internal constructor(
     private val dbPath: String = "gtfs.db",
     private val scriptComponent: ScriptComponent = ScriptComponent::class.create(dbPath)
 ) {
-    public operator fun invoke(block: StaticGtfsScope.() -> Unit) {
-        scriptComponent.taskDsl().run(block)
-    }
-
-    public fun <R> withResult(block: StaticGtfsScope.() -> R): R {
+    public operator fun <R> invoke(block: StaticGtfsScope.() -> R): R {
         return scriptComponent.taskDsl().run(block)
     }
 }
