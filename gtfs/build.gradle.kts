@@ -1,3 +1,6 @@
+import com.vanniktech.maven.publish.MavenPublishPluginExtension
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
@@ -43,4 +46,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         "-opt-in=kotlin.RequiresOptIn",
         "-opt-in=kotlin.contracts.ExperimentalContracts"
     )
+}
+
+extensions.getByType<MavenPublishPluginExtension>().apply {
+    sonatypeHost = SonatypeHost.S01
 }

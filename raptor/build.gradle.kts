@@ -1,3 +1,6 @@
+import com.vanniktech.maven.publish.MavenPublishPluginExtension
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
@@ -33,4 +36,8 @@ sqldelight {
     database("RaptorDatabase") {
         packageName = "ca.derekellis.kgtfs.raptor.db"
     }
+}
+
+extensions.getByType<MavenPublishPluginExtension>().apply {
+    sonatypeHost = SonatypeHost.S01
 }
