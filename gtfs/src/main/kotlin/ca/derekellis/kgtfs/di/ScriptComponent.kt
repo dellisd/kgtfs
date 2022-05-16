@@ -22,6 +22,7 @@ import io.github.dellisd.kgtfs.db.Trip
 import ca.derekellis.kgtfs.db.TripIdAdapter
 import ca.derekellis.kgtfs.db.migrateIfNeeded
 import ca.derekellis.kgtfs.domain.GtfsLoader
+import ca.derekellis.kgtfs.dsl.MutableStaticGtfsScope
 import ca.derekellis.kgtfs.dsl.StaticGtfsScope
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
@@ -70,4 +71,6 @@ internal abstract class ScriptComponent(private val dbPath: String = "gtfs.db") 
     abstract val gtfsLoader: GtfsLoader
 
     abstract fun taskDsl(): StaticGtfsScope
+
+    abstract fun mutableTaskDsl(): MutableStaticGtfsScope
 }

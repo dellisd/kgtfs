@@ -17,12 +17,12 @@ import me.tatarka.inject.annotations.Inject
 
 @Inject
 @GtfsDsl
-public class StaticGtfsScope(
+public open class StaticGtfsScope(
     public val stops: StopDsl,
     public val calendar: CalendarDsl,
     public val stopTimes: StopTimeDsl,
     public val trips: TripDsl,
-    private val database: GtfsDatabase
+    protected val database: GtfsDatabase
 ) {
     /**
      * List of all routes that service a given stop

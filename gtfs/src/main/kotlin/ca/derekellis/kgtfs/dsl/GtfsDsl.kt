@@ -3,8 +3,14 @@ package ca.derekellis.kgtfs.dsl
 import ca.derekellis.kgtfs.di.ScriptComponent
 import ca.derekellis.kgtfs.di.create
 import io.ktor.http.Url
+import kotlinx.serialization.csv.Csv
+import kotlinx.serialization.encodeToString
 import java.io.File
 import java.net.URI
+import java.nio.file.Path
+import kotlin.io.path.Path
+import kotlin.io.path.isDirectory
+import kotlin.io.path.writeText
 
 @DslMarker
 public annotation class GtfsDsl
@@ -47,5 +53,33 @@ public class Gtfs internal constructor(
 ) {
     public operator fun <R> invoke(block: StaticGtfsScope.() -> R): R {
         return scriptComponent.taskDsl().run(block)
+    }
+
+    public fun <R> edit(block: MutableStaticGtfsScope.() -> R): R {
+        return scriptComponent.mutableTaskDsl().run(block)
+    }
+
+    public fun exportCSV(path: String) {
+        exportCSV(Path(path))
+    }
+
+    public fun exportCSV(path: Path) {
+        check(path.isDirectory()) { "Path should be a directory" }
+
+        val csv = Csv {
+            hasHeaderRecord = true
+        }
+
+        invoke {
+            // TODO: Write other files!!!!!!!!
+            val stops = csv.encodeToString(stops.getAll())
+            path.resolve("stops.txt").writeText(stops)
+
+            val trips = csv.encodeToString(trips.getAll())
+            path.resolve("trips.txt").writeText(trips)
+
+            val stopTimes = csv.encodeToString(stopTimes.getAll())
+            path.resolve("stop_times.txt").writeText(stopTimes)
+        }
     }
 }
