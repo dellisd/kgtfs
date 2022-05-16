@@ -24,4 +24,18 @@ gtfs(source = "https://www.octranspo.com/files/google_transit.zip") {
 
     println(calendar.today().map { it.service_id })
 }
+
+// Reusable gtfs container
+val gtfs = runBlocking { Gtfs(source =  "https://www.octranspo.com/files/google_transit.zip") }
+gtfs {
+    // Use static GTFS data in here
+}
+
+// Make edits to GTFS data
+gtfs.edit {
+    stops.add(Stop(/* ... */))
+}
+
+// Export GTFS CSV files
+gtfs.exportCSV("/gtfs_dir")
 ```
