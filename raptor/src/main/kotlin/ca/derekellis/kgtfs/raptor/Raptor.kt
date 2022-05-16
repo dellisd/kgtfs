@@ -63,7 +63,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                         trip = provider.getEarliestTripAtStop(
                             route,
                             i + indexOfStop,
-                            labels[k - 1].getOrDefault(stopAlongRoute, GtfsTime(time.hour, time.minute, time.second))
+                            labels[k - 1].getOrDefault(stopAlongRoute, GtfsTime.MAX)
                         )
                         stopTimes = trip?.let { provider.getStopTimes(it) }
 
@@ -127,15 +127,17 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
         connections: Map<StopId, Map<Int, Leg>>,
         destination: StopId
     ): List<Journey> {
-        return connections[destination]?.keys?.map { key ->
+        return connections[destination]?.keys?.mapNotNull outer@ { key ->
             var step = destination
 
             val legs = (key downTo 1).mapNotNull { k ->
-                val leg = connections.getValue(step)[k]!!
+                // Skip this plan if no path is possible
+                // TODO: Review this?
+                val leg = connections.getValue(step)[k] ?: return@outer null
                 leg.also { step = leg.from }
             }
 
-            return@map Journey(legs.reversed())
+            return@outer Journey(legs.reversed())
         } ?: emptyList()
     }
 }

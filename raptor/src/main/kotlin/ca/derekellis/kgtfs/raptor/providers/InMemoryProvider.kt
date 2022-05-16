@@ -143,6 +143,7 @@ public class InMemoryProvider(
 
     override fun getEarliestTripAtStop(route: RouteId, index: Int, after: GtfsTime): TripId? {
         return tripsForRoute.getValue(route)
+            .asSequence()
             .map { trip -> trip to stopTimesForTrip.getValue(trip)[index] }
             .sortedBy { (_, stop) -> stop.arrivalTime }
             .firstOrNull { (_, stop) -> stop.arrivalTime > after }?.first
