@@ -7,7 +7,6 @@ import ca.derekellis.kgtfs.domain.model.Stop
 import ca.derekellis.kgtfs.dsl.gtfs
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.db.getDatabase
-import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
 import io.github.dellisd.spatialk.geojson.Position
 import io.github.dellisd.spatialk.geojson.dsl.feature
@@ -77,7 +76,7 @@ public suspend fun RaptorCacheBuilder(
             it.trips.forEach { (trip, times) ->
                 database.tripQueries.insert(trip, it.route)
                 times.forEachIndexed { index, time ->
-                    database.stopTimeQueries.insert(trip, time.stopId, GtfsTime(time.arrivalTime), index + 1)
+                    database.stopTimeQueries.insert(trip, time.stopId, time.arrivalTime, index + 1)
                 }
             }
         }

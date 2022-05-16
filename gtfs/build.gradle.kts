@@ -33,6 +33,8 @@ dependencies {
     implementation(libs.logback)
 
     api(libs.spatialk.turf)
+
+    testImplementation(kotlin("test"))
 }
 
 sqldelight {

@@ -1,16 +1,16 @@
 package ca.derekellis.kgtfs.raptor
 
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.domain.model.TripId
-import ca.derekellis.kgtfs.raptor.models.GtfsTime
+import ca.derekellis.kgtfs.domain.model.toGtfsTime
 import ca.derekellis.kgtfs.raptor.models.Journey
 import ca.derekellis.kgtfs.raptor.models.Leg
 import ca.derekellis.kgtfs.raptor.models.RouteLeg
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
 import ca.derekellis.kgtfs.raptor.models.TransferLeg
-import ca.derekellis.kgtfs.raptor.models.toGtfsTime
 import ca.derekellis.kgtfs.raptor.utils.takeLastWhileInclusive
 import java.time.Duration
 import java.time.LocalDateTime
@@ -63,7 +63,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                         trip = provider.getEarliestTripAtStop(
                             route,
                             i + indexOfStop,
-                            labels[k - 1].getOrDefault(stopAlongRoute, GtfsTime.MAX)
+                            labels[k - 1].getOrDefault(stopAlongRoute, GtfsTime(time.hour, time.minute, time.second))
                         )
                         stopTimes = trip?.let { provider.getStopTimes(it) }
 
@@ -127,7 +127,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
         connections: Map<StopId, Map<Int, Leg>>,
         destination: StopId
     ): List<Journey> {
-        return connections.getValue(destination).keys.map { key ->
+        return connections[destination]?.keys?.map { key ->
             var step = destination
 
             val legs = (key downTo 1).mapNotNull { k ->
@@ -136,6 +136,6 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
             }
 
             return@map Journey(legs.reversed())
-        }
+        } ?: emptyList()
     }
 }

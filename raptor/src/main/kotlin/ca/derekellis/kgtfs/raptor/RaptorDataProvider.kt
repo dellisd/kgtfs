@@ -1,9 +1,9 @@
 package ca.derekellis.kgtfs.raptor
 
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.domain.model.TripId
-import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
 

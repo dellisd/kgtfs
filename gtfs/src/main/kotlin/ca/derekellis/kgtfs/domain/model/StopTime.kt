@@ -6,8 +6,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 public data class StopTime(
     @SerialName("trip_id") val tripId: TripId,
-    @SerialName("arrival_time") val arrivalTime: String,
-    @SerialName("departure_time") val departureTime: String,
+    @SerialName("arrival_time") val arrivalTime: GtfsTime,
+    @SerialName("departure_time") val departureTime: GtfsTime,
     @SerialName("stop_id") val stopId: StopId,
     @SerialName("stop_sequence") val stopSequence: Int,
     @SerialName("stop_headsign") val stopHeadsign: String? = null,

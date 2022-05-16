@@ -2,6 +2,7 @@ package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.domain.model.Calendar
 import ca.derekellis.kgtfs.domain.model.CalendarDate
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.Route
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.ServiceId
@@ -62,7 +63,7 @@ internal val CalendarDateMapper =
     { service_id: ServiceId, date: LocalDate, exception_type: Int -> CalendarDate(service_id, date, exception_type) }
 
 internal val StopTimeMapper =
-    { trip_id: TripId, arrival_time: String, departure_time: String, stop_id: StopId, stop_sequence: Int, pickup_type: Int?, drop_off_type: Int? ->
+    { trip_id: TripId, arrival_time: GtfsTime, departure_time: GtfsTime, stop_id: StopId, stop_sequence: Int, pickup_type: Int?, drop_off_type: Int? ->
         StopTime(
             trip_id,
             arrival_time,

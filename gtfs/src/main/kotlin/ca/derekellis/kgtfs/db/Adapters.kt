@@ -1,6 +1,7 @@
 package ca.derekellis.kgtfs.db
 
 import app.cash.sqldelight.ColumnAdapter
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.Route
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.ServiceId
@@ -68,4 +69,10 @@ internal object LocalDateAdapter : ColumnAdapter<LocalDate, String> {
     )
 
     override fun encode(value: LocalDate): String = value.format(pattern)
+}
+
+internal object GtfsTimeAdapter : ColumnAdapter<GtfsTime, String> {
+    override fun decode(databaseValue: String): GtfsTime = GtfsTime(databaseValue)
+
+    override fun encode(value: GtfsTime): String = value.toString()
 }

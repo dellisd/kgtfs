@@ -1,5 +1,6 @@
 package ca.derekellis.kgtfs.raptor.providers
 
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
@@ -11,7 +12,6 @@ import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.executeAsSet
 import ca.derekellis.kgtfs.raptor.db.getDatabase
-import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
 import io.github.dellisd.spatialk.geojson.dsl.lngLat
@@ -54,7 +54,7 @@ public class SqliteProvider(dbPath: String) : RaptorDataProvider {
                 it.trips.forEach { (trip, times) ->
                     database.tripQueries.insert(trip, it.route)
                     times.forEachIndexed { index, time ->
-                        database.stopTimeQueries.insert(trip, time.stopId, GtfsTime(time.arrivalTime), index + 1)
+                        database.stopTimeQueries.insert(trip, time.stopId, time.arrivalTime, index + 1)
                     }
                 }
             }

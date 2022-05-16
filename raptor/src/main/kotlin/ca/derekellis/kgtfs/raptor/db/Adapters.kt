@@ -1,10 +1,10 @@
 package ca.derekellis.kgtfs.raptor.db
 
 import app.cash.sqldelight.ColumnAdapter
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.domain.model.TripId
-import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import io.github.dellisd.spatialk.geojson.Feature
 
 internal object RouteIdAdapter : ColumnAdapter<RouteId, String> {
@@ -28,10 +28,7 @@ internal object TripIdAdapter : ColumnAdapter<TripId, String> {
 internal object GtfsTimeAdapter : ColumnAdapter<GtfsTime, String> {
     override fun decode(databaseValue: String): GtfsTime = GtfsTime(databaseValue)
 
-    override fun encode(value: GtfsTime): String =
-        "${value.hour.toString().padStart(2, '0')}:${value.minute.toString().padStart(2, '0')}:${
-            value.second.toString().padStart(2, '0')
-        }"
+    override fun encode(value: GtfsTime): String = value.toString()
 }
 
 internal object FeatureAdapter : ColumnAdapter<Feature, String> {

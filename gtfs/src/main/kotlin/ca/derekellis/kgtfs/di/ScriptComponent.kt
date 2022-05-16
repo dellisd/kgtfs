@@ -3,6 +3,7 @@ package ca.derekellis.kgtfs.di
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import ca.derekellis.kgtfs.db.GtfsDatabase
+import ca.derekellis.kgtfs.db.GtfsTimeAdapter
 import io.github.dellisd.kgtfs.db.Calendar
 import io.github.dellisd.kgtfs.db.CalendarDate
 import ca.derekellis.kgtfs.db.InstantColumnAdapter
@@ -42,6 +43,8 @@ internal abstract class ScriptComponent(private val dbPath: String = "gtfs.db") 
             ),
             StopTimeAdapter = StopTime.Adapter(
                 TripIdAdapter,
+                GtfsTimeAdapter,
+                GtfsTimeAdapter,
                 StopIdAdapter,
                 IntColumnAdapter,
                 IntColumnAdapter,

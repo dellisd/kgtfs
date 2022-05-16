@@ -2,6 +2,7 @@
 
 package ca.derekellis.kgtfs.raptor.providers
 
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
@@ -13,7 +14,6 @@ import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.executeAsSet
 import ca.derekellis.kgtfs.raptor.db.getDatabase
-import ca.derekellis.kgtfs.raptor.models.GtfsTime
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
 import io.github.dellisd.spatialk.geojson.dsl.lngLat
@@ -23,8 +23,14 @@ import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
+import java.time.LocalDate
 
-public class InMemoryProvider(source: String, cache: String = "") : RaptorDataProvider {
+public class InMemoryProvider(
+    source: String,
+    cache: String = "",
+    private val date: LocalDate = LocalDate.now()
+) :
+    RaptorDataProvider {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val routesAtStop: MutableMap<StopId, MutableSet<RouteId>> = mutableMapOf()
     private val stopsAlongRoute: MutableMap<RouteId, List<StopId>> = mutableMapOf()
@@ -49,7 +55,7 @@ public class InMemoryProvider(source: String, cache: String = "") : RaptorDataPr
     private suspend fun buildIndicesFromSource(source: String) = gtfs(source, dbPath = "gtfs.db") {
         logger.info("Building indices from $source")
         // TODO: Update day as needed
-        val today = calendar.today().map { it.serviceId }.toSet()
+        val today = calendar.onDate(date).map { it.serviceId }.toSet()
         logger.debug("Today's calendars: $today")
 
         logger.debug("Computing unique trip sequences")
@@ -61,7 +67,7 @@ public class InMemoryProvider(source: String, cache: String = "") : RaptorDataPr
         allTimes.groupBy { it.tripId }
             .mapValuesTo(stopTimesForTrip) { (_, times) ->
                 times.mapIndexed { index, time ->
-                    StopTime(time.stopId, GtfsTime(time.arrivalTime), index)
+                    StopTime(time.stopId, time.arrivalTime, index)
                 }
             }
 

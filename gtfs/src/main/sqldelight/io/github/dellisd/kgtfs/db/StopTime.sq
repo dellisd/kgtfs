@@ -1,11 +1,12 @@
+import ca.derekellis.kgtfs.domain.model.GtfsTime;
 import ca.derekellis.kgtfs.domain.model.StopId;
 import ca.derekellis.kgtfs.domain.model.TripId;
 import kotlin.Int;
 
 CREATE TABLE StopTime (
     trip_id TEXT AS TripId NOT NULL,
-    arrival_time TEXT NOT NULL,
-    departure_time TEXT NOT NULL,
+    arrival_time TEXT AS GtfsTime NOT NULL,
+    departure_time TEXT AS GtfsTime NOT NULL,
     stop_id TEXT AS StopId NOT NULL,
     stop_sequence INTEGER AS Int NOT NULL,
     pickup_type INTEGER AS Int,
