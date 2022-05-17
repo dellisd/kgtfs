@@ -41,6 +41,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                 val stopsAlongRoute = allStopsAlongRoute.takeLastWhileInclusive { it != stop }
 
                 var boardingStop: StopId? = null
+                var boardingIndex: Int = -1
                 var trip: TripId? = null
                 var stopTimes: List<StopTime>? = null
                 stopsAlongRoute.forEachIndexed { i, stopAlongRoute ->
@@ -50,7 +51,13 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                         labels[k][stopAlongRoute] = stopTimes!![i + indexOfStop].arrivalTime
                         // Record this leg of the trip
                         connections.getOrPut(stopAlongRoute, ::mutableMapOf)[k] =
-                            RouteLeg(boardingStop!!, stopAlongRoute, trip!!)
+                            RouteLeg(
+                                boardingStop!!,
+                                stopAlongRoute,
+                                stopTimes!![boardingIndex].arrivalTime,
+                                labels[k].getValue(stopAlongRoute),
+                                trip!!
+                            )
 
                         toBeMarked.add(stopAlongRoute)
                     }
@@ -69,6 +76,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
 
                         if (trip != null) {
                             boardingStop = stopAlongRoute
+                            boardingIndex = i + indexOfStop
                         }
                     }
                 }
@@ -85,6 +93,8 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                             TransferLeg(
                                 transfer.from,
                                 transfer.to,
+                                start = labels[k - 1].getValue(stop),
+                                end = arrivalTime,
                                 transfer.duration,
                                 transfer.distance,
                                 transfer.geometry
@@ -127,7 +137,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
         connections: Map<StopId, Map<Int, Leg>>,
         destination: StopId
     ): List<Journey> {
-        return connections[destination]?.keys?.mapNotNull outer@ { key ->
+        return connections[destination]?.keys?.mapNotNull outer@{ key ->
             var step = destination
 
             val legs = (key downTo 1).mapNotNull { k ->
