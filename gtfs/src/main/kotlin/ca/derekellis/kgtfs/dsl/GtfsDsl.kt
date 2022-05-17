@@ -28,7 +28,7 @@ public suspend fun Gtfs(source: String, dbPath: String = "gtfs.db"): Gtfs {
     val zip = if (scheme.startsWith("http")) {
         GtfsZip.Remote(Url(asUri))
     } else {
-        GtfsZip.Local(File(asUri))
+        GtfsZip.Local(File(asUri.toString()))
     }
 
     return Gtfs(zip, dbPath)
