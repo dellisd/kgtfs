@@ -5,7 +5,6 @@ import ca.derekellis.kgtfs.di.create
 import io.ktor.http.Url
 import kotlinx.serialization.csv.Csv
 import kotlinx.serialization.encodeToString
-import java.io.File
 import java.net.URI
 import java.nio.file.Path
 import kotlin.io.path.Path
@@ -16,30 +15,36 @@ import kotlin.io.path.writeText
 public annotation class GtfsDsl
 
 @GtfsDsl
-public suspend fun <R> gtfs(source: String, dbPath: String = "gtfs.db", block: StaticGtfsScope.() -> R): R {
+public suspend fun <R> gtfs(source: String, dbPath: String = "", block: StaticGtfsScope.() -> R): R {
     return Gtfs(source, dbPath).invoke(block)
 }
 
 @GtfsDsl
-public suspend fun Gtfs(source: String, dbPath: String = "gtfs.db"): Gtfs {
+public suspend fun Gtfs(source: Path, dbPath: String = ""): Gtfs {
+    val zip = GtfsZip.Local(source)
+    return Gtfs(zip, dbPath)
+}
+
+@GtfsDsl
+public suspend fun Gtfs(source: String, dbPath: String = ""): Gtfs {
     val asUri = URI(source)
     val scheme = asUri.scheme ?: ""
 
     val zip = if (scheme.startsWith("http")) {
         GtfsZip.Remote(Url(asUri))
     } else {
-        GtfsZip.Local(File(asUri.toString()))
+        GtfsZip.Local(Path(asUri.toString()))
     }
 
     return Gtfs(zip, dbPath)
 }
 
 @GtfsDsl
-public suspend fun Gtfs(zip: GtfsZip, dbPath: String = "gtfs.db"): Gtfs {
+public suspend fun Gtfs(zip: GtfsZip, dbPath: String = ""): Gtfs {
     val scriptComponent = ScriptComponent::class.create(dbPath)
 
     when (zip) {
-        is GtfsZip.Local -> scriptComponent.gtfsLoader.loadFrom(zip.file.toPath())
+        is GtfsZip.Local -> scriptComponent.gtfsLoader.loadFrom(zip.path)
         is GtfsZip.Remote -> scriptComponent.gtfsLoader.loadFrom(zip.url)
     }
 
@@ -48,7 +53,7 @@ public suspend fun Gtfs(zip: GtfsZip, dbPath: String = "gtfs.db"): Gtfs {
 
 public class Gtfs internal constructor(
     private val zip: GtfsZip,
-    private val dbPath: String = "gtfs.db",
+    private val dbPath: String = "",
     private val scriptComponent: ScriptComponent = ScriptComponent::class.create(dbPath)
 ) {
     public operator fun <R> invoke(block: StaticGtfsScope.() -> R): R {
@@ -68,6 +73,7 @@ public class Gtfs internal constructor(
 
         val csv = Csv {
             hasHeaderRecord = true
+            recordSeparator = System.lineSeparator()
         }
 
         invoke {
