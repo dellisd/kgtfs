@@ -1,5 +1,6 @@
 package ca.derekellis.kgtfs.ext
 
+import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.ServiceId
 import ca.derekellis.kgtfs.domain.model.StopId
@@ -7,6 +8,7 @@ import ca.derekellis.kgtfs.domain.model.StopTime
 import ca.derekellis.kgtfs.domain.model.TripId
 import ca.derekellis.kgtfs.dsl.StaticGtfsScope
 import java.security.MessageDigest
+import java.time.Duration
 import java.time.LocalDate
 import java.util.PriorityQueue
 
@@ -55,3 +57,22 @@ public data class TripSequence<out M : Map<TripId, List<StopTime>>>(
     val sequence: List<StopId>,
     val trips: M
 )
+
+public fun TripSequence<*>.frequency(from: GtfsTime, until: GtfsTime): Duration? {
+    check(until > from) { "'until' must be after 'from'" }
+
+    val diffs = trips.values
+        .asSequence()
+        .map { it.first() }
+        .filter { it.arrivalTime in from..until }
+        .zipWithNext()
+        .map { (a, b) -> b.arrivalTime - a.arrivalTime }
+        .filter { it.toSeconds() > 0 }
+        .toList()
+
+    return if (diffs.isNotEmpty()) {
+        Duration.ofSeconds(diffs.sumOf { it.toSeconds() } / diffs.size)
+    } else {
+        null
+    }
+}

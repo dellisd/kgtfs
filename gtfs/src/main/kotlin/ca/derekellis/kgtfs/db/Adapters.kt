@@ -1,6 +1,7 @@
 package ca.derekellis.kgtfs.db
 
 import app.cash.sqldelight.ColumnAdapter
+import ca.derekellis.kgtfs.domain.model.AgencyId
 import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.domain.model.Route
 import ca.derekellis.kgtfs.domain.model.RouteId
@@ -47,6 +48,12 @@ internal object ShapeIdAdapter : ColumnAdapter<ShapeId, String> {
     override fun decode(databaseValue: String): ShapeId = ShapeId(databaseValue)
 
     override fun encode(value: ShapeId): String = value.value
+}
+
+internal object AgencyIdAdapter : ColumnAdapter<AgencyId, String> {
+    override fun decode(databaseValue: String): AgencyId = AgencyId(databaseValue)
+
+    override fun encode(value: AgencyId): String = value.value
 }
 
 internal object LocationTypeAdapter : ColumnAdapter<Stop.LocationType, Long> {

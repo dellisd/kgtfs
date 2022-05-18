@@ -2,6 +2,7 @@ package ca.derekellis.kgtfs.di
 
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
+import ca.derekellis.kgtfs.db.AgencyIdAdapter
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.GtfsTimeAdapter
 import io.github.dellisd.kgtfs.db.Calendar
@@ -25,6 +26,7 @@ import ca.derekellis.kgtfs.db.migrateIfNeeded
 import ca.derekellis.kgtfs.domain.GtfsLoader
 import ca.derekellis.kgtfs.dsl.MutableStaticGtfsScope
 import ca.derekellis.kgtfs.dsl.StaticGtfsScope
+import io.github.dellisd.kgtfs.db.Agency
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides
 
@@ -67,7 +69,8 @@ internal abstract class ScriptComponent(private val dbPath: String = "gtfs.db") 
                 ServiceIdAdapter,
                 LocalDateAdapter, IntColumnAdapter),
             RouteAdapter = Route.Adapter(RouteIdAdapter, RouteTypeAdapter),
-            ShapeAdapter = Shape.Adapter(ShapeIdAdapter, IntColumnAdapter)
+            ShapeAdapter = Shape.Adapter(ShapeIdAdapter, IntColumnAdapter),
+            AgencyAdapter = Agency.Adapter(AgencyIdAdapter)
         )
     }
 

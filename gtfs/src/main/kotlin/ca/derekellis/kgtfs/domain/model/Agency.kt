@@ -11,7 +11,7 @@ public value class AgencyId(public val value: String) {
 
 @Serializable
 public data class Agency(
-    @SerialName("agency_id") val id: AgencyId,
+    @SerialName("agency_id") val id: AgencyId = AgencyId("placeholder"),
     @SerialName("agency_name") val name: String,
     @SerialName("agency_url") val url: String,
     @SerialName("agency_timezone") val timezone: String,

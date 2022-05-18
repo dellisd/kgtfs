@@ -1,11 +1,8 @@
 package ca.derekellis.kgtfs
 
-import ca.derekellis.kgtfs.domain.GtfsLoader
 import ca.derekellis.kgtfs.dsl.Gtfs
 import kotlinx.coroutines.runBlocking
 import org.junit.Rule
-import kotlin.io.path.Path
-import kotlin.io.path.relativeTo
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
