@@ -16,7 +16,7 @@ class GtfsLoaderTest {
 
         gtfs {
             assertEquals(stops.getAll().size, 6)
-            assertEquals(trips.getAll().size, 2)
+            assertEquals(trips.getAll().size, 6)
         }
     }
 }

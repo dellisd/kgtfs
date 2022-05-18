@@ -18,7 +18,6 @@ public fun StaticGtfsScope.uniqueTripSequences(date: LocalDate = LocalDate.now()
 }
 
 public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<TripSequence<Map<TripId, List<StopTime>>>> {
-    val digest = MessageDigest.getInstance("SHA-256")
     val times = stopTimes.getByServiceId(serviceIds)
     val tripMap = trips.getByServiceId(serviceIds).associateBy { it.id }
 
@@ -33,8 +32,7 @@ public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List
     val unique = mutableMapOf<String, TripSequence<MutableMap<TripId, List<StopTime>>>>()
 
     orderedTimes.forEach { (tripId, times) ->
-        val hashBytes = digest.digest(times.joinToString("") { it.stopId.value }.encodeToByteArray())
-        val hash = hashBytes.joinToString("") { "%02x".format(it) }
+        val hash = sequenceHashOf(tripId)
         val trip = tripMap.getValue(tripId)
 
         // Create a new id to represent this sequence
@@ -43,7 +41,8 @@ public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List
             TripSequence(
                 RouteId(newId),
                 times.map { it.stopId },
-                mutableMapOf()
+                mutableMapOf(),
+                hash
             )
         }.trips[tripId] =
             times.toList()
@@ -52,10 +51,20 @@ public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List
     return unique.values.toList()
 }
 
+public fun StaticGtfsScope.sequenceHashOf(trip: TripId): String {
+    val digest = MessageDigest.getInstance("SHA-256")
+    val bytes = trips.getById(trip).stopTimes
+        .joinToString("") { it.stopId.value }
+        .encodeToByteArray()
+
+    return digest.digest(bytes).joinToString("") { "%02x".format(it) }
+}
+
 public data class TripSequence<out M : Map<TripId, List<StopTime>>>(
     val route: RouteId,
     val sequence: List<StopId>,
-    val trips: M
+    val trips: M,
+    val hash: String,
 )
 
 public fun TripSequence<*>.frequency(from: GtfsTime, until: GtfsTime): Duration? {
