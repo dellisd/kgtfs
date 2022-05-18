@@ -10,10 +10,14 @@ import me.tatarka.inject.annotations.Inject
 public class MutableStaticGtfsScope(
     stops: StopDsl,
     calendar: CalendarDsl,
+    dates: CalendarDateDsl,
     stopTimes: StopTimeDsl,
     trips: TripDsl,
+    routes: RouteDsl,
+    agencies: AgencyDsl,
+    shapes: ShapeDsl,
     database: GtfsDatabase
-) : StaticGtfsScope(stops, calendar, stopTimes, trips, database) {
+) : StaticGtfsScope(stops, calendar, dates, stopTimes, trips, routes, agencies, shapes, database) {
     public fun TripDsl.add(trip: Trip, stopTimes: List<StopTime>): Unit =
         with(this@MutableStaticGtfsScope) {
             database.transaction {

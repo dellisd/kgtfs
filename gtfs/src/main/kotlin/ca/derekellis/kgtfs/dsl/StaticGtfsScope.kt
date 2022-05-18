@@ -20,8 +20,12 @@ import me.tatarka.inject.annotations.Inject
 public open class StaticGtfsScope(
     public val stops: StopDsl,
     public val calendar: CalendarDsl,
+    public val dates: CalendarDateDsl,
     public val stopTimes: StopTimeDsl,
     public val trips: TripDsl,
+    public val routes: RouteDsl,
+    public val agencies: AgencyDsl,
+    public val shapes: ShapeDsl,
     protected val database: GtfsDatabase
 ) {
     /**

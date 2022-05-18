@@ -23,3 +23,6 @@ SELECT * FROM Calendar WHERE service_id = ?;
 
 getByDate:
 SELECT * FROM Calendar WHERE :date >= start_date AND :date <= end_date;
+
+getAll:
+SELECT * FROM Calendar;

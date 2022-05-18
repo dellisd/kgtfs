@@ -13,3 +13,6 @@ INSERT INTO CalendarDate VALUES (?, ?, ?);
 
 getByDate:
 SELECT * FROM CalendarDate WHERE date = ?;
+
+getAll:
+SELECT * FROM CalendarDate;

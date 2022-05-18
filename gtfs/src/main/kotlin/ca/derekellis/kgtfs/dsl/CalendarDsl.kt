@@ -35,4 +35,6 @@ public class CalendarDsl(private val database: GtfsDatabase) {
     }
 
     public fun today(): Set<Calendar> = onDate(LocalDate.now())
+
+    public fun getAll(): List<Calendar> = database.calendarQueries.getAll(CalendarMapper).executeAsList()
 }

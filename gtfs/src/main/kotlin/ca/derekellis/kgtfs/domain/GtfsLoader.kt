@@ -2,6 +2,7 @@ package ca.derekellis.kgtfs.domain
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.di.ScriptScope
+import ca.derekellis.kgtfs.domain.model.Agency
 import ca.derekellis.kgtfs.domain.model.Calendar
 import ca.derekellis.kgtfs.domain.model.CalendarDate
 import ca.derekellis.kgtfs.domain.model.Route
@@ -36,6 +37,7 @@ import java.time.format.DateTimeFormatter
 import kotlin.io.path.getLastModifiedTime
 import kotlin.io.path.notExists
 import kotlin.io.path.readText
+import io.github.dellisd.kgtfs.db.Agency as DbAgency
 
 @Inject
 @ScriptScope
@@ -97,6 +99,23 @@ public class GtfsLoader(private val database: GtfsDatabase) {
 
         database.metadataQueries.clear()
         database.metadataQueries.insert(source, lastUpdated)
+
+        read<Agency>(fs, "/agency.txt") { agencies ->
+            database.transaction {
+                agencies.forEach {
+                    database.agencyQueries.insert(
+                        it.id,
+                        it.name,
+                        it.url,
+                        it.timezone,
+                        it.lang,
+                        it.phone,
+                        it.fareUrl,
+                        it.email
+                    )
+                }
+            }
+        }
 
         read<Stop>(fs, "/stops.txt") { stops ->
             database.transaction {

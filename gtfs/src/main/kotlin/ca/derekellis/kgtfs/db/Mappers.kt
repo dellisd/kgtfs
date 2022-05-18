@@ -1,5 +1,7 @@
 package ca.derekellis.kgtfs.db
 
+import ca.derekellis.kgtfs.domain.model.Agency
+import ca.derekellis.kgtfs.domain.model.AgencyId
 import ca.derekellis.kgtfs.domain.model.Calendar
 import ca.derekellis.kgtfs.domain.model.CalendarDate
 import ca.derekellis.kgtfs.domain.model.GtfsTime
@@ -72,5 +74,19 @@ internal val StopTimeMapper =
             stop_sequence,
             pickupType = pickup_type,
             dropOffType = drop_off_type
+        )
+    }
+
+internal val AgencyMapper =
+    { agency_id: AgencyId, agency_name: String, agency_url: String, agency_timezeone: String, agency_lang: String?, agency_phone: String?, agency_fare_url: String?, agency_email: String? ->
+        Agency(
+            agency_id,
+            agency_name,
+            agency_url,
+            agency_timezeone,
+            agency_lang,
+            agency_phone,
+            agency_fare_url,
+            agency_email
         )
     }

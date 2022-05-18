@@ -3,6 +3,7 @@ package ca.derekellis.kgtfs.dsl
 import ca.derekellis.kgtfs.di.ScriptComponent
 import ca.derekellis.kgtfs.di.create
 import io.ktor.http.Url
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.csv.Csv
 import kotlinx.serialization.encodeToString
 import java.net.URI
@@ -68,6 +69,7 @@ public class Gtfs internal constructor(
         exportCSV(Path(path))
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     public fun exportCSV(path: Path) {
         check(path.isDirectory()) { "Path should be a directory" }
 
@@ -77,7 +79,18 @@ public class Gtfs internal constructor(
         }
 
         invoke {
-            // TODO: Write other files!!!!!!!!
+            val agencies = csv.encodeToString(agencies.getAll())
+            path.resolve("agency.txt").writeText(agencies)
+
+            val calendars = csv.encodeToString(calendar.getAll())
+            path.resolve("calendar.txt").writeText(calendars)
+
+            val calendarDates = csv.encodeToString(dates.getAll())
+            path.resolve("calendar_dates.txt").writeText(calendarDates)
+
+            val routes = csv.encodeToString(routes.getAll())
+            path.resolve("routes.txt").writeText(routes)
+
             val stops = csv.encodeToString(stops.getAll())
             path.resolve("stops.txt").writeText(stops)
 
