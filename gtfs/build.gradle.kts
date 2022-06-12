@@ -27,7 +27,7 @@ dependencies {
     implementation(libs.kotlin.inject.runtime)
     implementation(libs.bundles.ktor.client)
     implementation(libs.bundles.sqldelight)
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.csv)
     implementation(libs.logback)
@@ -35,6 +35,7 @@ dependencies {
     api(libs.spatialk.turf)
 
     testImplementation(kotlin("test"))
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 sqldelight {

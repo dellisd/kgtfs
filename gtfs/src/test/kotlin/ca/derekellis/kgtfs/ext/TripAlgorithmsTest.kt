@@ -4,6 +4,7 @@ import ca.derekellis.kgtfs.GtfsZipRule
 import ca.derekellis.kgtfs.domain.model.GtfsTime
 import ca.derekellis.kgtfs.dsl.Gtfs
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import java.time.Duration
 import java.time.LocalDate
@@ -24,7 +25,7 @@ class TripAlgorithmsTest {
     }
 
     @Test
-    fun `unique trip sequences are computed correctly`() {
+    fun `unique trip sequences are computed correctly`() = runTest {
         gtfs {
             val sequences = uniqueTripSequences(date = TEST_DATE)
 
@@ -40,7 +41,7 @@ class TripAlgorithmsTest {
     }
 
     @Test
-    fun `sequence frequency computed correctly`() {
+    fun `sequence frequency computed correctly`() = runTest {
         gtfs {
             val sequence = uniqueTripSequences(date = TEST_DATE)
                     .first { it.sequence.first().value == "AAAA" }
@@ -51,7 +52,7 @@ class TripAlgorithmsTest {
     }
 
     @Test
-    fun `invalid sequence frequency returns null`() {
+    fun `invalid sequence frequency returns null`() = runTest {
         gtfs {
             val sequence = uniqueTripSequences(date = TEST_DATE)
                 .first { it.sequence.first().value == "DDDD" }

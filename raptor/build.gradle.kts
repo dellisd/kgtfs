@@ -18,7 +18,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.spatialk.turf)
     implementation(libs.rtree)

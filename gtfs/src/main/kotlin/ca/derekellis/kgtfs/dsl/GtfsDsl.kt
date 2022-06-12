@@ -21,13 +21,13 @@ public suspend fun <R> gtfs(source: String, dbPath: String = "", block: StaticGt
 }
 
 @GtfsDsl
-public suspend fun Gtfs(source: Path, dbPath: String = ""): Gtfs {
+public fun Gtfs(source: Path, dbPath: String = ""): Gtfs {
     val zip = GtfsZip.Local(source)
     return Gtfs(zip, dbPath)
 }
 
 @GtfsDsl
-public suspend fun Gtfs(source: String, dbPath: String = ""): Gtfs {
+public fun Gtfs(source: String, dbPath: String = ""): Gtfs {
     val asUri = URI(source)
     val scheme = asUri.scheme ?: ""
 
@@ -41,13 +41,8 @@ public suspend fun Gtfs(source: String, dbPath: String = ""): Gtfs {
 }
 
 @GtfsDsl
-public suspend fun Gtfs(zip: GtfsZip, dbPath: String = ""): Gtfs {
+public fun Gtfs(zip: GtfsZip, dbPath: String = ""): Gtfs {
     val scriptComponent = ScriptComponent::class.create(dbPath)
-
-    when (zip) {
-        is GtfsZip.Local -> scriptComponent.gtfsLoader.loadFrom(zip.path)
-        is GtfsZip.Remote -> scriptComponent.gtfsLoader.loadFrom(zip.url)
-    }
 
     return Gtfs(zip, dbPath, scriptComponent)
 }
@@ -55,23 +50,38 @@ public suspend fun Gtfs(zip: GtfsZip, dbPath: String = ""): Gtfs {
 public class Gtfs internal constructor(
     private val zip: GtfsZip,
     private val dbPath: String = "",
-    private val scriptComponent: ScriptComponent = ScriptComponent::class.create(dbPath)
+    private val scriptComponent: ScriptComponent = ScriptComponent::class.create(dbPath),
 ) {
-    public operator fun <R> invoke(block: StaticGtfsScope.() -> R): R {
+    private var initialized: Boolean = false
+
+    private suspend fun ensureInitialized() {
+        if (!initialized) {
+            when (zip) {
+                is GtfsZip.Local -> scriptComponent.gtfsLoader.loadFrom(zip.path)
+                is GtfsZip.Remote -> scriptComponent.gtfsLoader.loadFrom(zip.url)
+            }
+            initialized = true
+        }
+    }
+
+    public suspend operator fun <R> invoke(block: StaticGtfsScope.() -> R): R {
+        ensureInitialized()
         return scriptComponent.taskDsl().run(block)
     }
 
-    public fun <R> edit(block: MutableStaticGtfsScope.() -> R): R {
+    public suspend fun <R> edit(block: MutableStaticGtfsScope.() -> R): R {
+        ensureInitialized()
         return scriptComponent.mutableTaskDsl().run(block)
     }
 
-    public fun exportCSV(path: String) {
+    public suspend fun exportCSV(path: String) {
         exportCSV(Path(path))
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    public fun exportCSV(path: Path) {
+    public suspend fun exportCSV(path: Path) {
         check(path.isDirectory()) { "Path should be a directory" }
+        ensureInitialized()
 
         val csv = Csv {
             hasHeaderRecord = true

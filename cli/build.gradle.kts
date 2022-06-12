@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.kotlin.scripting)
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.clikt)
     implementation(libs.logback)
     implementation(project(":gtfs"))

@@ -11,7 +11,8 @@ kotlin-scripting-jvmHost = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm
 kotlin-scripting-dependencies-core = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies", version.ref = "kotlin" }
 kotlin-scripting-dependencies-maven = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies-maven", version.ref = "kotlin" }
 
-kotlinx-coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
+kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0"
+kotlinx-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0"
 kotlinx-serialization-csv = "de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:2.0.0"
 kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.3.2"
 
