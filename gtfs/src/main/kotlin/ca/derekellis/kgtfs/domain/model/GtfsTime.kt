@@ -57,3 +57,4 @@ public data class GtfsTime(val hour: Int, val minute: Int, val second: Int) : Co
 }
 
 public fun LocalDateTime.toGtfsTime(): GtfsTime = GtfsTime(hour, minute, second)
+public fun LocalTime.toGtfsTime(): GtfsTime = GtfsTime(hour, minute, second)

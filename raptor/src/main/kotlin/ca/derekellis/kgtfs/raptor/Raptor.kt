@@ -14,9 +14,21 @@ import ca.derekellis.kgtfs.raptor.models.TransferLeg
 import ca.derekellis.kgtfs.raptor.utils.takeLastWhileInclusive
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.LocalTime
 
 public class Raptor(private val provider: RaptorDataProvider, public val walkingSpeed: Double = 1.4) {
-    public fun journeys(origin: StopId, destination: StopId, time: LocalDateTime): List<Journey> {
+    /**
+     * Get a list of journeys between the [origin] and [destination] when departing at [time].
+     * The journeys are returned in order of least-transfers to most-transfers and longest-duration to shortest-duration.
+     *
+     * @param buffer The amount of time to allocate for making transfers (a buffer between arriving at a stop and boarding a bus)
+     */
+    public fun journeys(
+        origin: StopId,
+        destination: StopId,
+        time: LocalTime,
+        buffer: Duration = Duration.ZERO
+    ): List<Journey> {
         // Earliest arrival times for a stop in the k-th round
         val labels = mutableListOf<MutableMap<StopId, GtfsTime>>()
         labels.add(mutableMapOf(origin to time.toGtfsTime()))
@@ -70,7 +82,7 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
                         trip = provider.getEarliestTripAtStop(
                             route,
                             i + indexOfStop,
-                            labels[k - 1].getOrDefault(stopAlongRoute, GtfsTime.MAX)
+                            labels[k - 1].getOrDefault(stopAlongRoute, GtfsTime.MAX) + buffer
                         )
                         stopTimes = trip?.let { provider.getStopTimes(it) }
 
