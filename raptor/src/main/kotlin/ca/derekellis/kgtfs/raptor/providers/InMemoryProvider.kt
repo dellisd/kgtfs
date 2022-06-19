@@ -3,31 +3,27 @@
 package ca.derekellis.kgtfs.raptor.providers
 
 import ca.derekellis.kgtfs.domain.model.GtfsTime
-import com.github.davidmoten.rtree2.RTree
-import com.github.davidmoten.rtree2.geometry.Geometries
-import com.github.davidmoten.rtree2.internal.EntryDefault
 import ca.derekellis.kgtfs.domain.model.RouteId
 import ca.derekellis.kgtfs.domain.model.StopId
 import ca.derekellis.kgtfs.domain.model.TripId
 import ca.derekellis.kgtfs.dsl.gtfs
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
-import ca.derekellis.kgtfs.raptor.db.executeAsSet
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
+import com.github.davidmoten.rtree2.RTree
+import com.github.davidmoten.rtree2.geometry.Geometries
+import com.github.davidmoten.rtree2.internal.EntryDefault
 import io.github.dellisd.spatialk.geojson.dsl.lngLat
 import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
 import io.github.dellisd.spatialk.turf.Units
 import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
-import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
-public class InMemoryProvider(
-    source: String,
-    cache: String = "",
+public class InMemoryProvider private constructor(
     private val date: LocalDate = LocalDate.now()
 ) :
     RaptorDataProvider {
@@ -41,18 +37,9 @@ public class InMemoryProvider(
 
     init {
         logger.info("Initializing InMemoryProvider")
-
-        if (cache.isNotEmpty()) {
-            loadIndicesFromCache(cache)
-        } else {
-            // TODO: Delegate the suspension to somewhere else
-            runBlocking {
-                buildIndicesFromSource(source)
-            }
-        }
     }
 
-    private suspend fun buildIndicesFromSource(source: String) = gtfs(source, dbPath = "gtfs.db") {
+    private suspend fun buildIndicesFromSource(source: String, gtfsCache: String = "") = gtfs(source, dbPath = gtfsCache) {
         logger.info("Building indices from $source")
         // TODO: Update day as needed
         val today = calendar.onDate(date).map { it.serviceId }.toSet()
@@ -110,29 +97,26 @@ public class InMemoryProvider(
         val database = getDatabase(cache)
 
         logger.debug("Loading routes at stops and transfers at stop")
-        database.stopQueries.getAll().executeAsList().forEach { stop ->
-            val set = database.routeAtStopQueries.getByStop(stop) { _, route, _ -> route }.executeAsSet()
-            routesAtStop[stop] = set.toMutableSet()
+        database.routeAtStopQueries.getAll().executeAsList()
+            .groupBy { it.stop_id }
+            .forEach { (key, value) -> routesAtStop[key] = value.map { it.route_id }.toMutableSet() }
 
-            val transfersAtStop = database.transferQueries.getByOrigin(stop, ::Transfer).executeAsSet()
-            transfers[stop] = transfersAtStop
-        }
+        database.transferQueries.getAll(::Transfer).executeAsList()
+            .groupBy { it.from }
+            .forEach { (key, value) -> transfers[key] = value.toSet() }
 
         logger.debug("Loading stops along route and trips for route")
-        database.routeQueries.getAll().executeAsList().forEach { route ->
-            val stops = database.routeAtStopQueries.getByRoute(route) { stop, _, _ -> stop }.executeAsList()
-            stopsAlongRoute[route] = stops
+        database.routeAtStopQueries.getAll().executeAsList()
+            .groupBy { it.route_id }
+            .forEach { (key, value) -> stopsAlongRoute[key] = value.map { it.stop_id } }
 
-            val trips = database.tripQueries.getByRoute(route) { trip, _ -> trip }.executeAsSet()
-            tripsForRoute[route] = trips
-            trips.forEach { trip ->
-                val stopTimes = database.stopTimeQueries.getByTrip(trip) { _, stop, arrival, sequence ->
-                    StopTime(stop, arrival, sequence)
-                }.executeAsList()
+        database.stopTimeQueries.getAll { trip, stop, arrival, sequence -> trip to StopTime(stop, arrival, sequence) }.executeAsList()
+            .groupBy { (trip) -> trip }
+            .forEach { (key, value) -> stopTimesForTrip[key] = value.map { (_, time) -> time } }
 
-                stopTimesForTrip[trip] = stopTimes
-            }
-        }
+        database.tripQueries.getAll().executeAsList()
+            .groupBy { it.route_id }
+            .forEach { (key, value) -> tripsForRoute[key] = value.map { it.id }.toSet() }
     }
 
     override fun getRoutesAtStop(stop: StopId): Set<RouteId> = routesAtStop[stop] ?: emptySet()
@@ -149,7 +133,7 @@ public class InMemoryProvider(
             .firstOrNull { (_, stop) -> stop.arrivalTime > after }?.first
     }
 
-    override fun getTransfersAtStop(stop: StopId): Set<Transfer> = transfers.getValue(stop)
+    override fun getTransfersAtStop(stop: StopId): Set<Transfer> = transfers[stop] ?: emptySet()
 
     override fun isStopBefore(route: RouteId, a: StopId, b: StopId): Boolean {
         getStopsAlongRoute(route).forEach {
@@ -160,5 +144,19 @@ public class InMemoryProvider(
             }
         }
         return false
+    }
+
+    public companion object {
+        public fun fromCache(cacheFile: String, date: LocalDate = LocalDate.now()): InMemoryProvider {
+            return InMemoryProvider(date).apply {
+                loadIndicesFromCache(cacheFile)
+            }
+        }
+
+        public suspend fun fromSource(source: String, date: LocalDate = LocalDate.now(), gtfsCache: String = ""): InMemoryProvider {
+            return InMemoryProvider(date).apply {
+                buildIndicesFromSource(source, gtfsCache = gtfsCache)
+            }
+        }
     }
 }

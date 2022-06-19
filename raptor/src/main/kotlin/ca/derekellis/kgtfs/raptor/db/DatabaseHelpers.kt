@@ -3,24 +3,29 @@ package ca.derekellis.kgtfs.raptor.db
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import org.slf4j.LoggerFactory
+import java.util.Properties
 
-internal fun getDatabase(path: String): RaptorDatabase = JdbcSqliteDriver("jdbc:sqlite:$path").let { driver ->
-    migrateIfNeeded(driver)
-    RaptorDatabase(
-        driver,
-        RouteAdapter = Route.Adapter(RouteIdAdapter),
-        StopAdapter = Stop.Adapter(StopIdAdapter),
-        StopTimeAdapter = StopTime.Adapter(
-            TripIdAdapter,
-            StopIdAdapter,
-            GtfsTimeAdapter,
-            IntColumnAdapter
-        ),
-        TripAdapter = Trip.Adapter(TripIdAdapter, RouteIdAdapter),
-        RouteAtStopAdapter = RouteAtStop.Adapter(StopIdAdapter, RouteIdAdapter, IntColumnAdapter),
-        TransferAdapter = Transfer.Adapter(StopIdAdapter, StopIdAdapter, FeatureAdapter)
-    )
-}
+internal fun getDatabase(path: String, readonly: Boolean = false): RaptorDatabase =
+    JdbcSqliteDriver("jdbc:sqlite:$path",
+        Properties().apply {
+            if (readonly) setProperty("open_mode", "1")
+        }).let { driver ->
+        migrateIfNeeded(driver)
+        RaptorDatabase(
+            driver,
+            RouteAdapter = Route.Adapter(RouteIdAdapter),
+            StopAdapter = Stop.Adapter(StopIdAdapter),
+            StopTimeAdapter = StopTime.Adapter(
+                TripIdAdapter,
+                StopIdAdapter,
+                GtfsTimeAdapter,
+                IntColumnAdapter
+            ),
+            TripAdapter = Trip.Adapter(TripIdAdapter, RouteIdAdapter),
+            RouteAtStopAdapter = RouteAtStop.Adapter(StopIdAdapter, RouteIdAdapter, IntColumnAdapter),
+            TransferAdapter = Transfer.Adapter(StopIdAdapter, StopIdAdapter, FeatureAdapter)
+        )
+    }
 
 private const val versionPragma = "user_version"
 

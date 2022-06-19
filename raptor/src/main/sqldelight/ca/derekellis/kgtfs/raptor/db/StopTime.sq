@@ -17,6 +17,9 @@ CREATE INDEX idx_stop_time ON StopTime (trip_id, sequence, arrival_time);
 insert:
 INSERT INTO StopTime VALUES (?, ?, ?, ?);
 
+getAll:
+SELECT * FROM StopTime;
+
 getByTrip:
 SELECT * FROM StopTime WHERE trip_id = ? ORDER BY sequence;
 
