@@ -95,7 +95,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
     }
 
     private fun readZip(zip: Path, source: String, lastUpdated: Instant) {
-        val fs = FileSystems.newFileSystem(zip.toUri(), emptyMap<String, String>(), null)
+        val fs = FileSystems.newFileSystem(zip, this::class.java.classLoader)
 
         database.metadataQueries.clear()
         database.metadataQueries.insert(source, lastUpdated)
