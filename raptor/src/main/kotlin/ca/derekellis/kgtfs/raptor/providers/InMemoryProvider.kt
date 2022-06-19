@@ -20,6 +20,9 @@ import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
 import io.github.dellisd.spatialk.turf.Units
 import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
@@ -92,31 +95,43 @@ public class InMemoryProvider private constructor(
         }
     }
 
-    private fun loadIndicesFromCache(cache: String) {
+    private suspend fun loadIndicesFromCache(cache: String) = coroutineScope {
         logger.info("Loading indices from $cache")
         val database = getDatabase(cache)
 
         logger.debug("Loading routes at stops and transfers at stop")
-        database.routeAtStopQueries.getAll().executeAsList()
-            .groupBy { it.stop_id }
-            .forEach { (key, value) -> routesAtStop[key] = value.map { it.route_id }.toMutableSet() }
+        val stops = async {
+            database.routeAtStopQueries.getAll().executeAsList()
+                .groupBy { it.stop_id }
+                .forEach { (key, value) -> routesAtStop[key] = value.map { it.route_id }.toMutableSet() }
 
-        database.transferQueries.getAll(::Transfer).executeAsList()
-            .groupBy { it.from }
-            .forEach { (key, value) -> transfers[key] = value.toSet() }
+            database.transferQueries.getAll(::Transfer).executeAsList()
+                .groupBy { it.from }
+                .forEach { (key, value) -> transfers[key] = value.toSet() }
+        }
 
         logger.debug("Loading stops along route and trips for route")
-        database.routeAtStopQueries.getAll().executeAsList()
-            .groupBy { it.route_id }
-            .forEach { (key, value) -> stopsAlongRoute[key] = value.map { it.stop_id } }
+        val routes = async {
+            database.routeAtStopQueries.getAll().executeAsList()
+                .groupBy { it.route_id }
+                .forEach { (key, value) -> stopsAlongRoute[key] = value.map { it.stop_id } }
 
-        database.stopTimeQueries.getAll { trip, stop, arrival, sequence -> trip to StopTime(stop, arrival, sequence) }.executeAsList()
-            .groupBy { (trip) -> trip }
-            .forEach { (key, value) -> stopTimesForTrip[key] = value.map { (_, time) -> time } }
+            database.stopTimeQueries.getAll { trip, stop, arrival, sequence ->
+                trip to StopTime(
+                    stop,
+                    arrival,
+                    sequence
+                )
+            }.executeAsList()
+                .groupBy { (trip) -> trip }
+                .forEach { (key, value) -> stopTimesForTrip[key] = value.map { (_, time) -> time } }
 
-        database.tripQueries.getAll().executeAsList()
-            .groupBy { it.route_id }
-            .forEach { (key, value) -> tripsForRoute[key] = value.map { it.id }.toSet() }
+            database.tripQueries.getAll().executeAsList()
+                .groupBy { it.route_id }
+                .forEach { (key, value) -> tripsForRoute[key] = value.map { it.id }.toSet() }
+        }
+
+        listOf(stops, routes).awaitAll()
     }
 
     override fun getRoutesAtStop(stop: StopId): Set<RouteId> = routesAtStop[stop] ?: emptySet()
@@ -147,7 +162,7 @@ public class InMemoryProvider private constructor(
     }
 
     public companion object {
-        public fun fromCache(cacheFile: String, date: LocalDate = LocalDate.now()): InMemoryProvider {
+        public suspend fun fromCache(cacheFile: String, date: LocalDate = LocalDate.now()): InMemoryProvider {
             return InMemoryProvider(date).apply {
                 loadIndicesFromCache(cacheFile)
             }
