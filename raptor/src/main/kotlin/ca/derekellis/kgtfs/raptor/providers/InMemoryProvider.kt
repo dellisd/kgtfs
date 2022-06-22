@@ -97,7 +97,7 @@ public class InMemoryProvider private constructor(
 
     private suspend fun loadIndicesFromCache(cache: String) = coroutineScope {
         logger.info("Loading indices from $cache")
-        val database = getDatabase(cache)
+        val database = getDatabase(cache, readOnly = true)
 
         logger.debug("Loading routes at stops and transfers at stop")
         val stops = async {

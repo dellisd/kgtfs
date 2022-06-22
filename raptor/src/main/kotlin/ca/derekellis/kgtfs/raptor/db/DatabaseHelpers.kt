@@ -5,10 +5,10 @@ import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import org.slf4j.LoggerFactory
 import java.util.Properties
 
-internal fun getDatabase(path: String, readonly: Boolean = false): RaptorDatabase =
+internal fun getDatabase(path: String, readOnly: Boolean = false): RaptorDatabase =
     JdbcSqliteDriver("jdbc:sqlite:$path",
         Properties().apply {
-            if (readonly) setProperty("open_mode", "1")
+            if (readOnly) setProperty("open_mode", "1")
         }).let { driver ->
         migrateIfNeeded(driver)
         RaptorDatabase(
