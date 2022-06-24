@@ -1,5 +1,6 @@
 package ca.derekellis.kgtfs.dsl
 
+import app.cash.sqldelight.db.SqlDriver
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.domain.model.Stop
 import ca.derekellis.kgtfs.domain.model.StopTime
@@ -16,8 +17,9 @@ public class MutableStaticGtfsScope(
     routes: RouteDsl,
     agencies: AgencyDsl,
     shapes: ShapeDsl,
-    database: GtfsDatabase
-) : StaticGtfsScope(stops, calendar, dates, stopTimes, trips, routes, agencies, shapes, database) {
+    database: GtfsDatabase,
+    driver: SqlDriver,
+) : StaticGtfsScope(stops, calendar, dates, stopTimes, trips, routes, agencies, shapes, database, driver) {
     public fun TripDsl.add(trip: Trip, stopTimes: List<StopTime>): Unit =
         with(this@MutableStaticGtfsScope) {
             database.transaction {
