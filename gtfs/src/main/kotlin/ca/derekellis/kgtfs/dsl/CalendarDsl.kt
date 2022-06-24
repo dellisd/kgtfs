@@ -10,12 +10,16 @@ import java.time.LocalDate
 @Inject
 @GtfsDsl
 public class CalendarDsl(private val database: GtfsDatabase) {
-    public fun onDate(time: LocalDate): Set<Calendar> {
+
+    /**
+     * Get the calendars that are active on specified date, dependent on the day of week.
+     */
+    public fun onDate(date: LocalDate): Set<Calendar> {
         val exceptions =
-            database.calendarDateQueries.getByDate(time, CalendarDateMapper).executeAsList()
+            database.calendarDateQueries.getByDate(date, CalendarDateMapper).executeAsList()
                 .associateBy { it.serviceId }
 
-        val predicate = when (time.dayOfWeek.value) {
+        val predicate = when (date.dayOfWeek.value) {
             1 -> Calendar::monday
             2 -> Calendar::tuesday
             3 -> Calendar::wednesday
@@ -26,7 +30,7 @@ public class CalendarDsl(private val database: GtfsDatabase) {
         }
 
         val calendars =
-            database.calendarQueries.getByDate(time, CalendarMapper).executeAsList()
+            database.calendarQueries.getByDate(date, CalendarMapper).executeAsList()
 
         return calendars
             .filter { predicate(it) || exceptions[it.serviceId]?.exceptionType == 1 }
@@ -37,4 +41,10 @@ public class CalendarDsl(private val database: GtfsDatabase) {
     public fun today(): Set<Calendar> = onDate(LocalDate.now())
 
     public fun getAll(): List<Calendar> = database.calendarQueries.getAll(CalendarMapper).executeAsList()
+
+    /**
+     * Get all calendars on a specified date, regardless of the day of week.
+     */
+    public fun allOnDate(date: LocalDate = LocalDate.now()): Set<Calendar> =
+        database.calendarQueries.getByDate(date, CalendarMapper).executeAsList().toSet()
 }
