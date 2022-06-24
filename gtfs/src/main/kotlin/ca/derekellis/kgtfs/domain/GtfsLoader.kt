@@ -36,6 +36,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.io.path.getLastModifiedTime
 import kotlin.io.path.notExists
+import kotlin.io.path.readLines
 import kotlin.io.path.readText
 import io.github.dellisd.kgtfs.db.Agency as DbAgency
 
@@ -44,10 +45,6 @@ import io.github.dellisd.kgtfs.db.Agency as DbAgency
 @OptIn(ExperimentalSerializationApi::class)
 public class GtfsLoader(private val database: GtfsDatabase) {
     private val logger = LoggerFactory.getLogger(javaClass)
-    private val csv = Csv {
-        hasHeaderRecord = true
-        recordSeparator = System.lineSeparator()
-    }
     private val httpClient = HttpClient(CIO)
 
     public suspend fun loadFrom(zip: Path) {
@@ -97,10 +94,18 @@ public class GtfsLoader(private val database: GtfsDatabase) {
     private fun readZip(zip: Path, source: String, lastUpdated: Instant) {
         val fs = FileSystems.newFileSystem(zip, this::class.java.classLoader)
 
+        val lines = fs.getPath("/agency.txt").readText()
+        val cr = lines.contains("\r")
+
+        val csv = Csv {
+            hasHeaderRecord = true
+            recordSeparator = if (cr) "\r\n" else "\n"
+        }
+
         database.metadataQueries.clear()
         database.metadataQueries.insert(source, lastUpdated)
 
-        read<Agency>(fs, "/agency.txt") { agencies ->
+        read<Agency>(fs, "/agency.txt", csv) { agencies ->
             database.transaction {
                 agencies.forEach {
                     database.agencyQueries.insert(
@@ -117,7 +122,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Stop>(fs, "/stops.txt") { stops ->
+        read<Stop>(fs, "/stops.txt", csv) { stops ->
             database.transaction {
                 stops.forEach {
                     database.stopQueries.insert(
@@ -135,7 +140,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Trip>(fs, "/trips.txt") { stops ->
+        read<Trip>(fs, "/trips.txt", csv) { stops ->
             database.transaction {
                 stops.forEach {
                     database.tripQueries.insert(
@@ -151,7 +156,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<StopTime>(fs, "/stop_times.txt") { times ->
+        read<StopTime>(fs, "/stop_times.txt", csv) { times ->
             database.transaction {
                 times.forEach {
                     database.stopTimeQueries.insert(
@@ -167,7 +172,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Calendar>(fs, "/calendar.txt") { calendars ->
+        read<Calendar>(fs, "/calendar.txt", csv) { calendars ->
             database.transaction {
                 calendars.forEach {
                     database.calendarQueries.insert(
@@ -186,7 +191,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Shape>(fs, "/shapes.txt") { shapes ->
+        read<Shape>(fs, "/shapes.txt", csv) { shapes ->
             database.transaction {
                 shapes.forEach {
                     database.shapeQueries.insert(
@@ -199,7 +204,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Route>(fs, "/routes.txt") { routes ->
+        read<Route>(fs, "/routes.txt", csv) { routes ->
             database.transaction {
                 routes.forEach {
                     database.routeQueries.insert(
@@ -216,7 +221,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<CalendarDate>(fs, "/calendar_dates.txt") { dates ->
+        read<CalendarDate>(fs, "/calendar_dates.txt", csv) { dates ->
             database.transaction {
                 dates.forEach {
                     database.calendarDateQueries.insert(
@@ -229,7 +234,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
         }
     }
 
-    private inline fun <reified T> read(zip: FileSystem, file: String, block: (List<T>) -> Unit) {
+    private inline fun <reified T> read(zip: FileSystem, file: String, csv: Csv, block: (List<T>) -> Unit) {
         val csvFile = zip.getPath(file)
         val name = file.removePrefix("/")
 
