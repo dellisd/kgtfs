@@ -1,5 +1,8 @@
 package ca.derekellis.kgtfs.dsl
 
+import app.cash.sqldelight.db.SqlCursor
+import app.cash.sqldelight.db.SqlDriver
+import app.cash.sqldelight.db.SqlPreparedStatement
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.RouteMapper
 import ca.derekellis.kgtfs.db.ShapeMapper
@@ -26,7 +29,8 @@ public open class StaticGtfsScope(
     public val routes: RouteDsl,
     public val agencies: AgencyDsl,
     public val shapes: ShapeDsl,
-    protected val database: GtfsDatabase
+    protected val database: GtfsDatabase,
+    private val driver: SqlDriver,
 ) {
     /**
      * List of all routes that service a given stop
@@ -73,4 +77,7 @@ public open class StaticGtfsScope(
      */
     public val Route.shapes: Map<ShapeId, List<Shape>>
         get() = database.shapeQueries.getByRouteId(this.id, ShapeMapper).executeAsList().groupBy { it.id }
+
+    public fun <T> rawQuery(sql: String, mapper: (SqlCursor) -> T, parameters: Int = 0, binders: (SqlPreparedStatement.() -> Unit)? = null): T =
+        driver.executeQuery(null, sql, mapper, parameters, binders)
 }
