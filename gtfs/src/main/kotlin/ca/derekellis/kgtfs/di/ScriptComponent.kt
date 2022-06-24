@@ -1,6 +1,7 @@
 package ca.derekellis.kgtfs.di
 
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
+import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import ca.derekellis.kgtfs.db.AgencyIdAdapter
 import ca.derekellis.kgtfs.db.GtfsDatabase
@@ -35,9 +36,13 @@ import me.tatarka.inject.annotations.Provides
 internal abstract class ScriptComponent(private val dbPath: String = "gtfs.db") {
     @Provides
     @ScriptScope
-    fun provideDatabase(): GtfsDatabase = JdbcSqliteDriver("jdbc:sqlite:$dbPath").let { driver ->
-        migrateIfNeeded(driver)
-        GtfsDatabase(
+    fun sqlDriver(): SqlDriver = JdbcSqliteDriver("jdbc:sqlite:$dbPath")
+
+    @Provides
+    @ScriptScope
+    fun provideDatabase(driver: SqlDriver): GtfsDatabase {
+        migrateIfNeeded(driver as JdbcSqliteDriver)
+        return GtfsDatabase(
             driver,
             StopAdapter = Stop.Adapter(
                 StopIdAdapter,
