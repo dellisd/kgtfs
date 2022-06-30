@@ -12,12 +12,12 @@ import java.time.Duration
 import java.time.LocalDate
 import java.util.PriorityQueue
 
-public fun StaticGtfsScope.uniqueTripSequences(date: LocalDate = LocalDate.now()): List<TripSequence<Map<TripId, List<StopTime>>>> {
+public fun StaticGtfsScope.uniqueTripSequences(date: LocalDate = LocalDate.now()): List<TripSequence> {
     val serviceIds = calendar.onDate(date).map { it.serviceId }.toSet()
     return uniqueTripSequences(serviceIds)
 }
 
-public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<TripSequence<Map<TripId, List<StopTime>>>> {
+public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<TripSequence> {
     val times = stopTimes.getByServiceId(serviceIds)
     val tripMap = trips.getByServiceId(serviceIds).associateBy { it.id }
 
@@ -29,7 +29,7 @@ public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List
             .add(time)
     }
 
-    val unique = mutableMapOf<String, TripSequence<MutableMap<TripId, List<StopTime>>>>()
+    val unique = mutableMapOf<String, TripSequence>()
 
     orderedTimes.forEach { (tripId, times) ->
         val hash = sequenceHashOf(tripId)
@@ -40,12 +40,13 @@ public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List
         unique.getOrPut(newId) {
             TripSequence(
                 RouteId(newId),
+                trip.routeId,
                 times.map { it.stopId },
                 mutableMapOf(),
                 hash
             )
-        }.trips[tripId] =
-            times.toList()
+        }
+            ._trips[tripId] = times.toList()
     }
 
     return unique.values.toList()
@@ -60,14 +61,29 @@ public fun StaticGtfsScope.sequenceHashOf(trip: TripId): String {
     return digest.digest(bytes).joinToString("") { "%02x".format(it) }
 }
 
-public data class TripSequence<out M : Map<TripId, List<StopTime>>>(
-    val route: RouteId,
+/**
+ * Represents a unique sequence of stops in a route and the corresponding trips for this sequence.
+ *
+ * @param uniqueId A unique identifier for this sequence. The format is: "`${gtfsId}-${directionId}-${hash}`"
+ * where the `directionId` is taken from the GTFS trip entries, and the `hash` is the value of [hash].
+ * @param gtfsId The GTFS ID of the Route that this sequence is for
+ * @param sequence The sequence of stops
+ * @param hash A unique hash of the sequence of stops, useful for indexing
+ */
+public data class TripSequence(
+    val uniqueId: RouteId,
+    val gtfsId: RouteId,
     val sequence: List<StopId>,
-    val trips: M,
+    internal val _trips: MutableMap<TripId, List<StopTime>>,
     val hash: String,
-)
+) {
+    /**
+     * All trips and their corresponding stop times that follow this sequence on this particular route.
+     */
+    val trips: Map<TripId, List<StopTime>> get() = _trips
+}
 
-public fun TripSequence<*>.frequency(from: GtfsTime, until: GtfsTime): Duration? {
+public fun TripSequence.frequency(from: GtfsTime, until: GtfsTime): Duration? {
     check(until > from) { "'until' must be after 'from'" }
 
     val diffs = trips.values

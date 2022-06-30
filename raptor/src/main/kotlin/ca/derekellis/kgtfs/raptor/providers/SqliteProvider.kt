@@ -46,13 +46,13 @@ public class SqliteProvider(dbPath: String) : RaptorDataProvider {
             stops.getAll().forEach { database.stopQueries.insert(it.id) }
 
             sequences.forEach {
-                database.routeQueries.insert(it.route)
+                database.routeQueries.insert(it.uniqueId)
                 it.sequence.forEachIndexed { index, stop ->
-                    database.routeAtStopQueries.insert(stop, it.route, index + 1)
+                    database.routeAtStopQueries.insert(stop, it.uniqueId, index + 1)
                 }
 
                 it.trips.forEach { (trip, times) ->
-                    database.tripQueries.insert(trip, it.route)
+                    database.tripQueries.insert(trip, it.uniqueId)
                     times.forEachIndexed { index, time ->
                         database.stopTimeQueries.insert(trip, time.stopId, time.arrivalTime, index + 1)
                     }

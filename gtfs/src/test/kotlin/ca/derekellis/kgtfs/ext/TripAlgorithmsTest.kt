@@ -32,9 +32,9 @@ class TripAlgorithmsTest {
             assertEquals(2, sequences.size)
             sequences.forEach {
                 if (it.sequence.first().value == "DDDD") {
-                    assertEquals(1, it.trips.size)
+                    assertEquals(1, it._trips.size)
                 } else {
-                    assertEquals(5, it.trips.size)
+                    assertEquals(5, it._trips.size)
                 }
             }
         }
