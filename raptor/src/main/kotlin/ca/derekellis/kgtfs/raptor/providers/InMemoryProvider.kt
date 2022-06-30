@@ -62,7 +62,7 @@ public class InMemoryProvider private constructor(
             }
 
         // Deal with stop sequences
-        sequences.forEach { (route, sequence, trips) ->
+        sequences.forEach { (route, _, sequence, trips) ->
             trips.forEach { (_, stops) ->
                 stops.forEach { time ->
                     routesAtStop.getOrPut(time.stopId, ::mutableSetOf).add(route)

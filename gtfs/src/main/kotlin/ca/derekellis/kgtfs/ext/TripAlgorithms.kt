@@ -70,17 +70,50 @@ public fun StaticGtfsScope.sequenceHashOf(trip: TripId): String {
  * @param sequence The sequence of stops
  * @param hash A unique hash of the sequence of stops, useful for indexing
  */
-public data class TripSequence(
-    val uniqueId: RouteId,
-    val gtfsId: RouteId,
-    val sequence: List<StopId>,
+public class TripSequence(
+    public val uniqueId: RouteId,
+    public val gtfsId: RouteId,
+    public val sequence: List<StopId>,
     internal val _trips: MutableMap<TripId, List<StopTime>>,
-    val hash: String,
+    public val hash: String,
 ) {
     /**
      * All trips and their corresponding stop times that follow this sequence on this particular route.
      */
-    val trips: Map<TripId, List<StopTime>> get() = _trips
+    public val trips: Map<TripId, List<StopTime>> get() = _trips
+
+    public operator fun component1(): RouteId = uniqueId
+    public operator fun component2(): RouteId = gtfsId
+    public operator fun component3(): List<StopId> = sequence
+    public operator fun component4(): Map<TripId, List<StopTime>> = trips
+    public operator fun component5(): String = hash
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TripSequence
+
+        if (uniqueId != other.uniqueId) return false
+        if (gtfsId != other.gtfsId) return false
+        if (sequence != other.sequence) return false
+        if (hash != other.hash) return false
+        if (trips != other.trips) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = uniqueId.hashCode()
+        result = 31 * result + gtfsId.hashCode()
+        result = 31 * result + sequence.hashCode()
+        result = 31 * result + hash.hashCode()
+        result = 31 * result + trips.hashCode()
+        return result
+    }
+
+    override fun toString(): String =
+        "TripSequence(uniqueId=$uniqueId, gtfsId=$gtfsId, sequence=$sequence,  trips=$trips, hash='$hash')"
 }
 
 public fun TripSequence.frequency(from: GtfsTime, until: GtfsTime): Duration? {
