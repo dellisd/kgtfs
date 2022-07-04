@@ -245,7 +245,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
 
         logger.info("Reading $name")
 
-        val text = csvFile.readText()
+        val text = csvFile.readText().trim('\uFEFF')
         val items: List<T> = csv.decodeFromString(ListSerializer(serializer()), text)
         logger.info("Parsed from $name")
 
