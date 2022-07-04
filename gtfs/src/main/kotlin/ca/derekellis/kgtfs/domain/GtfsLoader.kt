@@ -94,18 +94,10 @@ public class GtfsLoader(private val database: GtfsDatabase) {
     private fun readZip(zip: Path, source: String, lastUpdated: Instant) {
         val fs = FileSystems.newFileSystem(zip, this::class.java.classLoader)
 
-        val lines = fs.getPath("/agency.txt").readText()
-        val cr = lines.contains("\r")
-
-        val csv = Csv {
-            hasHeaderRecord = true
-            recordSeparator = if (cr) "\r\n" else "\n"
-        }
-
         database.metadataQueries.clear()
         database.metadataQueries.insert(source, lastUpdated)
 
-        read<Agency>(fs, "/agency.txt", csv) { agencies ->
+        read<Agency>(fs, "/agency.txt") { agencies ->
             database.transaction {
                 agencies.forEach {
                     database.agencyQueries.insert(
@@ -122,7 +114,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Stop>(fs, "/stops.txt", csv) { stops ->
+        read<Stop>(fs, "/stops.txt") { stops ->
             database.transaction {
                 stops.forEach {
                     database.stopQueries.insert(
@@ -140,7 +132,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Trip>(fs, "/trips.txt", csv) { stops ->
+        read<Trip>(fs, "/trips.txt") { stops ->
             database.transaction {
                 stops.forEach {
                     database.tripQueries.insert(
@@ -156,7 +148,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<StopTime>(fs, "/stop_times.txt", csv) { times ->
+        read<StopTime>(fs, "/stop_times.txt") { times ->
             database.transaction {
                 times.forEach {
                     database.stopTimeQueries.insert(
@@ -172,7 +164,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Calendar>(fs, "/calendar.txt", csv) { calendars ->
+        read<Calendar>(fs, "/calendar.txt") { calendars ->
             database.transaction {
                 calendars.forEach {
                     database.calendarQueries.insert(
@@ -191,7 +183,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Shape>(fs, "/shapes.txt", csv) { shapes ->
+        read<Shape>(fs, "/shapes.txt") { shapes ->
             database.transaction {
                 shapes.forEach {
                     database.shapeQueries.insert(
@@ -204,7 +196,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Route>(fs, "/routes.txt", csv) { routes ->
+        read<Route>(fs, "/routes.txt") { routes ->
             database.transaction {
                 routes.forEach {
                     database.routeQueries.insert(
@@ -221,7 +213,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<CalendarDate>(fs, "/calendar_dates.txt", csv) { dates ->
+        read<CalendarDate>(fs, "/calendar_dates.txt") { dates ->
             database.transaction {
                 dates.forEach {
                     database.calendarDateQueries.insert(
@@ -234,7 +226,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
         }
     }
 
-    private inline fun <reified T> read(zip: FileSystem, file: String, csv: Csv, block: (List<T>) -> Unit) {
+    private inline fun <reified T> read(zip: FileSystem, file: String, block: (List<T>) -> Unit) {
         val csvFile = zip.getPath(file)
         val name = file.removePrefix("/")
 
@@ -246,6 +238,13 @@ public class GtfsLoader(private val database: GtfsDatabase) {
         logger.info("Reading $name")
 
         val text = csvFile.readText().trim('\uFEFF')
+
+        val cr = text.contains("\r")
+        val csv = Csv {
+            hasHeaderRecord = true
+            recordSeparator = if (cr) "\r\n" else "\n"
+        }
+
         val items: List<T> = csv.decodeFromString(ListSerializer(serializer()), text)
         logger.info("Parsed from $name")
 
