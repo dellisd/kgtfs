@@ -34,11 +34,12 @@ import java.nio.file.Path
 import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.io.path.div
 import kotlin.io.path.getLastModifiedTime
+import kotlin.io.path.isDirectory
+import kotlin.io.path.name
 import kotlin.io.path.notExists
-import kotlin.io.path.readLines
 import kotlin.io.path.readText
-import io.github.dellisd.kgtfs.db.Agency as DbAgency
 
 @Inject
 @ScriptScope
@@ -47,19 +48,20 @@ public class GtfsLoader(private val database: GtfsDatabase) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val httpClient = HttpClient(CIO)
 
-    public suspend fun loadFrom(zip: Path) {
+    public suspend fun loadFromPath(zip: Path) {
         val metadata = database.metadataQueries.get().executeAsOneOrNull()
         val lastModified = zip.getLastModifiedTime().toInstant()
 
         if (metadata == null || metadata.last_updated < lastModified) {
             logger.info("Loading GTFS from $zip")
-            withContext(Dispatchers.IO) { readZip(zip, zip.toString(), lastModified) }
+            val root = if (zip.isDirectory()) zip else FileSystems.newFileSystem(zip, this::class.java.classLoader).getPath("/")
+            withContext(Dispatchers.IO) { readFromPath(root, zip.toString(), lastModified) }
         } else {
             logger.info("GTFS cache is up to date. Skipping.")
         }
     }
 
-    public suspend fun loadFrom(url: Url) {
+    public suspend fun loadFromUrl(url: Url) {
         val temp = withContext(Dispatchers.IO) {
             Files.createTempFile(null, null)
         }
@@ -85,19 +87,19 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             response.bodyAsChannel().copyAndClose(temp.toFile().writeChannel())
 
             logger.info("Successfully downloaded GTFS zip")
-            withContext(Dispatchers.IO) { readZip(temp, url.toString(), lastModified) }
+            withContext(Dispatchers.IO) {
+                readFromPath(FileSystems.newFileSystem(temp, this::class.java.classLoader).getPath("/"), url.toString(), lastModified)
+            }
         } else {
             logger.info("GTFS cache is up to date. Skipping download.")
         }
     }
 
-    private fun readZip(zip: Path, source: String, lastUpdated: Instant) {
-        val fs = FileSystems.newFileSystem(zip, this::class.java.classLoader)
-
+    private fun readFromPath(root: Path, source: String, lastUpdated: Instant) {
         database.metadataQueries.clear()
         database.metadataQueries.insert(source, lastUpdated)
 
-        read<Agency>(fs, "/agency.txt") { agencies ->
+        read<Agency>(root / "agency.txt") { agencies ->
             database.transaction {
                 agencies.forEach {
                     database.agencyQueries.insert(
@@ -114,7 +116,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Stop>(fs, "/stops.txt") { stops ->
+        read<Stop>(root / "stops.txt") { stops ->
             database.transaction {
                 stops.forEach {
                     database.stopQueries.insert(
@@ -132,7 +134,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Trip>(fs, "/trips.txt") { stops ->
+        read<Trip>(root / "trips.txt") { stops ->
             database.transaction {
                 stops.forEach {
                     database.tripQueries.insert(
@@ -148,7 +150,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<StopTime>(fs, "/stop_times.txt") { times ->
+        read<StopTime>(root / "stop_times.txt") { times ->
             database.transaction {
                 times.forEach {
                     database.stopTimeQueries.insert(
@@ -164,7 +166,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Calendar>(fs, "/calendar.txt") { calendars ->
+        read<Calendar>(root / "calendar.txt") { calendars ->
             database.transaction {
                 calendars.forEach {
                     database.calendarQueries.insert(
@@ -183,7 +185,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Shape>(fs, "/shapes.txt") { shapes ->
+        read<Shape>(root / "shapes.txt") { shapes ->
             database.transaction {
                 shapes.forEach {
                     database.shapeQueries.insert(
@@ -196,7 +198,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<Route>(fs, "/routes.txt") { routes ->
+        read<Route>(root / "routes.txt") { routes ->
             database.transaction {
                 routes.forEach {
                     database.routeQueries.insert(
@@ -213,7 +215,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
             }
         }
 
-        read<CalendarDate>(fs, "/calendar_dates.txt") { dates ->
+        read<CalendarDate>(root / "calendar_dates.txt") { dates ->
             database.transaction {
                 dates.forEach {
                     database.calendarDateQueries.insert(
@@ -226,18 +228,17 @@ public class GtfsLoader(private val database: GtfsDatabase) {
         }
     }
 
-    private inline fun <reified T> read(zip: FileSystem, file: String, block: (List<T>) -> Unit) {
-        val csvFile = zip.getPath(file)
-        val name = file.removePrefix("/")
+    private inline fun <reified T> read(path: Path, block: (List<T>) -> Unit) {
+        val name = path.name
 
-        if (csvFile.notExists()) {
+        if (path.notExists()) {
             logger.error("Cannot read $name")
             return
         }
 
         logger.info("Reading $name")
 
-        val text = csvFile.readText().trim('\uFEFF')
+        val text = path.readText().trim('\uFEFF')
 
         val cr = text.contains("\r")
         val csv = Csv {

@@ -2,6 +2,8 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.di.ScriptComponent
 import ca.derekellis.kgtfs.di.create
+import ca.derekellis.kgtfs.isSqliteFile
+import ca.derekellis.kgtfs.isZipFile
 import io.ktor.http.Url
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.csv.Csv
@@ -22,7 +24,13 @@ public suspend fun <R> gtfs(source: String, dbPath: String = "", block: StaticGt
 
 @GtfsDsl
 public fun Gtfs(source: Path, dbPath: String = ""): Gtfs {
-    val zip = GtfsZip.Local(source)
+    val zip = when {
+        source.isDirectory() -> GtfsZip.LocalDirectory(source)
+        source.isSqliteFile() -> return Gtfs(GtfsZip.LocalSqliteFile(source), source.toString())
+        source.isZipFile() -> GtfsZip.Local(source)
+        else -> throw IllegalArgumentException("Unsupported file type")
+    }
+
     return Gtfs(zip, dbPath)
 }
 
@@ -34,7 +42,13 @@ public fun Gtfs(source: String, dbPath: String = ""): Gtfs {
     val zip = if (scheme.startsWith("http")) {
         GtfsZip.Remote(Url(asUri))
     } else {
-        GtfsZip.Local(Path(asUri.toString()))
+        val path = Path(asUri.toString())
+        when {
+            path.isDirectory() -> GtfsZip.LocalDirectory(path)
+            path.isSqliteFile() -> return Gtfs(GtfsZip.LocalSqliteFile(path), path.toString())
+            path.isZipFile() -> GtfsZip.Local(path)
+            else -> throw IllegalArgumentException("Unsupported file type")
+        }
     }
 
     return Gtfs(zip, dbPath)
@@ -42,9 +56,10 @@ public fun Gtfs(source: String, dbPath: String = ""): Gtfs {
 
 @GtfsDsl
 public fun Gtfs(zip: GtfsZip, dbPath: String = ""): Gtfs {
-    val scriptComponent = ScriptComponent::class.create(dbPath)
+    val actualDbPath = if (zip is GtfsZip.LocalSqliteFile) zip.path.toString() else dbPath
+    val scriptComponent = ScriptComponent::class.create(actualDbPath)
 
-    return Gtfs(zip, dbPath, scriptComponent)
+    return Gtfs(zip, actualDbPath, scriptComponent)
 }
 
 public class Gtfs internal constructor(
@@ -57,8 +72,10 @@ public class Gtfs internal constructor(
     private suspend fun ensureInitialized() {
         if (!initialized) {
             when (zip) {
-                is GtfsZip.Local -> scriptComponent.gtfsLoader.loadFrom(zip.path)
-                is GtfsZip.Remote -> scriptComponent.gtfsLoader.loadFrom(zip.url)
+                is GtfsZip.Local -> scriptComponent.gtfsLoader.loadFromPath(zip.path)
+                is GtfsZip.Remote -> scriptComponent.gtfsLoader.loadFromUrl(zip.url)
+                is GtfsZip.LocalDirectory -> scriptComponent.gtfsLoader.loadFromPath(zip.path)
+                is GtfsZip.LocalSqliteFile -> { /* no-op, database is located directly */ }
             }
             initialized = true
         }
