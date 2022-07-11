@@ -244,6 +244,7 @@ public class GtfsLoader(private val database: GtfsDatabase) {
         val csv = Csv {
             hasHeaderRecord = true
             recordSeparator = if (cr) "\r\n" else "\n"
+            ignoreUnknownColumns = true
         }
 
         val items: List<T> = csv.decodeFromString(ListSerializer(serializer()), text)
