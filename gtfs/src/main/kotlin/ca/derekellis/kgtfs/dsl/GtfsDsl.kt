@@ -128,4 +128,12 @@ public class Gtfs internal constructor(
             path.resolve("stop_times.txt").writeText(stopTimes)
         }
     }
+
+    /**
+     * Closes the underlying SQLite database.
+     * All querying and editing of this GTFS object after calling this method will fail.
+     */
+    public fun close() {
+        scriptComponent.sqlDriver().close()
+    }
 }
