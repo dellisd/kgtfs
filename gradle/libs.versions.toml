@@ -1,7 +1,7 @@
 [versions]
 kotlin = "1.8.10"
 ktor = "2.0.0"
-sqldelight = "2.0.0-alpha02"
+sqldelight = "2.0.0-alpha05"
 kotlin-inject = "0.4.1"
 
 [libraries]
@@ -37,7 +37,7 @@ rtree = "com.github.davidmoten:rtree2:0.9.3"
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
-ksp = { id = "com.google.devtools.ksp", version = "1.6.20-1.0.5" }
+ksp = { id = "com.google.devtools.ksp", version = "1.8.10-1.0.9" }
 publishing = { id = "com.vanniktech.maven.publish", version = "0.19.0" }
 
 [bundles]

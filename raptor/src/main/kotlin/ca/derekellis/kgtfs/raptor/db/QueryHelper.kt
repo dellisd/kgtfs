@@ -6,4 +6,4 @@ internal fun <T : Any> ExecutableQuery<T>.executeAsSet(): Set<T> = execute { cur
     val result = mutableSetOf<T>()
     while (cursor.next()) result.add(mapper(cursor))
     result
-}
+}.value
