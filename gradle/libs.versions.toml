@@ -2,7 +2,7 @@
 kotlin = "1.8.10"
 ktor = "2.0.0"
 sqldelight = "2.0.0-alpha05"
-kotlin-inject = "0.4.1"
+kotlin-inject = "0.6.1"
 
 [libraries]
 kotlin-scripting-common = { module = "org.jetbrains.kotlin:kotlin-scripting-common", version.ref = "kotlin" }
