@@ -14,7 +14,7 @@ internal fun migrateIfNeeded(driver: JdbcSqliteDriver) {
             } else {
                 null
             }
-        }, 0) ?: 0
+        }, 0).value ?: 0
 
     val newVersion = GtfsDatabase.Schema.version
 

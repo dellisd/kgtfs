@@ -39,8 +39,10 @@ dependencies {
 }
 
 sqldelight {
-    database("GtfsDatabase") {
-        packageName = "ca.derekellis.kgtfs.db"
+    databases {
+        create("GtfsDatabase") {
+            packageName.set("ca.derekellis.kgtfs.db")
+        }
     }
 }
 

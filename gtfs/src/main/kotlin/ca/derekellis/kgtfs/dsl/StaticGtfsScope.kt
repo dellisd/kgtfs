@@ -79,5 +79,5 @@ public open class StaticGtfsScope(
         get() = database.shapeQueries.getByRouteId(this.id, ShapeMapper).executeAsList().groupBy { it.id }
 
     public fun <T> rawQuery(sql: String, mapper: (SqlCursor) -> T, parameters: Int = 0, binders: (SqlPreparedStatement.() -> Unit)? = null): T =
-        driver.executeQuery(null, sql, mapper, parameters, binders)
+        driver.executeQuery(null, sql, mapper, parameters, binders).value
 }
