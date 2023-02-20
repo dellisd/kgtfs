@@ -44,6 +44,7 @@ import kotlin.io.path.readText
 @Inject
 @ScriptScope
 @OptIn(ExperimentalSerializationApi::class)
+@Deprecated("Use GtfsReader instead")
 public class GtfsLoader(private val database: GtfsDatabase) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val httpClient = HttpClient(CIO)

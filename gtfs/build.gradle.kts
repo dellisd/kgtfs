@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.csv)
+    implementation(libs.csv)
     implementation(libs.logback)
 
     api(libs.spatialk.turf)

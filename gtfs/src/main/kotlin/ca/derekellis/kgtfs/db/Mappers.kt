@@ -78,7 +78,7 @@ internal val StopTimeMapper =
     }
 
 internal val AgencyMapper =
-    { agency_id: AgencyId, agency_name: String, agency_url: String, agency_timezeone: String, agency_lang: String?, agency_phone: String?, agency_fare_url: String?, agency_email: String? ->
+    { agency_id: AgencyId?, agency_name: String, agency_url: String, agency_timezeone: String, agency_lang: String?, agency_phone: String?, agency_fare_url: String?, agency_email: String? ->
         Agency(
             agency_id,
             agency_name,

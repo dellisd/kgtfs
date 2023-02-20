@@ -1,8 +1,8 @@
 import ca.derekellis.kgtfs.domain.model.AgencyId;
 
 CREATE TABLE Agency (
-    agency_id TEXT AS AgencyId NOT NULL PRIMARY KEY,
-    agency_name TEXT NOT NULL,
+    agency_id TEXT AS AgencyId,
+    agency_name TEXT NOT NULL PRIMARY KEY,
     agency_url TEXT NOT NULL,
     agency_timezeone TEXT NOT NULL,
     agency_lang TEXT,

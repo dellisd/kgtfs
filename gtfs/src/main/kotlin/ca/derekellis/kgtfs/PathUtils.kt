@@ -2,6 +2,8 @@ package ca.derekellis.kgtfs
 
 import java.nio.file.Path
 import kotlin.io.path.inputStream
+import kotlin.io.path.isDirectory
+import kotlin.io.path.isRegularFile
 
 private val ZIP_SIGNATURE = byteArrayOf(0x50, 0x4B, 0x03, 0x04)
 private val SQLITE_SIGNATURE = byteArrayOf(
@@ -10,15 +12,19 @@ private val SQLITE_SIGNATURE = byteArrayOf(
 )
 
 internal fun Path.isZipFile(): Boolean {
-  val stream = inputStream()
-  val bytes = stream.readNBytes(ZIP_SIGNATURE.size)
+  if (!isRegularFile()) return false
+  val bytes = inputStream().use { stream ->
+    stream.readNBytes(ZIP_SIGNATURE.size)
+  }
 
   return bytes.contentEquals(ZIP_SIGNATURE)
 }
 
 internal fun Path.isSqliteFile(): Boolean {
-  val stream = inputStream()
-  val bytes = stream.readNBytes(SQLITE_SIGNATURE.size)
+  if (!isRegularFile()) return false
+  val bytes = inputStream().use { stream ->
+    stream.readNBytes(SQLITE_SIGNATURE.size)
+  }
 
   return bytes.contentEquals(SQLITE_SIGNATURE)
 }
