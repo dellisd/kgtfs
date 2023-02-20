@@ -1,15 +1,15 @@
 package ca.derekellis.kgtfs.db
 
 import app.cash.sqldelight.ColumnAdapter
-import ca.derekellis.kgtfs.domain.model.AgencyId
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.ServiceId
-import ca.derekellis.kgtfs.domain.model.ShapeId
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.TripId
+import ca.derekellis.kgtfs.csv.AgencyId
+import ca.derekellis.kgtfs.csv.GtfsTime
+import ca.derekellis.kgtfs.csv.Route
+import ca.derekellis.kgtfs.csv.RouteId
+import ca.derekellis.kgtfs.csv.ServiceId
+import ca.derekellis.kgtfs.csv.ShapeId
+import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.TripId
 import java.time.Instant
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

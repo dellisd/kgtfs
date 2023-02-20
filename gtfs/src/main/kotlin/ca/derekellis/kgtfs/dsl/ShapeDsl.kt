@@ -2,8 +2,8 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.ShapeMapper
-import ca.derekellis.kgtfs.domain.model.Shape
-import ca.derekellis.kgtfs.domain.model.ShapeId
+import ca.derekellis.kgtfs.csv.Shape
+import ca.derekellis.kgtfs.csv.ShapeId
 import me.tatarka.inject.annotations.Inject
 
 @Inject

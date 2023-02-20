@@ -1,11 +1,11 @@
 package ca.derekellis.kgtfs.ext
 
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.ServiceId
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.StopTime
-import ca.derekellis.kgtfs.domain.model.TripId
+import ca.derekellis.kgtfs.csv.GtfsTime
+import ca.derekellis.kgtfs.csv.RouteId
+import ca.derekellis.kgtfs.csv.ServiceId
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.StopTime
+import ca.derekellis.kgtfs.csv.TripId
 import ca.derekellis.kgtfs.dsl.StaticGtfsScope
 import java.security.MessageDigest
 import java.time.Duration
@@ -71,11 +71,11 @@ public fun StaticGtfsScope.sequenceHashOf(trip: TripId): String {
  * @param hash A unique hash of the sequence of stops, useful for indexing
  */
 public class TripSequence(
-    public val uniqueId: RouteId,
-    public val gtfsId: RouteId,
-    public val sequence: List<StopId>,
-    internal val _trips: MutableMap<TripId, List<StopTime>>,
-    public val hash: String,
+  public val uniqueId: RouteId,
+  public val gtfsId: RouteId,
+  public val sequence: List<StopId>,
+  internal val _trips: MutableMap<TripId, List<StopTime>>,
+  public val hash: String,
 ) {
     /**
      * All trips and their corresponding stop times that follow this sequence on this particular route.

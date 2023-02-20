@@ -1,10 +1,10 @@
 package ca.derekellis.kgtfs.raptor
 
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.TripId
-import ca.derekellis.kgtfs.domain.model.toGtfsTime
+import ca.derekellis.kgtfs.csv.GtfsTime
+import ca.derekellis.kgtfs.csv.RouteId
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.TripId
+import ca.derekellis.kgtfs.csv.toGtfsTime
 import ca.derekellis.kgtfs.raptor.models.Journey
 import ca.derekellis.kgtfs.raptor.models.Leg
 import ca.derekellis.kgtfs.raptor.models.RouteLeg
@@ -13,7 +13,6 @@ import ca.derekellis.kgtfs.raptor.models.Transfer
 import ca.derekellis.kgtfs.raptor.models.TransferLeg
 import ca.derekellis.kgtfs.raptor.utils.takeLastWhileInclusive
 import java.time.Duration
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 public class Raptor(private val provider: RaptorDataProvider, public val walkingSpeed: Double = 1.4) {
@@ -24,10 +23,10 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
      * @param buffer The amount of time to allocate for making transfers (a buffer between arriving at a stop and boarding a bus)
      */
     public fun journeys(
-        origin: StopId,
-        destination: StopId,
-        time: LocalTime,
-        buffer: Duration = Duration.ZERO
+      origin: StopId,
+      destination: StopId,
+      time: LocalTime,
+      buffer: Duration = Duration.ZERO
     ): List<Journey> {
         // Earliest arrival times for a stop in the k-th round
         val labels = mutableListOf<MutableMap<StopId, GtfsTime>>()
@@ -146,8 +145,8 @@ public class Raptor(private val provider: RaptorDataProvider, public val walking
     private val Transfer.duration: Duration get() = Duration.ofSeconds((distance / walkingSpeed).toLong())
 
     private fun connectionsToJourneys(
-        connections: Map<StopId, Map<Int, Leg>>,
-        destination: StopId
+      connections: Map<StopId, Map<Int, Leg>>,
+      destination: StopId
     ): List<Journey> {
         return connections[destination]?.keys?.mapNotNull outer@{ key ->
             var step = destination

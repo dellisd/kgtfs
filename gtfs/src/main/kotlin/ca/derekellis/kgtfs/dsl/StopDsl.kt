@@ -2,8 +2,8 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.StopMapper
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopId
+import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.csv.StopId
 import me.tatarka.inject.annotations.Inject
 
 @Inject

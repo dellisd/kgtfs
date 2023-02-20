@@ -2,8 +2,8 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.RouteMapper
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.RouteId
+import ca.derekellis.kgtfs.csv.Route
+import ca.derekellis.kgtfs.csv.RouteId
 import me.tatarka.inject.annotations.Inject
 
 @Inject

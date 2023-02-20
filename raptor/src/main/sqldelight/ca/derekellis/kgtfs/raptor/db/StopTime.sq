@@ -1,6 +1,6 @@
-import ca.derekellis.kgtfs.domain.model.StopId;
-import ca.derekellis.kgtfs.domain.model.TripId;
-import ca.derekellis.kgtfs.domain.model.GtfsTime;
+import ca.derekellis.kgtfs.csv.StopId;
+import ca.derekellis.kgtfs.csv.TripId;
+import ca.derekellis.kgtfs.csv.GtfsTime;
 import kotlin.Int;
 
 CREATE TABLE StopTime(

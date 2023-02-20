@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.domain.model
+package ca.derekellis.kgtfs.csv
 
 import ca.derekellis.kgtfs.domain.serial.RouteTypeSerializer
 import kotlinx.serialization.SerialName
@@ -12,14 +12,14 @@ public value class RouteId(public val value: String) {
 
 @Serializable
 public data class Route(
-    @SerialName("route_id") val id: RouteId,
-    @SerialName("route_short_name") val shortName: String?,
-    @SerialName("route_long_name") val longName: String?,
-    @SerialName("route_desc") val desc: String?,
-    @SerialName("route_type") val type: Type,
-    @SerialName("route_url") val url: String? = null,
-    @SerialName("route_color") val color: String? = null,
-    @SerialName("route_text_color") val textColor: String? = null
+  @SerialName("route_id") val id: RouteId,
+  @SerialName("route_short_name") val shortName: String?,
+  @SerialName("route_long_name") val longName: String?,
+  @SerialName("route_desc") val desc: String?,
+  @SerialName("route_type") val type: Type,
+  @SerialName("route_url") val url: String? = null,
+  @SerialName("route_color") val color: String? = null,
+  @SerialName("route_text_color") val textColor: String? = null
 ) {
     @Serializable(with = RouteTypeSerializer::class)
     public enum class Type(internal val value: Int) {

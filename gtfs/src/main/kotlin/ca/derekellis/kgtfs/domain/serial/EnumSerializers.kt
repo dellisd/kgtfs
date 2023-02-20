@@ -1,7 +1,7 @@
 package ca.derekellis.kgtfs.domain.serial
 
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.Stop
+import ca.derekellis.kgtfs.csv.Route
+import ca.derekellis.kgtfs.csv.Stop
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor

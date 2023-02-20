@@ -1,4 +1,4 @@
-import ca.derekellis.kgtfs.domain.model.StopId;
+import ca.derekellis.kgtfs.csv.StopId;
 
 CREATE TABLE Stop (
     id TEXT AS StopId PRIMARY KEY

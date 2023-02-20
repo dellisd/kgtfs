@@ -1,7 +1,7 @@
 package ca.derekellis.kgtfs.ext
 
 import ca.derekellis.kgtfs.GtfsZipRule
-import ca.derekellis.kgtfs.domain.model.GtfsTime
+import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.dsl.Gtfs
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest

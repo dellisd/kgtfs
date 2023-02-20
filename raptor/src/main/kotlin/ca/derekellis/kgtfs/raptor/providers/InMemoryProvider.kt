@@ -2,10 +2,10 @@
 
 package ca.derekellis.kgtfs.raptor.providers
 
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.TripId
+import ca.derekellis.kgtfs.csv.GtfsTime
+import ca.derekellis.kgtfs.csv.RouteId
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.TripId
 import ca.derekellis.kgtfs.dsl.gtfs
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider

@@ -1,4 +1,4 @@
-import ca.derekellis.kgtfs.domain.model.ServiceId;
+import ca.derekellis.kgtfs.csv.ServiceId;
 import java.time.LocalDate;
 import kotlin.Boolean;
 

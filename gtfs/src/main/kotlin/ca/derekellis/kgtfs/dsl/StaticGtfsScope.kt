@@ -9,13 +9,13 @@ import ca.derekellis.kgtfs.db.ShapeMapper
 import ca.derekellis.kgtfs.db.StopMapper
 import ca.derekellis.kgtfs.db.StopTimeMapper
 import ca.derekellis.kgtfs.db.TripMapper
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.Shape
-import ca.derekellis.kgtfs.domain.model.ShapeId
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.StopTime
-import ca.derekellis.kgtfs.domain.model.Trip
+import ca.derekellis.kgtfs.csv.Route
+import ca.derekellis.kgtfs.csv.Shape
+import ca.derekellis.kgtfs.csv.ShapeId
+import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.StopTime
+import ca.derekellis.kgtfs.csv.Trip
 import me.tatarka.inject.annotations.Inject
 
 @Inject

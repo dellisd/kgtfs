@@ -1,5 +1,5 @@
-import ca.derekellis.kgtfs.domain.model.RouteId;
-import ca.derekellis.kgtfs.domain.model.TripId;
+import ca.derekellis.kgtfs.csv.RouteId;
+import ca.derekellis.kgtfs.csv.TripId;
 
 CREATE TABLE Trip (
     id TEXT AS TripId PRIMARY KEY,

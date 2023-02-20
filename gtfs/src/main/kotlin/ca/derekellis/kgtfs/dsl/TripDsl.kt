@@ -2,9 +2,9 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.TripMapper
-import ca.derekellis.kgtfs.domain.model.ServiceId
-import ca.derekellis.kgtfs.domain.model.Trip
-import ca.derekellis.kgtfs.domain.model.TripId
+import ca.derekellis.kgtfs.csv.ServiceId
+import ca.derekellis.kgtfs.csv.Trip
+import ca.derekellis.kgtfs.csv.TripId
 import me.tatarka.inject.annotations.Inject
 
 @Inject

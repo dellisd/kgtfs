@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs.raptor.models
 
-import ca.derekellis.kgtfs.domain.model.StopId
+import ca.derekellis.kgtfs.csv.StopId
 import io.github.dellisd.spatialk.geojson.Feature
 
 /**

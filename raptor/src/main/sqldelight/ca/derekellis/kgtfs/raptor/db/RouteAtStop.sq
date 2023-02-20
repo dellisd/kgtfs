@@ -1,5 +1,5 @@
-import ca.derekellis.kgtfs.domain.model.RouteId;
-import ca.derekellis.kgtfs.domain.model.StopId;
+import ca.derekellis.kgtfs.csv.RouteId;
+import ca.derekellis.kgtfs.csv.StopId;
 import kotlin.Int;
 
 CREATE TABLE RouteAtStop (

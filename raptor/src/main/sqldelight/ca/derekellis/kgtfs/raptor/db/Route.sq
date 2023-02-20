@@ -1,4 +1,4 @@
-import ca.derekellis.kgtfs.domain.model.RouteId;
+import ca.derekellis.kgtfs.csv.RouteId;
 
 CREATE TABLE Route (
     id TEXT AS RouteId PRIMARY KEY

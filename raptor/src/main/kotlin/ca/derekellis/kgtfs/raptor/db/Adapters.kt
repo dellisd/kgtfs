@@ -1,10 +1,10 @@
 package ca.derekellis.kgtfs.raptor.db
 
 import app.cash.sqldelight.ColumnAdapter
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.TripId
+import ca.derekellis.kgtfs.csv.GtfsTime
+import ca.derekellis.kgtfs.csv.RouteId
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.TripId
 import io.github.dellisd.spatialk.geojson.Feature
 
 internal object RouteIdAdapter : ColumnAdapter<RouteId, String> {

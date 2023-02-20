@@ -2,14 +2,14 @@ package ca.derekellis.kgtfs.domain
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.di.ScriptScope
-import ca.derekellis.kgtfs.domain.model.Agency
-import ca.derekellis.kgtfs.domain.model.Calendar
-import ca.derekellis.kgtfs.domain.model.CalendarDate
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.Shape
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopTime
-import ca.derekellis.kgtfs.domain.model.Trip
+import ca.derekellis.kgtfs.csv.Agency
+import ca.derekellis.kgtfs.csv.Calendar
+import ca.derekellis.kgtfs.csv.CalendarDate
+import ca.derekellis.kgtfs.csv.Route
+import ca.derekellis.kgtfs.csv.Shape
+import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.csv.StopTime
+import ca.derekellis.kgtfs.csv.Trip
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.onDownload
@@ -27,7 +27,6 @@ import kotlinx.serialization.csv.Csv
 import kotlinx.serialization.serializer
 import me.tatarka.inject.annotations.Inject
 import org.slf4j.LoggerFactory
-import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.Files
 import java.nio.file.Path

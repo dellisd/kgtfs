@@ -1,7 +1,7 @@
 package ca.derekellis.kgtfs.ext
 
-import ca.derekellis.kgtfs.domain.model.Shape
-import ca.derekellis.kgtfs.domain.model.Stop
+import ca.derekellis.kgtfs.csv.Shape
+import ca.derekellis.kgtfs.csv.Stop
 import io.github.dellisd.spatialk.geojson.LineString
 import io.github.dellisd.spatialk.geojson.Position
 import io.github.dellisd.spatialk.geojson.dsl.lineString

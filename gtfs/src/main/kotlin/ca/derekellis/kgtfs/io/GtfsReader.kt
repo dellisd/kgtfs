@@ -19,7 +19,7 @@ import kotlin.io.path.inputStream
 import kotlin.io.path.isDirectory
 
 /**
- * Reader for a [GtfsSource] that writes all GTFS data into a [GtfsCache] database.
+ * Reader for a [path] that writes all of its GTFS data into a [GtfsCache] database.
  */
 public class GtfsReader(
   public val path: Path,

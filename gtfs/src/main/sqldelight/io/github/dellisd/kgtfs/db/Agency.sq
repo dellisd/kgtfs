@@ -1,4 +1,4 @@
-import ca.derekellis.kgtfs.domain.model.AgencyId;
+import ca.derekellis.kgtfs.csv.AgencyId;
 
 CREATE TABLE Agency (
     agency_id TEXT AS AgencyId,

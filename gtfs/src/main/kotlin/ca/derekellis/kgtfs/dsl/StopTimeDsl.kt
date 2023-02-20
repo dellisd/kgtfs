@@ -2,9 +2,9 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.StopTimeMapper
-import ca.derekellis.kgtfs.domain.model.ServiceId
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.StopTime
+import ca.derekellis.kgtfs.csv.ServiceId
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.StopTime
 import me.tatarka.inject.annotations.Inject
 
 @Inject

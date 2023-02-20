@@ -3,7 +3,7 @@ package ca.derekellis.kgtfs.raptor.providers
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
-import ca.derekellis.kgtfs.domain.model.Stop
+import ca.derekellis.kgtfs.csv.Stop
 import ca.derekellis.kgtfs.dsl.gtfs
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.db.getDatabase
@@ -48,10 +48,10 @@ public annotation class RaptorCacheDsl
  */
 @RaptorCacheDsl
 public suspend fun RaptorCacheBuilder(
-    source: String,
-    cache: String,
-    transfers: (Stop, List<Stop>) -> List<Transfer> = DefaultTransferMapper,
-    transferSearchDistance: Double = 500.0
+  source: String,
+  cache: String,
+  transfers: (Stop, List<Stop>) -> List<Transfer> = DefaultTransferMapper,
+  transferSearchDistance: Double = 500.0
 ): Unit = gtfs(source, dbPath = "") {
     val logger = LoggerFactory.getLogger("RaptorCacheBuilder")
     val database = getDatabase(cache)

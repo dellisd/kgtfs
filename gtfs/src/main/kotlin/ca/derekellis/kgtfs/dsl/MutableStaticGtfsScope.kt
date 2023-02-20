@@ -2,9 +2,9 @@ package ca.derekellis.kgtfs.dsl
 
 import app.cash.sqldelight.db.SqlDriver
 import ca.derekellis.kgtfs.db.GtfsDatabase
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopTime
-import ca.derekellis.kgtfs.domain.model.Trip
+import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.csv.StopTime
+import ca.derekellis.kgtfs.csv.Trip
 import me.tatarka.inject.annotations.Inject
 
 @Inject

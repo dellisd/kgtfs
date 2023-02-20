@@ -1,20 +1,20 @@
 package ca.derekellis.kgtfs.db
 
-import ca.derekellis.kgtfs.domain.model.Agency
-import ca.derekellis.kgtfs.domain.model.AgencyId
-import ca.derekellis.kgtfs.domain.model.Calendar
-import ca.derekellis.kgtfs.domain.model.CalendarDate
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.ServiceId
-import ca.derekellis.kgtfs.domain.model.Shape
-import ca.derekellis.kgtfs.domain.model.ShapeId
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.StopTime
-import ca.derekellis.kgtfs.domain.model.Trip
-import ca.derekellis.kgtfs.domain.model.TripId
+import ca.derekellis.kgtfs.csv.Agency
+import ca.derekellis.kgtfs.csv.AgencyId
+import ca.derekellis.kgtfs.csv.Calendar
+import ca.derekellis.kgtfs.csv.CalendarDate
+import ca.derekellis.kgtfs.csv.GtfsTime
+import ca.derekellis.kgtfs.csv.Route
+import ca.derekellis.kgtfs.csv.RouteId
+import ca.derekellis.kgtfs.csv.ServiceId
+import ca.derekellis.kgtfs.csv.Shape
+import ca.derekellis.kgtfs.csv.ShapeId
+import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.csv.StopId
+import ca.derekellis.kgtfs.csv.StopTime
+import ca.derekellis.kgtfs.csv.Trip
+import ca.derekellis.kgtfs.csv.TripId
 import java.time.LocalDate
 
 internal val StopMapper =

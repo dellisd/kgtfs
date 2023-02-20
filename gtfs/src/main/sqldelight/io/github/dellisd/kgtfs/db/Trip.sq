@@ -1,7 +1,7 @@
-import ca.derekellis.kgtfs.domain.model.RouteId;
-import ca.derekellis.kgtfs.domain.model.ServiceId;
-import ca.derekellis.kgtfs.domain.model.ShapeId;
-import ca.derekellis.kgtfs.domain.model.TripId;
+import ca.derekellis.kgtfs.csv.RouteId;
+import ca.derekellis.kgtfs.csv.ServiceId;
+import ca.derekellis.kgtfs.csv.ShapeId;
+import ca.derekellis.kgtfs.csv.TripId;
 import kotlin.Int;
 
 CREATE TABLE Trip (

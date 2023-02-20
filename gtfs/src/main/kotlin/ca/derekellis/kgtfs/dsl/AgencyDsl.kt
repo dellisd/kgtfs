@@ -2,8 +2,8 @@ package ca.derekellis.kgtfs.dsl
 
 import ca.derekellis.kgtfs.db.AgencyMapper
 import ca.derekellis.kgtfs.db.GtfsDatabase
-import ca.derekellis.kgtfs.domain.model.Agency
-import ca.derekellis.kgtfs.domain.model.AgencyId
+import ca.derekellis.kgtfs.csv.Agency
+import ca.derekellis.kgtfs.csv.AgencyId
 import me.tatarka.inject.annotations.Inject
 
 @Inject

@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs
 
-import ca.derekellis.kgtfs.domain.model.GtfsTime
+import ca.derekellis.kgtfs.csv.GtfsTime
 import java.time.Duration
 import kotlin.test.Test
 import kotlin.test.assertEquals

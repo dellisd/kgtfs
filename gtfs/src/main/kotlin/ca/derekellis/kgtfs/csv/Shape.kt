@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.domain.model
+package ca.derekellis.kgtfs.csv
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

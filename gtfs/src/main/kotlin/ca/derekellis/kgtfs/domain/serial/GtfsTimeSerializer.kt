@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs.domain.serial
 
-import ca.derekellis.kgtfs.domain.model.GtfsTime
+import ca.derekellis.kgtfs.csv.GtfsTime
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor

@@ -1,20 +1,5 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.domain.model.Agency
-import ca.derekellis.kgtfs.domain.model.AgencyId
-import ca.derekellis.kgtfs.domain.model.Calendar
-import ca.derekellis.kgtfs.domain.model.CalendarDate
-import ca.derekellis.kgtfs.domain.model.GtfsTime
-import ca.derekellis.kgtfs.domain.model.Route
-import ca.derekellis.kgtfs.domain.model.RouteId
-import ca.derekellis.kgtfs.domain.model.ServiceId
-import ca.derekellis.kgtfs.domain.model.Shape
-import ca.derekellis.kgtfs.domain.model.ShapeId
-import ca.derekellis.kgtfs.domain.model.Stop
-import ca.derekellis.kgtfs.domain.model.StopId
-import ca.derekellis.kgtfs.domain.model.StopTime
-import ca.derekellis.kgtfs.domain.model.Trip
-import ca.derekellis.kgtfs.domain.model.TripId
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 

@@ -3,7 +3,7 @@ package ca.derekellis.kgtfs.dsl
 import ca.derekellis.kgtfs.db.CalendarDateMapper
 import ca.derekellis.kgtfs.db.CalendarMapper
 import ca.derekellis.kgtfs.db.GtfsDatabase
-import ca.derekellis.kgtfs.domain.model.Calendar
+import ca.derekellis.kgtfs.csv.Calendar
 import me.tatarka.inject.annotations.Inject
 import java.time.LocalDate
 
