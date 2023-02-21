@@ -2,8 +2,6 @@ package ca.derekellis.kgtfs.cache
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
-import ca.derekellis.kgtfs.db.migrateIfNeeded
-import ca.derekellis.kgtfs.db.withGtfsSchema
 import ca.derekellis.kgtfs.csv.Agency
 import ca.derekellis.kgtfs.csv.Calendar
 import ca.derekellis.kgtfs.csv.CalendarDate
@@ -12,15 +10,9 @@ import ca.derekellis.kgtfs.csv.Shape
 import ca.derekellis.kgtfs.csv.Stop
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.Trip
-import ca.derekellis.kgtfs.dsl.AgencyDsl
-import ca.derekellis.kgtfs.dsl.CalendarDateDsl
-import ca.derekellis.kgtfs.dsl.CalendarDsl
-import ca.derekellis.kgtfs.dsl.RouteDsl
-import ca.derekellis.kgtfs.dsl.ShapeDsl
-import ca.derekellis.kgtfs.dsl.StaticGtfsScope
-import ca.derekellis.kgtfs.dsl.StopDsl
-import ca.derekellis.kgtfs.dsl.StopTimeDsl
-import ca.derekellis.kgtfs.dsl.TripDsl
+import ca.derekellis.kgtfs.db.migrateIfNeeded
+import ca.derekellis.kgtfs.db.withGtfsSchema
+import ca.derekellis.kgtfs.read.GtfsScope
 import java.nio.file.Path
 
 public class GtfsCache private constructor(
@@ -28,23 +20,9 @@ public class GtfsCache private constructor(
 ) : AutoCloseable {
   internal val database = driver.withGtfsSchema().apply { migrateIfNeeded(driver as JdbcSqliteDriver) }
 
-  private val scope by lazy {
-    StaticGtfsScope(
-      StopDsl(database),
-      CalendarDsl(database),
-      CalendarDateDsl(database),
-      StopTimeDsl(database),
-      TripDsl(database),
-      RouteDsl(database),
-      AgencyDsl(database),
-      ShapeDsl(database),
-      database,
-      driver
-    )
-  }
+  private val gtfsScope by lazy { GtfsScope(driver, database) }
 
-  @Deprecated("To be replaced with new API in the future.")
-  public fun <R> read(block: StaticGtfsScope.() -> R): R = scope.block()
+  public fun <R> read(block: GtfsScope.() -> R): R = gtfsScope.block()
 
   internal fun writeAgencies(agencies: Sequence<Agency>) = database.transaction {
     agencies.withEach {

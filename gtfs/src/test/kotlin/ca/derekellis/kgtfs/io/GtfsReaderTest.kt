@@ -16,8 +16,8 @@ class GtfsReaderTest {
     val cache = GtfsReader(gtfs.zip).intoCache(Files.createTempFile("gtfs-reader", null))
 
     cache.read {
-      assertEquals(stops.getAll().size, 6)
-      assertEquals(trips.getAll().size, 6)
+      assertEquals(stops.all().size, 6)
+      assertEquals(trips.all().size, 6)
     }
   }
 
@@ -26,8 +26,8 @@ class GtfsReaderTest {
     val cache = GtfsReader(Path("src/test/resources/gtfs")).intoCache(Files.createTempFile("gtfs-reader", null))
 
     cache.read {
-      assertEquals(stops.getAll().size, 6)
-      assertEquals(trips.getAll().size, 6)
+      assertEquals(stops.all().size, 6)
+      assertEquals(trips.all().size, 6)
     }
   }
 }
