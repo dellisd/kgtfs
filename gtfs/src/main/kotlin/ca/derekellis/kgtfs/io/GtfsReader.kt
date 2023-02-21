@@ -15,6 +15,7 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import kotlin.io.path.div
+import kotlin.io.path.exists
 import kotlin.io.path.inputStream
 import kotlin.io.path.isDirectory
 
@@ -36,7 +37,9 @@ public class GtfsReader(
     read(root / "calendar_dates.txt", factory = CalendarDateFactory, block = cache::writeCalendarDates)
     read(root / "routes.txt", factory = RouteFactory, block = cache::writeRoutes)
     read(root / "stops.txt", factory = StopFactory, block = cache::writeStops)
-    read(root / "shapes.txt", factory = ShapeFactory, block = cache::writeShapes)
+    (root / "shapes.txt").takeIf { it.exists() }?.let { shapes ->
+      read(shapes, factory = ShapeFactory, block = cache::writeShapes)
+    }
     read(root / "trips.txt", factory = TripFactory, block = cache::writeTrips)
     read(root / "stop_times.txt", factory = StopTimeFactory, block = cache::writeStopTimes)
 

@@ -19,6 +19,7 @@ import kotlinx.coroutines.withContext
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
+import kotlin.io.path.exists
 import kotlin.io.path.outputStream
 
 class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-compatible SQLite database.") {
@@ -32,6 +33,10 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
     .default(Path("gtfs.db"))
 
   override fun run(): Unit = runBlocking {
+    if (output.exists()) {
+      confirm("The output target $output already exists. Overwrite?", abort = true)
+    }
+
     val remoteZipPath = if (uri.startsWith("http", ignoreCase = true) || uri.startsWith("https", ignoreCase = true)) {
       try {
         downloadZip(Url(uri))
@@ -40,7 +45,9 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
       }
     } else null
 
-    GtfsReader(remoteZipPath ?: Path(uri)).intoCache(output)
+    GtfsReader(remoteZipPath ?: Path(uri))
+      .intoCache(output)
+      .close()
   }
 
   private suspend fun downloadZip(url: Url, onProgress: (Int) -> Unit = {}): Path = withContext(Dispatchers.IO) {
