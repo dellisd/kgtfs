@@ -26,7 +26,7 @@ public data class Stop(
     @SerialName("wheelchair_boarding") val wheelchairBoarding: Int? = null,
     @SerialName("level_id") val levelId: String? = null,
     @SerialName("platform_code") val platformCode: String? = null
-) {
+) : Gtfs {
     @Serializable(with = LocationTypeSerializer::class)
     public enum class LocationType {
         Platform,

@@ -15,4 +15,4 @@ public data class Shape(
     @SerialName("shape_pt_lat") val latitude: Double,
     @SerialName("shape_pt_lon") val longitude: Double,
     @SerialName("shape_pt_sequence") val sequence: Int,
-)
+) : Gtfs

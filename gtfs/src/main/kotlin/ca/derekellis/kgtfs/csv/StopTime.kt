@@ -17,4 +17,4 @@ public data class StopTime(
   @SerialName("continuous_drop_off") val continuousDropOff: Int? = null,
   @SerialName("shape_dist_travelled") val shapeDistTraveled: Double? = null,
   @SerialName("timepoint") val timepoint: Int? = null
-)
+) : Gtfs

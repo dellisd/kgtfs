@@ -21,4 +21,4 @@ public data class Trip(
   @SerialName("shape_id") val shapeId: ShapeId? = null,
   @SerialName("wheelchair_accessible") val wheelchairAccessible: Int? = null,
   @SerialName("bikes_allowed") val bikesAllowed: Boolean? = null
-)
+) : Gtfs

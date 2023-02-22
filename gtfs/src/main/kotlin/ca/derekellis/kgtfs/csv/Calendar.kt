@@ -27,4 +27,4 @@ public data class Calendar(
   @Serializable(with = IntBooleanSerializer::class) val sunday: Boolean,
   @SerialName("start_date") val startDate: LocalDate,
   @SerialName("end_date") val endDate: LocalDate
-)
+) : Gtfs

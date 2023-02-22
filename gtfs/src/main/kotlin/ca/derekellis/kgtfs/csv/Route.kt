@@ -20,7 +20,7 @@ public data class Route(
   @SerialName("route_url") val url: String? = null,
   @SerialName("route_color") val color: String? = null,
   @SerialName("route_text_color") val textColor: String? = null
-) {
+) : Gtfs {
     @Serializable(with = RouteTypeSerializer::class)
     public enum class Type(internal val value: Int) {
         Tram(0),

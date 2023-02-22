@@ -12,6 +12,7 @@ import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.Trip
 import ca.derekellis.kgtfs.db.migrateIfNeeded
 import ca.derekellis.kgtfs.db.withGtfsSchema
+import ca.derekellis.kgtfs.io.GtfsReader
 import ca.derekellis.kgtfs.read.GtfsScope
 import java.nio.file.Path
 
@@ -24,31 +25,31 @@ public class GtfsCache private constructor(
 
   public fun <R> read(block: GtfsScope.() -> R): R = gtfsScope.block()
 
-  internal fun writeAgencies(agencies: Sequence<Agency>) = database.transaction {
+  private fun writeAgencies(agencies: Sequence<Agency>) = database.transaction {
     agencies.withEach {
       database.agencyQueries.insert(id, name, url, timezone, lang, phone, fareUrl, email)
     }
   }
 
-  internal fun writeStops(stops: Sequence<Stop>) = database.transaction {
+  private fun writeStops(stops: Sequence<Stop>) = database.transaction {
     stops.withEach {
       database.stopQueries.insert(id, code, name, description, latitude, longitude, zoneId, url, locationType)
     }
   }
 
-  internal fun writeTrips(trips: Sequence<Trip>) = database.transaction {
+  private fun writeTrips(trips: Sequence<Trip>) = database.transaction {
     trips.withEach {
       database.tripQueries.insert(routeId, serviceId, id, headsign, directionId, blockId, shapeId)
     }
   }
 
-  internal fun writeStopTimes(stopTimes: Sequence<StopTime>) = database.transaction {
+  private fun writeStopTimes(stopTimes: Sequence<StopTime>) = database.transaction {
     stopTimes.withEach {
       database.stopTimeQueries.insert(tripId, arrivalTime, departureTime, stopId, stopSequence, pickupType, dropOffType)
     }
   }
 
-  internal fun writeCalendars(calendars: Sequence<Calendar>) = database.transaction {
+  private fun writeCalendars(calendars: Sequence<Calendar>) = database.transaction {
     calendars.withEach {
       database.calendarQueries.insert(
         serviceId,
@@ -65,25 +66,23 @@ public class GtfsCache private constructor(
     }
   }
 
-  internal fun writeShapes(shapes: Sequence<Shape>) = database.transaction {
+  private fun writeShapes(shapes: Sequence<Shape>) = database.transaction {
     shapes.withEach {
       database.shapeQueries.insert(id, latitude, longitude, sequence)
     }
   }
 
-  internal fun writeRoutes(routes: Sequence<Route>) = database.transaction {
+  private fun writeRoutes(routes: Sequence<Route>) = database.transaction {
     routes.withEach {
       database.routeQueries.insert(id, shortName, longName, desc, type, url, color, textColor)
     }
   }
 
-  internal fun writeCalendarDates(dates: Sequence<CalendarDate>) = database.transaction {
+  private fun writeCalendarDates(dates: Sequence<CalendarDate>) = database.transaction {
     dates.withEach {
       database.calendarDateQueries.insert(serviceId, date, exceptionType)
     }
   }
-
-  private fun <T> Sequence<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
 
   override fun close() {
     driver.close()
@@ -91,5 +90,18 @@ public class GtfsCache private constructor(
 
   public companion object {
     public fun open(path: Path): GtfsCache = GtfsCache(JdbcSqliteDriver("jdbc:sqlite:$path"))
+
+    public fun fromReader(path: Path, reader: GtfsReader): GtfsCache = open(path).apply {
+      reader.readAgencies(::writeAgencies)
+      reader.readStops(::writeStops)
+      reader.readCalendars(::writeCalendars)
+      reader.readCalendarDates(::writeCalendarDates)
+      reader.readRoutes(::writeRoutes)
+      reader.readShapes(::writeShapes)
+      reader.readTrips(::writeTrips)
+      reader.readStopTimes(::writeStopTimes)
+    }
+
+    private fun <T> Sequence<T>.withEach(block: T.() -> Unit) = forEach { it.block() }
   }
 }

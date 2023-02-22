@@ -19,4 +19,4 @@ public data class Agency(
     @SerialName("agency_phone") val phone: String? = null,
     @SerialName("agency_fare_url") val fareUrl: String? = null,
     @SerialName("agency_email") val email: String? = null
-)
+) : Gtfs
