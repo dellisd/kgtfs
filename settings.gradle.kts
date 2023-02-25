@@ -1,4 +1,14 @@
 rootProject.name = "kgtfs"
-include("cli")
-include("gtfs")
-include("raptor")
+
+dependencyResolutionManagement {
+  repositories {
+    mavenCentral()
+    google()
+  }
+}
+
+include(":cli")
+include(":gtfs")
+include(":gtfs:csv")
+include(":gtfs:db")
+include(":raptor")

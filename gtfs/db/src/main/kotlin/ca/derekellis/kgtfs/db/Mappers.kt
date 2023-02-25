@@ -17,12 +17,12 @@ import ca.derekellis.kgtfs.csv.Trip
 import ca.derekellis.kgtfs.csv.TripId
 import java.time.LocalDate
 
-internal val StopMapper =
+public val StopMapper: (StopId, String?, String?, String?, Double?, Double?, String?, String?, Stop.LocationType?) -> Stop =
     { stop_id: StopId, stop_code: String?, stop_name: String?, stop_desc: String?, stop_lat: Double?, stop_lon: Double?, zone_id: String?, stop_url: String?, location_type: Stop.LocationType? ->
         Stop(stop_id, stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_url, location_type)
     }
 
-internal val RouteMapper =
+public val RouteMapper: (RouteId, String?, String?, String?, Route.Type, String?, String?, String?) -> Route =
     { route_id: RouteId, route_short_name: String?, route_long_name: String?, route_desc: String?, route_type: Route.Type, route_url: String?, route_color: String?, route_text_color: String? ->
         Route(
             route_id,
@@ -36,16 +36,16 @@ internal val RouteMapper =
         )
     }
 
-internal val TripMapper =
+public val TripMapper: (RouteId, ServiceId, TripId, String?, Int?, String?, ShapeId?) -> Trip =
     { route_id: RouteId, service_id: ServiceId, trip_id: TripId, trip_headsign: String?, direction_id: Int?, block_id: String?, shape_id: ShapeId? ->
         Trip(route_id, service_id, trip_id, trip_headsign, null, direction_id, block_id, shape_id)
     }
 
-internal val ShapeMapper = { shape_id: ShapeId, shape_pt_lat: Double, shape_pt_lon: Double, shape_pt_sequence: Int ->
+public val ShapeMapper: (ShapeId, Double, Double, Int) -> Shape = { shape_id: ShapeId, shape_pt_lat: Double, shape_pt_lon: Double, shape_pt_sequence: Int ->
     Shape(shape_id, shape_pt_lat, shape_pt_lon, shape_pt_sequence)
 }
 
-internal val CalendarMapper =
+public val CalendarMapper: (ServiceId, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, LocalDate, LocalDate) -> Calendar =
     { service_id: ServiceId, monday: Boolean, tuesday: Boolean, wednesday: Boolean, thursday: Boolean, friday: Boolean, saturday: Boolean, sunday: Boolean, start_date: LocalDate, end_date: LocalDate ->
         Calendar(
             service_id,
@@ -61,10 +61,10 @@ internal val CalendarMapper =
         )
     }
 
-internal val CalendarDateMapper =
+public val CalendarDateMapper: (ServiceId, LocalDate, Int) -> CalendarDate =
     { service_id: ServiceId, date: LocalDate, exception_type: Int -> CalendarDate(service_id, date, exception_type) }
 
-internal val StopTimeMapper =
+public val StopTimeMapper: (TripId, GtfsTime, GtfsTime, StopId, Int, Int?, Int?) -> StopTime =
     { trip_id: TripId, arrival_time: GtfsTime, departure_time: GtfsTime, stop_id: StopId, stop_sequence: Int, pickup_type: Int?, drop_off_type: Int? ->
         StopTime(
             trip_id,
@@ -77,7 +77,7 @@ internal val StopTimeMapper =
         )
     }
 
-internal val AgencyMapper =
+public val AgencyMapper: (AgencyId?, String, String, String, String?, String?, String?, String?) -> Agency =
     { agency_id: AgencyId?, agency_name: String, agency_url: String, agency_timezeone: String, agency_lang: String?, agency_phone: String?, agency_fare_url: String?, agency_email: String? ->
         Agency(
             agency_id,

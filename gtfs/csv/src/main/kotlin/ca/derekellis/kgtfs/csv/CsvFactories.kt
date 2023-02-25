@@ -3,7 +3,7 @@ package ca.derekellis.kgtfs.csv
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-internal typealias CsvFactory<T> = Map<String, String>.() -> T
+public typealias CsvFactory<T> = Map<String, String>.() -> T
 
 private fun Map<String, String>.getBoolean(key: String): Boolean = when (get(key)) {
   "1" -> true
@@ -13,7 +13,7 @@ private fun Map<String, String>.getBoolean(key: String): Boolean = when (get(key
 private val datePattern = DateTimeFormatter.ofPattern("yyyyMMdd")
 private fun Map<String, String>.getLocalDate(key: String): LocalDate = LocalDate.parse(getValue(key), datePattern)
 
-internal val AgencyFactory: CsvFactory<Agency> = {
+public val AgencyFactory: CsvFactory<Agency> = {
   Agency(
     id = get("agency_id")?.let(::AgencyId),
     name = getValue("agency_name"),
@@ -26,7 +26,7 @@ internal val AgencyFactory: CsvFactory<Agency> = {
   )
 }
 
-internal val CalendarFactory: CsvFactory<Calendar> = {
+public val CalendarFactory: CsvFactory<Calendar> = {
   Calendar(
     serviceId = ServiceId(getValue("service_id")),
     monday = getBoolean("monday"),
@@ -41,7 +41,7 @@ internal val CalendarFactory: CsvFactory<Calendar> = {
   )
 }
 
-internal val CalendarDateFactory: CsvFactory<CalendarDate> = {
+public val CalendarDateFactory: CsvFactory<CalendarDate> = {
   CalendarDate(
     serviceId = ServiceId(getValue("service_id")),
     date = getLocalDate("date"),
@@ -49,7 +49,7 @@ internal val CalendarDateFactory: CsvFactory<CalendarDate> = {
   )
 }
 
-internal val RouteFactory: CsvFactory<Route> = {
+public val RouteFactory: CsvFactory<Route> = {
   Route(
     id = RouteId(getValue("route_id")),
     shortName = get("route_short_name"),
@@ -62,7 +62,7 @@ internal val RouteFactory: CsvFactory<Route> = {
   )
 }
 
-internal val StopFactory: CsvFactory<Stop> = {
+public val StopFactory: CsvFactory<Stop> = {
   Stop(
     id = StopId(getValue("stop_id")),
     code = get("stop_code"),
@@ -81,7 +81,7 @@ internal val StopFactory: CsvFactory<Stop> = {
   )
 }
 
-internal val ShapeFactory: CsvFactory<Shape> = {
+public val ShapeFactory: CsvFactory<Shape> = {
   Shape(
     id = ShapeId(getValue("shape_id")),
     latitude = getValue("shape_pt_lat").toDouble(),
@@ -90,7 +90,7 @@ internal val ShapeFactory: CsvFactory<Shape> = {
   )
 }
 
-internal val TripFactory: CsvFactory<Trip> = {
+public val TripFactory: CsvFactory<Trip> = {
   Trip(
     routeId = RouteId(getValue("route_id")),
     serviceId = ServiceId(getValue("service_id")),
@@ -105,7 +105,7 @@ internal val TripFactory: CsvFactory<Trip> = {
   )
 }
 
-internal val StopTimeFactory: CsvFactory<StopTime> = {
+public val StopTimeFactory: CsvFactory<StopTime> = {
   StopTime(
     tripId = TripId(getValue("trip_id")),
     arrivalTime = getValue("arrival_time").let(::GtfsTime),

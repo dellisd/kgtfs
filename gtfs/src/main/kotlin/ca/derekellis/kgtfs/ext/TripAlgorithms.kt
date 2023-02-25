@@ -6,7 +6,6 @@ import ca.derekellis.kgtfs.csv.ServiceId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.TripId
-import ca.derekellis.kgtfs.dsl.StaticGtfsScope
 import ca.derekellis.kgtfs.read.GtfsScope
 import java.security.MessageDigest
 import java.time.Duration

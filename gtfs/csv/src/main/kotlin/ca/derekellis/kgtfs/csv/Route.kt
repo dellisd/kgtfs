@@ -22,7 +22,7 @@ public data class Route(
   @SerialName("route_text_color") val textColor: String? = null
 ) : Gtfs {
     @Serializable(with = RouteTypeSerializer::class)
-    public enum class Type(internal val value: Int) {
+    public enum class Type(public val value: Int) {
         Tram(0),
         Subway(1),
         Rail(2),
@@ -35,7 +35,7 @@ public data class Route(
         Monorail(12);
 
         public companion object {
-            internal val valueMap = mapOf(
+            public val valueMap: Map<Int, Type> = mapOf(
                 Tram.value to Tram,
                 Subway.value to Subway,
                 Rail.value to Rail,

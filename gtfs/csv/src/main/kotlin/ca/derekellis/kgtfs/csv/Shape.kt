@@ -11,8 +11,8 @@ public value class ShapeId(public val value: String) {
 
 @Serializable
 public data class Shape(
-    @SerialName("shape_id") val id: ShapeId,
-    @SerialName("shape_pt_lat") val latitude: Double,
-    @SerialName("shape_pt_lon") val longitude: Double,
-    @SerialName("shape_pt_sequence") val sequence: Int,
+  @SerialName("shape_id") val id: ShapeId,
+  @SerialName("shape_pt_lat") val latitude: Double,
+  @SerialName("shape_pt_lon") val longitude: Double,
+  @SerialName("shape_pt_sequence") val sequence: Int,
 ) : Gtfs
