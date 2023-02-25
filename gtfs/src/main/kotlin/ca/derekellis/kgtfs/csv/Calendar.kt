@@ -2,8 +2,8 @@
 
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.domain.serial.DateSerializer
-import ca.derekellis.kgtfs.domain.serial.IntBooleanSerializer
+import ca.derekellis.kgtfs.csv.serializers.DateSerializer
+import ca.derekellis.kgtfs.csv.serializers.IntBooleanSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers

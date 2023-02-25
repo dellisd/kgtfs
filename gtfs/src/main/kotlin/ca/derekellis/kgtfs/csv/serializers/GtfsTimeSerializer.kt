@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.domain.serial
+package ca.derekellis.kgtfs.csv.serializers
 
 import ca.derekellis.kgtfs.csv.GtfsTime
 import kotlinx.serialization.KSerializer

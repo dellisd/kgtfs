@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.domain.serial
+package ca.derekellis.kgtfs.csv.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
@@ -9,7 +9,7 @@ import kotlinx.serialization.encoding.Encoder
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-public object DateSerializer : KSerializer<LocalDate> {
+internal object DateSerializer : KSerializer<LocalDate> {
     private val pattern = DateTimeFormatter.ofPattern("yyyyMMdd")
 
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("Date", PrimitiveKind.STRING)

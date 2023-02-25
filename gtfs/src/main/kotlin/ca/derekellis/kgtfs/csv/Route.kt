@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.domain.serial.RouteTypeSerializer
+import ca.derekellis.kgtfs.csv.serializers.RouteTypeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

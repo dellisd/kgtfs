@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.domain.serial
+package ca.derekellis.kgtfs.csv.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind

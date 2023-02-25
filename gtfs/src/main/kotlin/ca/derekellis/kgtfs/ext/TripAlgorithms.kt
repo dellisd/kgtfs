@@ -7,19 +7,22 @@ import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.TripId
 import ca.derekellis.kgtfs.dsl.StaticGtfsScope
+import ca.derekellis.kgtfs.read.GtfsScope
 import java.security.MessageDigest
 import java.time.Duration
 import java.time.LocalDate
 import java.util.PriorityQueue
 
-public fun StaticGtfsScope.uniqueTripSequences(date: LocalDate = LocalDate.now()): List<TripSequence> {
-    val serviceIds = calendar.onDate(date).map { it.serviceId }.toSet()
+@GtfsAlgorithmsDsl
+public fun GtfsScope.uniqueTripSequences(date: LocalDate = LocalDate.now()): List<TripSequence> {
+    val serviceIds = calendars.onDate(date).map { it.serviceId }.toSet()
     return uniqueTripSequences(serviceIds)
 }
 
-public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<TripSequence> {
-    val times = stopTimes.getByServiceId(serviceIds)
-    val tripMap = trips.getByServiceId(serviceIds).associateBy { it.id }
+@GtfsAlgorithmsDsl
+public fun GtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<TripSequence> {
+    val times = stopTimes.byServiceId(serviceIds)
+    val tripMap = trips.byServiceIds(serviceIds).associateBy { it.id }
 
     // Make sure each trip's stop times are ordered by stop sequence
     val orderedTimes = mutableMapOf<TripId, PriorityQueue<StopTime>>()
@@ -52,9 +55,9 @@ public fun StaticGtfsScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List
     return unique.values.toList()
 }
 
-public fun StaticGtfsScope.sequenceHashOf(trip: TripId): String {
+public fun GtfsScope.sequenceHashOf(trip: TripId): String {
     val digest = MessageDigest.getInstance("SHA-256")
-    val bytes = trips.getById(trip).stopTimes
+    val bytes = trips.byId(trip).run { stopTimes.byTripId(id) }
         .joinToString("") { it.stopId.value }
         .encodeToByteArray()
 

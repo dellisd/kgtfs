@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.domain.serial.DateSerializer
+import ca.derekellis.kgtfs.csv.serializers.DateSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.LocalDate

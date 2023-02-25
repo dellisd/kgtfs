@@ -7,7 +7,7 @@ import ca.derekellis.kgtfs.csv.TripId
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.TripMapper
 
-public class TripsAccessor internal constructor(private val database: GtfsDatabase) {
+public class TripAccessor internal constructor(private val database: GtfsDatabase) {
   @GtfsScopeDsl
   public fun all(): List<Trip> = database.tripQueries.getAll(TripMapper).executeAsList()
 

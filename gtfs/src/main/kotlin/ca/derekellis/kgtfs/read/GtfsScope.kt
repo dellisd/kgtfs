@@ -21,13 +21,28 @@ public class GtfsScope internal constructor(
   private val database: GtfsDatabase
 ) {
   @GtfsScopeDsl
-  public val stops: StopsAccessor by lazy { StopsAccessor(database) }
+  public val agencies: AgencyAccessor by lazy { AgencyAccessor(database) }
+
+  @GtfsScopeDsl
+  public val stops: StopAccessor by lazy { StopAccessor(database) }
 
   @GtfsScopeDsl
   public val calendars: CalendarAccessor by lazy { CalendarAccessor(database) }
 
   @GtfsScopeDsl
-  public val trips: TripsAccessor by lazy { TripsAccessor(database) }
+  public val calendarDates: CalendarDateAccessor by lazy { CalendarDateAccessor(database) }
+
+  @GtfsScopeDsl
+  public val trips: TripAccessor by lazy { TripAccessor(database) }
+
+  @GtfsScopeDsl
+  public val routes: RouteAccessor by lazy { RouteAccessor(database) }
+
+  @GtfsScopeDsl
+  public val stopTimes: StopTimeAccessor by lazy { StopTimeAccessor(database) }
+
+  @GtfsScopeDsl
+  public val shapes: ShapeAccessor by lazy { ShapeAccessor(database) }
 
   /**
    * Computes the range of dates that this GTFS dataset covers.

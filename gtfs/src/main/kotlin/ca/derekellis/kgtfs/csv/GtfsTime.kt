@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.domain.serial.GtfsTimeSerializer
+import ca.derekellis.kgtfs.csv.serializers.GtfsTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.Duration
 import java.time.LocalDate

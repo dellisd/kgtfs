@@ -1,6 +1,6 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.domain.serial.LocationTypeSerializer
+import ca.derekellis.kgtfs.csv.serializers.LocationTypeSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

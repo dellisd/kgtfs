@@ -5,7 +5,7 @@ import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.db.GtfsDatabase
 import ca.derekellis.kgtfs.db.StopMapper
 
-public class StopsAccessor internal constructor(private val database: GtfsDatabase) {
+public class StopAccessor internal constructor(private val database: GtfsDatabase) {
   @GtfsScopeDsl
   public fun all(): List<Stop> = database.stopQueries.getAll(StopMapper).executeAsList()
 
