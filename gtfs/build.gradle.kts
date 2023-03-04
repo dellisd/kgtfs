@@ -37,7 +37,3 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
         "-opt-in=kotlin.contracts.ExperimentalContracts"
     )
 }
-
-extensions.getByType<MavenPublishPluginExtension>().apply {
-    sonatypeHost = SonatypeHost.S01
-}

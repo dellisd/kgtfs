@@ -40,7 +40,3 @@ sqldelight {
         }
     }
 }
-
-extensions.getByType<MavenPublishPluginExtension>().apply {
-    sonatypeHost = SonatypeHost.S01
-}
