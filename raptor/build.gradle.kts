@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.bundles.sqldelight)
     implementation(libs.bundles.ktor.client)
     implementation(project(":gtfs"))
+    implementation(project(":gtfs:csv"))
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

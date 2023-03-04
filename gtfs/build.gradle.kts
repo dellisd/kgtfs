@@ -17,7 +17,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":gtfs:csv"))
+    api(project(":gtfs:csv"))
     implementation(project(":gtfs:db"))
 
     ksp(libs.kotlin.inject.compiler)

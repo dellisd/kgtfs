@@ -1,28 +1,16 @@
 package ca.derekellis.kgtfs.raptor.providers
 
 import ca.derekellis.kgtfs.csv.GtfsTime
-import com.github.davidmoten.rtree2.RTree
-import com.github.davidmoten.rtree2.geometry.Geometries
-import com.github.davidmoten.rtree2.internal.EntryDefault
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.TripId
-import ca.derekellis.kgtfs.dsl.gtfs
-import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.executeAsSet
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.StopTime
 import ca.derekellis.kgtfs.raptor.models.Transfer
-import io.github.dellisd.spatialk.geojson.dsl.lngLat
-import io.github.dellisd.spatialk.turf.Units
-import io.github.dellisd.spatialk.turf.convertLength
-import io.github.dellisd.spatialk.turf.distance
-import org.slf4j.LoggerFactory
 
 public class SqliteProvider(dbPath: String) : RaptorDataProvider {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
     private val routesAtStop: MutableMap<StopId, Set<RouteId>> = mutableMapOf()
 
     private val database = getDatabase(dbPath)
@@ -30,62 +18,6 @@ public class SqliteProvider(dbPath: String) : RaptorDataProvider {
     init {
         database.routeAtStopQueries.getAll().executeAsList().groupBy { it.stop_id }.forEach { (stop, list) ->
             routesAtStop[stop] = list.map { it.route_id }.toSet()
-        }
-    }
-
-    public suspend fun build(source: String): Unit = gtfs(source, dbPath = "") {
-        // TODO: Handle different days
-        val today = calendar.today().map { it.serviceId }.toSet()
-        logger.info("Using calendars: $today")
-
-        logger.info("Computing unique trip sequences")
-        val sequences = uniqueTripSequences(today)
-
-        logger.info("Loading stop and route info")
-        database.transaction {
-            stops.getAll().forEach { database.stopQueries.insert(it.id) }
-
-            sequences.forEach {
-                database.routeQueries.insert(it.uniqueId)
-                it.sequence.forEachIndexed { index, stop ->
-                    database.routeAtStopQueries.insert(stop, it.uniqueId, index + 1)
-                }
-
-                it.trips.forEach { (trip, times) ->
-                    database.tripQueries.insert(trip, it.uniqueId)
-                    times.forEachIndexed { index, time ->
-                        database.stopTimeQueries.insert(trip, time.stopId, time.arrivalTime, index + 1)
-                    }
-                }
-            }
-        }
-
-        logger.info("Computing footpath estimates")
-        val allStops = stops.getAll()
-        // Compute estimates of footpath transfers
-        val tree = RTree.create(
-            allStops
-                .map { EntryDefault.entry(it.id, Geometries.pointGeographic(it.longitude!!, it.latitude!!)) })
-
-        val allTransfers = allStops.flatMap { stop ->
-            val results = tree.search(
-                Geometries.circle(
-                    stop.longitude!!,
-                    stop.latitude!!,
-                    convertLength(500.0, to = Units.Degrees)
-                )
-            )
-            val stopPosition = lngLat(stop.longitude!!, stop.latitude!!)
-            results.asSequence().filter { it.value() != stop.id }.map { entry ->
-                val point = lngLat(entry.geometry().x(), entry.geometry().y())
-                Transfer(stop.id, entry.value(), distance(stopPosition, point, Units.Meters), null)
-            }
-        }
-
-        database.transaction {
-            allTransfers.forEach { (from, to, distance) ->
-                database.transferQueries.insert(from, to, distance, null)
-            }
         }
     }
 

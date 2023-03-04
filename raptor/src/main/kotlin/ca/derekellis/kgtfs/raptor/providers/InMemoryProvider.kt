@@ -2,11 +2,11 @@
 
 package ca.derekellis.kgtfs.raptor.providers
 
+import ca.derekellis.kgtfs.cache.GtfsCache
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.TripId
-import ca.derekellis.kgtfs.dsl.gtfs
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.getDatabase
@@ -23,14 +23,11 @@ import io.github.dellisd.spatialk.turf.distance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 public class InMemoryProvider private constructor(
     private val date: LocalDate = LocalDate.now()
-) :
-    RaptorDataProvider {
-    private val logger = LoggerFactory.getLogger(javaClass)
+) : RaptorDataProvider {
     private val routesAtStop: MutableMap<StopId, MutableSet<RouteId>> = mutableMapOf()
     private val stopsAlongRoute: MutableMap<RouteId, List<StopId>> = mutableMapOf()
 
@@ -38,21 +35,12 @@ public class InMemoryProvider private constructor(
     private val tripsForRoute: MutableMap<RouteId, Set<TripId>> = mutableMapOf()
     private val transfers: MutableMap<StopId, Set<Transfer>> = mutableMapOf()
 
-    init {
-        logger.info("Initializing InMemoryProvider")
-    }
-
-    private suspend fun buildIndicesFromSource(source: String, gtfsCache: String = "") = gtfs(source, dbPath = gtfsCache) {
-        logger.info("Building indices from $source")
+    private fun buildIndicesFromGtfs(source: GtfsCache) = source.read {
         // TODO: Update day as needed
-        val today = calendar.onDate(date).map { it.serviceId }.toSet()
-        logger.debug("Today's calendars: $today")
-
-        logger.debug("Computing unique trip sequences")
-        val allTimes = stopTimes.getAll()
+        val today = calendars.onDate(date).map { it.serviceId }.toSet()
+        val allTimes = stopTimes.all()
         val sequences = uniqueTripSequences(today)
 
-        logger.debug("Loading stop and route info")
         // Get all stop times grouped by trip
         allTimes.groupBy { it.tripId }
             .mapValuesTo(stopTimesForTrip) { (_, times) ->
@@ -72,8 +60,7 @@ public class InMemoryProvider private constructor(
             tripsForRoute[route] = trips.keys
         }
 
-        logger.debug("Computing footpath estimates")
-        val allStops = stops.getAll()
+        val allStops = stops.all()
         // Compute estimates of footpath transfers
         val tree = RTree.create(
             allStops
@@ -96,10 +83,8 @@ public class InMemoryProvider private constructor(
     }
 
     private suspend fun loadIndicesFromCache(cache: String) = coroutineScope {
-        logger.info("Loading indices from $cache")
         val database = getDatabase(cache, readOnly = true)
 
-        logger.debug("Loading routes at stops and transfers at stop")
         val stops = async {
             database.routeAtStopQueries.getAll().executeAsList()
                 .groupBy { it.stop_id }
@@ -110,7 +95,6 @@ public class InMemoryProvider private constructor(
                 .forEach { (key, value) -> transfers[key] = value.toSet() }
         }
 
-        logger.debug("Loading stops along route and trips for route")
         val routes = async {
             database.routeAtStopQueries.getAll().executeAsList()
                 .groupBy { it.route_id }
@@ -168,9 +152,9 @@ public class InMemoryProvider private constructor(
             }
         }
 
-        public suspend fun fromSource(source: String, date: LocalDate = LocalDate.now(), gtfsCache: String = ""): InMemoryProvider {
+        public fun fromGtfs(source: GtfsCache, date: LocalDate = LocalDate.now()): InMemoryProvider {
             return InMemoryProvider(date).apply {
-                buildIndicesFromSource(source, gtfsCache = gtfsCache)
+                buildIndicesFromGtfs(source)
             }
         }
     }

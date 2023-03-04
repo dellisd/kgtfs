@@ -1,6 +1,7 @@
 plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.sqldelight)
+  alias(libs.plugins.publishing)
 }
 
 kotlin {

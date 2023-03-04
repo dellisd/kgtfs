@@ -9,6 +9,7 @@ import ca.derekellis.kgtfs.csv.CalendarDateFactory
 import ca.derekellis.kgtfs.csv.CalendarFactory
 import ca.derekellis.kgtfs.csv.CsvFactory
 import ca.derekellis.kgtfs.csv.Gtfs
+import ca.derekellis.kgtfs.csv.InternalKgtfsApi
 import ca.derekellis.kgtfs.csv.Route
 import ca.derekellis.kgtfs.csv.RouteFactory
 import ca.derekellis.kgtfs.csv.Shape
@@ -31,6 +32,7 @@ import kotlin.io.path.isDirectory
 /**
  * Reader for a [path] that writes all of its GTFS data into a [GtfsCache] database.
  */
+@OptIn(InternalKgtfsApi::class)
 public class GtfsReader(
   public val path: Path,
 ) {

@@ -1,10 +1,10 @@
 package ca.derekellis.kgtfs.raptor.providers
 
+import ca.derekellis.kgtfs.cache.GtfsCache
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
 import ca.derekellis.kgtfs.csv.Stop
-import ca.derekellis.kgtfs.dsl.gtfs
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.Transfer
@@ -15,7 +15,6 @@ import io.github.dellisd.spatialk.geojson.dsl.lngLat
 import io.github.dellisd.spatialk.turf.Units
 import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
-import org.slf4j.LoggerFactory
 
 public val DefaultTransferMapper: (Stop, List<Stop>) -> List<Transfer> = { origin: Stop, destinations: List<Stop> ->
     destinations.map { dest ->
@@ -47,25 +46,21 @@ public annotation class RaptorCacheDsl
  * @param transferSearchDistance The max distance stops should be searched for when building transfers
  */
 @RaptorCacheDsl
-public suspend fun RaptorCacheBuilder(
-  source: String,
+public fun RaptorCacheBuilder(
+  source: GtfsCache,
   cache: String,
   transfers: (Stop, List<Stop>) -> List<Transfer> = DefaultTransferMapper,
   transferSearchDistance: Double = 500.0
-): Unit = gtfs(source, dbPath = "") {
-    val logger = LoggerFactory.getLogger("RaptorCacheBuilder")
+): Unit = source.read {
     val database = getDatabase(cache)
 
     // TODO: Handle different days
-    val today = calendar.today().map { it.serviceId }.toSet()
-    logger.info("Using calendars: $today")
+    val today = calendars.today().map { it.serviceId }.toSet()
 
-    logger.info("Computing unique trip sequences")
     val sequences = uniqueTripSequences(today)
 
-    logger.info("Loading stop and route info")
     database.transaction {
-        stops.getAll().forEach { database.stopQueries.insert(it.id) }
+        stops.all().forEach { database.stopQueries.insert(it.id) }
 
         sequences.forEach {
             database.routeQueries.insert(it.uniqueId)
@@ -82,8 +77,7 @@ public suspend fun RaptorCacheBuilder(
         }
     }
 
-    logger.info("Computing footpath estimates")
-    val allStops = stops.getAll()
+    val allStops = stops.all()
     val allStopsIndex = allStops.associateBy { it.id }
     // Compute estimates of footpath transfers
     val tree = RTree.create(

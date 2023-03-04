@@ -13,6 +13,7 @@ private fun Map<String, String>.getBoolean(key: String): Boolean = when (get(key
 private val datePattern = DateTimeFormatter.ofPattern("yyyyMMdd")
 private fun Map<String, String>.getLocalDate(key: String): LocalDate = LocalDate.parse(getValue(key), datePattern)
 
+@InternalKgtfsApi
 public val AgencyFactory: CsvFactory<Agency> = {
   Agency(
     id = get("agency_id")?.let(::AgencyId),
@@ -26,6 +27,7 @@ public val AgencyFactory: CsvFactory<Agency> = {
   )
 }
 
+@InternalKgtfsApi
 public val CalendarFactory: CsvFactory<Calendar> = {
   Calendar(
     serviceId = ServiceId(getValue("service_id")),
@@ -41,6 +43,7 @@ public val CalendarFactory: CsvFactory<Calendar> = {
   )
 }
 
+@InternalKgtfsApi
 public val CalendarDateFactory: CsvFactory<CalendarDate> = {
   CalendarDate(
     serviceId = ServiceId(getValue("service_id")),
@@ -49,6 +52,7 @@ public val CalendarDateFactory: CsvFactory<CalendarDate> = {
   )
 }
 
+@InternalKgtfsApi
 public val RouteFactory: CsvFactory<Route> = {
   Route(
     id = RouteId(getValue("route_id")),
@@ -62,6 +66,7 @@ public val RouteFactory: CsvFactory<Route> = {
   )
 }
 
+@InternalKgtfsApi
 public val StopFactory: CsvFactory<Stop> = {
   Stop(
     id = StopId(getValue("stop_id")),
@@ -81,6 +86,7 @@ public val StopFactory: CsvFactory<Stop> = {
   )
 }
 
+@InternalKgtfsApi
 public val ShapeFactory: CsvFactory<Shape> = {
   Shape(
     id = ShapeId(getValue("shape_id")),
@@ -90,6 +96,7 @@ public val ShapeFactory: CsvFactory<Shape> = {
   )
 }
 
+@InternalKgtfsApi
 public val TripFactory: CsvFactory<Trip> = {
   Trip(
     routeId = RouteId(getValue("route_id")),
@@ -105,6 +112,7 @@ public val TripFactory: CsvFactory<Trip> = {
   )
 }
 
+@InternalKgtfsApi
 public val StopTimeFactory: CsvFactory<StopTime> = {
   StopTime(
     tripId = TripId(getValue("trip_id")),
