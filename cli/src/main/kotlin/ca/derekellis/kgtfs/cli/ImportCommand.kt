@@ -29,7 +29,7 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
   )
 
   private val output by option("--output", "-o")
-    .path(canBeDir = false, mustBeWritable = true)
+    .path(canBeDir = false)
     .default(Path("gtfs.db"))
 
   override fun run(): Unit = runBlocking {

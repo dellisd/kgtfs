@@ -58,7 +58,7 @@ public class GtfsScope internal constructor(
         if (calendar.startDate < min) {
           min = calendar.startDate
         }
-        if (calendar.endDate < max) {
+        if (calendar.endDate > max) {
           max = calendar.endDate
         }
       }
