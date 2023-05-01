@@ -1,6 +1,6 @@
 [versions]
 kotlin = "1.8.10"
-ktor = "2.2.3"
+ktor = "2.3.0"
 sqldelight = "2.0.0-alpha05"
 kotlin-inject = "0.6.1"
 
