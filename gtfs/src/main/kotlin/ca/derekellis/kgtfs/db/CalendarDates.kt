@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.db2
+package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.csv.CalendarDate
 import ca.derekellis.kgtfs.csv.ServiceId
@@ -7,18 +7,19 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.statements.InsertStatement
 import java.time.LocalDate
 
-object CalendarDates : Table() {
-  val serviceId: Column<String> = text("service_id")
-  val date: Column<LocalDate> = date("date")
-  val exceptionType: Column<Int> = integer("exception_type")
+public object CalendarDates : Table() {
+  public val serviceId: Column<String> = text("service_id")
+  public val date: Column<LocalDate> = date("date")
+  public val exceptionType: Column<Int> = integer("exception_type")
 
-  val Mapper: (ResultRow) -> CalendarDate = {
+  public val Mapper: (ResultRow) -> CalendarDate = {
     CalendarDate(it[serviceId].let(::ServiceId), it[date], it[exceptionType])
   }
 
-  fun insert(calendarDate: CalendarDate) = insert {
+  public fun insert(calendarDate: CalendarDate): InsertStatement<Number> = insert {
     it[serviceId] = calendarDate.serviceId.value
     it[date] = calendarDate.date
     it[exceptionType] = calendarDate.exceptionType

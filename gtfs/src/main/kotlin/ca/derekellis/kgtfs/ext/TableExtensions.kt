@@ -1,8 +1,8 @@
 package ca.derekellis.kgtfs.ext
 
 import ca.derekellis.kgtfs.csv.Calendar
-import ca.derekellis.kgtfs.db2.CalendarDates
-import ca.derekellis.kgtfs.db2.Calendars
+import ca.derekellis.kgtfs.db.CalendarDates
+import ca.derekellis.kgtfs.db.Calendars
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import java.time.LocalDate

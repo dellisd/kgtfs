@@ -18,6 +18,8 @@ kotlin {
 }
 
 dependencies {
+    api(projects.gtfs)
+
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.spatialk.turf)
@@ -25,8 +27,6 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.bundles.sqldelight)
     implementation(libs.bundles.ktor.client)
-    implementation(project(":gtfs"))
-    implementation(project(":gtfs:csv"))
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

@@ -1,13 +1,13 @@
 package ca.derekellis.kgtfs
 
-import ca.derekellis.kgtfs.db2.Agencies as AgenciesTable
-import ca.derekellis.kgtfs.db2.CalendarDates as CalendarDatesTable
-import ca.derekellis.kgtfs.db2.Calendars as CalendarsTable
-import ca.derekellis.kgtfs.db2.Routes as RoutesTable
-import ca.derekellis.kgtfs.db2.Shapes as ShapesTable
-import ca.derekellis.kgtfs.db2.StopTimes as StopTimesTable
-import ca.derekellis.kgtfs.db2.Stops as StopsTable
-import ca.derekellis.kgtfs.db2.Trips as TripsTable
+import ca.derekellis.kgtfs.db.Agencies as AgenciesTable
+import ca.derekellis.kgtfs.db.CalendarDates as CalendarDatesTable
+import ca.derekellis.kgtfs.db.Calendars as CalendarsTable
+import ca.derekellis.kgtfs.db.Routes as RoutesTable
+import ca.derekellis.kgtfs.db.Shapes as ShapesTable
+import ca.derekellis.kgtfs.db.StopTimes as StopTimesTable
+import ca.derekellis.kgtfs.db.Stops as StopsTable
+import ca.derekellis.kgtfs.db.Trips as TripsTable
 
 public class GtfsDbScope {
   @GtfsDsl

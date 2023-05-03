@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.db2
+package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.ServiceId
@@ -9,19 +9,20 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.statements.InsertStatement
 
-object Trips : Table() {
-  val routeId: Column<String> = text("route_id")
-  val serviceId: Column<String> = text("service_id")
-  val id: Column<String> = text("trip_id")
-  val headsign: Column<String?> = text("trip_headsign").nullable()
-  val directionId: Column<Int?> = integer("direction_id").nullable()
-  val blockId: Column<String?> = text("block_id").nullable()
-  val shapeId: Column<String?> = text("shape_id").nullable()
+public object Trips : Table() {
+  public val routeId: Column<String> = text("route_id")
+  public val serviceId: Column<String> = text("service_id")
+  public val id: Column<String> = text("trip_id")
+  public val headsign: Column<String?> = text("trip_headsign").nullable()
+  public val directionId: Column<Int?> = integer("direction_id").nullable()
+  public val blockId: Column<String?> = text("block_id").nullable()
+  public val shapeId: Column<String?> = text("shape_id").nullable()
 
-  override val primaryKey = PrimaryKey(id)
+  override val primaryKey: PrimaryKey = PrimaryKey(id)
 
-  val Mapper: (ResultRow) -> Trip = {
+  public val Mapper: (ResultRow) -> Trip = {
     Trip(
       it[routeId].let(::RouteId),
       it[serviceId].let(::ServiceId),
@@ -33,7 +34,7 @@ object Trips : Table() {
     )
   }
 
-  fun insert(trip: Trip) = insert {
+  public fun insert(trip: Trip): InsertStatement<Number> = insert {
     it[routeId] = trip.routeId.value
     it[serviceId] = trip.serviceId.value
     it[id] = trip.id.value

@@ -1,4 +1,4 @@
-package ca.derekellis.kgtfs.db2
+package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.csv.Calendar
 import ca.derekellis.kgtfs.csv.ServiceId
@@ -7,23 +7,24 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.javatime.date
+import org.jetbrains.exposed.sql.statements.InsertStatement
 import java.time.LocalDate
 
-object Calendars : Table(name = "Calendar") {
-  val serviceId: Column<String> = text("service_id")
-  val monday: Column<Boolean> = bool("monday")
-  val tuesday: Column<Boolean> = bool("tuesday")
-  val wednesday: Column<Boolean> = bool("wednesday")
-  val thursday: Column<Boolean> = bool("thursday")
-  val friday: Column<Boolean> = bool("friday")
-  val saturday: Column<Boolean> = bool("saturday")
-  val sunday: Column<Boolean> = bool("sunday")
-  val startDate: Column<LocalDate> = date("start_date")
-  val endDate: Column<LocalDate> = date("end_date")
+public object Calendars : Table(name = "Calendar") {
+  public val serviceId: Column<String> = text("service_id")
+  public val monday: Column<Boolean> = bool("monday")
+  public val tuesday: Column<Boolean> = bool("tuesday")
+  public val wednesday: Column<Boolean> = bool("wednesday")
+  public val thursday: Column<Boolean> = bool("thursday")
+  public val friday: Column<Boolean> = bool("friday")
+  public val saturday: Column<Boolean> = bool("saturday")
+  public val sunday: Column<Boolean> = bool("sunday")
+  public val startDate: Column<LocalDate> = date("start_date")
+  public val endDate: Column<LocalDate> = date("end_date")
 
-  override val primaryKey = PrimaryKey(serviceId)
+  override val primaryKey: PrimaryKey = PrimaryKey(serviceId)
 
-  val Mapper: (ResultRow) -> Calendar = {
+  public val Mapper: (ResultRow) -> Calendar = {
     Calendar(
       it[serviceId].let(::ServiceId),
       it[monday],
@@ -38,7 +39,7 @@ object Calendars : Table(name = "Calendar") {
     )
   }
 
-  fun insert(calendar: Calendar) = insert {
+  public fun insert(calendar: Calendar): InsertStatement<Number> = insert {
     it[serviceId] = calendar.serviceId.value
     it[monday] = calendar.monday
     it[tuesday] = calendar.tuesday
