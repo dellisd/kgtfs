@@ -12,7 +12,7 @@ public class StopTimeAccessor internal constructor(private val database: GtfsDat
   public fun all(): List<StopTime> = database.stopTimeQueries.getAll(StopTimeMapper).executeAsList()
 
   @GtfsScopeDsl
-  public fun byServiceId(serviceIds: Set<ServiceId>): List<StopTime> =
+  public fun byServiceIds(serviceIds: Set<ServiceId>): List<StopTime> =
     database.stopTimeQueries.getByServiceId(serviceIds, StopTimeMapper).executeAsList()
 
   @GtfsScopeDsl

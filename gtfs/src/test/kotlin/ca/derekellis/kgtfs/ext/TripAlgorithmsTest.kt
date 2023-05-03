@@ -1,5 +1,7 @@
 package ca.derekellis.kgtfs.ext
 
+import ca.derekellis.kgtfs.ExperimentalKgtfsApi
+import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.GtfsZipRule
 import ca.derekellis.kgtfs.cache.GtfsCache
 import ca.derekellis.kgtfs.csv.GtfsTime
@@ -13,20 +15,21 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
+@OptIn(ExperimentalKgtfsApi::class)
 class TripAlgorithmsTest {
     @get:Rule
     val gtfsRule: GtfsZipRule = GtfsZipRule()
 
-    private lateinit var cache: GtfsCache
+    private lateinit var db: GtfsDb
 
     @BeforeTest
     fun setup() {
-        cache = GtfsReader(gtfsRule.zip).intoCache(Files.createTempFile("gtfs-reader", null))
+        db = GtfsDb.fromReader(GtfsReader(gtfsRule.zip), Files.createTempFile("gtfs-reader", null))
     }
 
     @Test
     fun `unique trip sequences are computed correctly`() {
-        cache.read {
+        db.query {
             val sequences = uniqueTripSequences(date = TEST_DATE)
 
             assertEquals(2, sequences.size)
@@ -42,7 +45,7 @@ class TripAlgorithmsTest {
 
     @Test
     fun `sequence frequency computed correctly`() {
-        cache.read {
+        db.query {
             val sequence = uniqueTripSequences(date = TEST_DATE)
                     .first { it.sequence.first().value == "AAAA" }
 
@@ -53,7 +56,7 @@ class TripAlgorithmsTest {
 
     @Test
     fun `invalid sequence frequency returns null`() {
-        cache.read {
+        db.query {
             val sequence = uniqueTripSequences(date = TEST_DATE)
                 .first { it.sequence.first().value == "DDDD" }
 

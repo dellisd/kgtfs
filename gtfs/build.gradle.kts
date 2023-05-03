@@ -19,12 +19,18 @@ kotlin {
 dependencies {
     api(project(":gtfs:csv"))
     implementation(project(":gtfs:db"))
+    api(projects.gtfs.db2)
 
     ksp(libs.kotlin.inject.compiler)
+    implementation(libs.okhttp)
     implementation(libs.kotlin.inject.runtime)
     implementation(libs.bundles.ktor.client)
     implementation(libs.bundles.sqldelight)
     implementation(libs.csv)
+
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.javaTime)
+    implementation(libs.exposed.jdbc)
 
     api(libs.spatialk.turf)
 
