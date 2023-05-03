@@ -7,7 +7,6 @@ import ca.derekellis.kgtfs.csv.ServiceId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.TripId
-import ca.derekellis.kgtfs.read.GtfsScope
 import org.jetbrains.exposed.sql.JoinType
 import org.jetbrains.exposed.sql.select
 import java.security.MessageDigest

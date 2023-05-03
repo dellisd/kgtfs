@@ -1,6 +1,5 @@
 package ca.derekellis.kgtfs.io
 
-import ca.derekellis.kgtfs.cache.GtfsCache
 import ca.derekellis.kgtfs.csv.Agency
 import ca.derekellis.kgtfs.csv.AgencyFactory
 import ca.derekellis.kgtfs.csv.Calendar

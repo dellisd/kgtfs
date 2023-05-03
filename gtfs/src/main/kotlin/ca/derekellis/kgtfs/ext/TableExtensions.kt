@@ -27,3 +27,5 @@ public fun Calendars.onDate(date: LocalDate): Set<Calendar> {
     .filter { calendarDates[it.serviceId]?.exceptionType != 2 }
     .toSet()
 }
+
+public fun Calendars.today(): Set<Calendar> = onDate(LocalDate.now())

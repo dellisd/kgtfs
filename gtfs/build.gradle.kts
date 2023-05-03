@@ -20,6 +20,7 @@ dependencies {
     api(project(":gtfs:csv"))
     implementation(project(":gtfs:db"))
     api(projects.gtfs.db2)
+    api(libs.exposed.core)
 
     ksp(libs.kotlin.inject.compiler)
     implementation(libs.okhttp)

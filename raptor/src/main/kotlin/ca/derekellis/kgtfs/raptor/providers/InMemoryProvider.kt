@@ -2,11 +2,13 @@
 
 package ca.derekellis.kgtfs.raptor.providers
 
-import ca.derekellis.kgtfs.cache.GtfsCache
+import ca.derekellis.kgtfs.ExperimentalKgtfsApi
+import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.TripId
+import ca.derekellis.kgtfs.ext.onDate
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.getDatabase
@@ -23,6 +25,7 @@ import io.github.dellisd.spatialk.turf.distance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDate
 
 public class InMemoryProvider private constructor(
@@ -35,10 +38,11 @@ public class InMemoryProvider private constructor(
     private val tripsForRoute: MutableMap<RouteId, Set<TripId>> = mutableMapOf()
     private val transfers: MutableMap<StopId, Set<Transfer>> = mutableMapOf()
 
-    private fun buildIndicesFromGtfs(source: GtfsCache) = source.read {
+    @OptIn(ExperimentalKgtfsApi::class)
+    private fun buildIndicesFromGtfs(source: GtfsDb) = source.query {
         // TODO: Update day as needed
-        val today = calendars.onDate(date).map { it.serviceId }.toSet()
-        val allTimes = stopTimes.all()
+        val today = Calendars.onDate(date).map { it.serviceId }.toSet()
+        val allTimes = StopTimes.selectAll().map(StopTimes.Mapper)
         val sequences = uniqueTripSequences(today)
 
         // Get all stop times grouped by trip
@@ -60,7 +64,7 @@ public class InMemoryProvider private constructor(
             tripsForRoute[route] = trips.keys
         }
 
-        val allStops = stops.all()
+        val allStops = Stops.selectAll().map(Stops.Mapper)
         // Compute estimates of footpath transfers
         val tree = RTree.create(
             allStops
@@ -152,7 +156,8 @@ public class InMemoryProvider private constructor(
             }
         }
 
-        public fun fromGtfs(source: GtfsCache, date: LocalDate = LocalDate.now()): InMemoryProvider {
+        @OptIn(ExperimentalKgtfsApi::class)
+        public fun fromGtfs(source: GtfsDb, date: LocalDate = LocalDate.now()): InMemoryProvider {
             return InMemoryProvider(date).apply {
                 buildIndicesFromGtfs(source)
             }

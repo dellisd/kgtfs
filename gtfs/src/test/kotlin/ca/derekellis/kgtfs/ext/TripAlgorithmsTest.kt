@@ -3,7 +3,6 @@ package ca.derekellis.kgtfs.ext
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
 import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.GtfsZipRule
-import ca.derekellis.kgtfs.cache.GtfsCache
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.io.GtfsReader
 import org.junit.Rule

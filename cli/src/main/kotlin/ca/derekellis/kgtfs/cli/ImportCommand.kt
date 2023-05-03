@@ -1,5 +1,7 @@
 package ca.derekellis.kgtfs.cli
 
+import ca.derekellis.kgtfs.ExperimentalKgtfsApi
+import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.io.GtfsReader
 import com.github.ajalt.clikt.completion.CompletionCandidates
 import com.github.ajalt.clikt.core.CliktCommand
@@ -32,6 +34,7 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
     .path(canBeDir = false)
     .default(Path("gtfs.db"))
 
+  @OptIn(ExperimentalKgtfsApi::class)
   override fun run(): Unit = runBlocking {
     if (output.exists()) {
       confirm("The output target $output already exists. Overwrite?", abort = true)
@@ -45,9 +48,7 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
       }
     } else null
 
-    GtfsReader(remoteZipPath ?: Path(uri))
-      .intoCache(output)
-      .close()
+    GtfsDb.fromReader(GtfsReader(remoteZipPath ?: Path(uri)), output)
   }
 
   private suspend fun downloadZip(url: Url, onProgress: (Int) -> Unit = {}): Path = withContext(Dispatchers.IO) {

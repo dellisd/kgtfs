@@ -1,6 +1,5 @@
 package ca.derekellis.kgtfs
 
-import ca.derekellis.kgtfs.read.GtfsScopeDsl
 import ca.derekellis.kgtfs.db2.Agencies as AgenciesTable
 import ca.derekellis.kgtfs.db2.CalendarDates as CalendarDatesTable
 import ca.derekellis.kgtfs.db2.Calendars as CalendarsTable
@@ -11,27 +10,27 @@ import ca.derekellis.kgtfs.db2.Stops as StopsTable
 import ca.derekellis.kgtfs.db2.Trips as TripsTable
 
 public class GtfsDbScope {
-  @GtfsScopeDsl
+  @GtfsDsl
   public val Agencies: AgenciesTable = AgenciesTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val CalendarDates: CalendarDatesTable = CalendarDatesTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val Calendars: CalendarsTable = CalendarsTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val Routes: RoutesTable = RoutesTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val Shapes: ShapesTable = ShapesTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val Stops: StopsTable = StopsTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val StopTimes: StopTimesTable = StopTimesTable
 
-  @GtfsScopeDsl
+  @GtfsDsl
   public val Trips: TripsTable = TripsTable
 }

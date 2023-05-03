@@ -1,10 +1,12 @@
 package ca.derekellis.kgtfs.raptor.providers
 
-import ca.derekellis.kgtfs.cache.GtfsCache
+import ca.derekellis.kgtfs.ExperimentalKgtfsApi
+import ca.derekellis.kgtfs.GtfsDb
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
 import ca.derekellis.kgtfs.csv.Stop
+import ca.derekellis.kgtfs.ext.today
 import ca.derekellis.kgtfs.ext.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.Transfer
@@ -15,6 +17,7 @@ import io.github.dellisd.spatialk.geojson.dsl.lngLat
 import io.github.dellisd.spatialk.turf.Units
 import io.github.dellisd.spatialk.turf.convertLength
 import io.github.dellisd.spatialk.turf.distance
+import org.jetbrains.exposed.sql.selectAll
 
 public val DefaultTransferMapper: (Stop, List<Stop>) -> List<Transfer> = { origin: Stop, destinations: List<Stop> ->
     destinations.map { dest ->
@@ -45,22 +48,23 @@ public annotation class RaptorCacheDsl
  * uses straight line distance.
  * @param transferSearchDistance The max distance stops should be searched for when building transfers
  */
+@OptIn(ExperimentalKgtfsApi::class)
 @RaptorCacheDsl
 public fun RaptorCacheBuilder(
-  source: GtfsCache,
+  source: GtfsDb,
   cache: String,
   transfers: (Stop, List<Stop>) -> List<Transfer> = DefaultTransferMapper,
   transferSearchDistance: Double = 500.0
-): Unit = source.read {
+): Unit = source.query {
     val database = getDatabase(cache)
 
     // TODO: Handle different days
-    val today = calendars.today().map { it.serviceId }.toSet()
+    val today = Calendars.today().map { it.serviceId }.toSet()
 
     val sequences = uniqueTripSequences(today)
 
     database.transaction {
-        stops.all().forEach { database.stopQueries.insert(it.id) }
+        Stops.selectAll().map(Stops.Mapper).forEach { database.stopQueries.insert(it.id) }
 
         sequences.forEach {
             database.routeQueries.insert(it.uniqueId)
@@ -77,7 +81,7 @@ public fun RaptorCacheBuilder(
         }
     }
 
-    val allStops = stops.all()
+    val allStops = Stops.selectAll().map(Stops.Mapper)
     val allStopsIndex = allStops.associateBy { it.id }
     // Compute estimates of footpath transfers
     val tree = RTree.create(

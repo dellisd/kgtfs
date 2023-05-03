@@ -1,7 +1,6 @@
 package ca.derekellis.kgtfs
 
 import ca.derekellis.kgtfs.io.GtfsReader
-import ca.derekellis.kgtfs.read.GtfsScopeDsl
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlLogger
@@ -14,7 +13,7 @@ public class GtfsDb(public val path: Path) {
   private val database = Database.connect("jdbc:sqlite:$path")
 
   @ExperimentalKgtfsApi
-  @GtfsScopeDsl
+  @GtfsDsl
   public fun <T> query(logger: SqlLogger? = null, statement: GtfsDbScope.() -> T): T = transaction(database) {
     logger?.let { addLogger(logger) }
     GtfsDbScope().statement()
