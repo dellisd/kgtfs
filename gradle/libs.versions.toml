@@ -29,7 +29,7 @@ kotlin-inject-runtime = { module = "me.tatarka.inject:kotlin-inject-runtime", ve
 
 logback = "ch.qos.logback:logback-classic:1.4.7"
 
-clikt = "com.github.ajalt.clikt:clikt:3.5.2"
+clikt = "com.github.ajalt.clikt:clikt:3.5.4"
 csv = { module = "com.github.doyaaaaaken:kotlin-csv", version = "1.9.0" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.11.0" }
 spatialk-turf = "io.github.dellisd.spatialk:turf:0.2.1"
