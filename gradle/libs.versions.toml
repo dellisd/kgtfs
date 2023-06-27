@@ -2,7 +2,7 @@
 exposed = "0.41.1"
 kotlin = "1.8.21"
 ktor = "2.3.0"
-sqldelight = "2.0.0-alpha05"
+sqldelight = "2.0.0-rc02"
 
 [libraries]
 kotlin-scripting-common = { module = "org.jetbrains.kotlin:kotlin-scripting-common", version.ref = "kotlin" }
