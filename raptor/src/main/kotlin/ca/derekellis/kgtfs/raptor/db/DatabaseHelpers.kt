@@ -1,6 +1,7 @@
 package ca.derekellis.kgtfs.raptor.db
 
 import app.cash.sqldelight.adapter.primitive.IntColumnAdapter
+import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
 import org.slf4j.LoggerFactory
 import java.util.Properties
@@ -33,16 +34,17 @@ internal fun migrateIfNeeded(driver: JdbcSqliteDriver) {
     val logger = LoggerFactory.getLogger("migrateIfNeeded")
     val oldVersion =
         driver.executeQuery(null, "PRAGMA $versionPragma", mapper = { cursor ->
-            if (cursor.next()) {
-                cursor.getLong(0)?.toInt()
+            val result = if (cursor.next().value) {
+                cursor.getLong(0)
             } else {
                 null
             }
-        }, 0).value ?: 0
+            QueryResult.Value(result)
+        }, 0).value ?: 0L
 
     val newVersion = RaptorDatabase.Schema.version
 
-    if (oldVersion == 0) {
+    if (oldVersion == 0L) {
         logger.info("Creating DB version $newVersion!")
         RaptorDatabase.Schema.create(driver)
         driver.execute(null, "PRAGMA $versionPragma=$newVersion", 0)
