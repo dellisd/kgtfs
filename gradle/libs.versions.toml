@@ -23,7 +23,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 sqldelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-adapters = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqldelight" }
 
-logback = "ch.qos.logback:logback-classic:1.4.7"
+logback = "ch.qos.logback:logback-classic:1.4.8"
 
 clikt = "com.github.ajalt.clikt:clikt:3.5.2"
 csv = { module = "com.github.doyaaaaaken:kotlin-csv", version = "1.9.0" }
