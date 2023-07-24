@@ -8,9 +8,8 @@ import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.nio.file.Path
 
-@ExperimentalKgtfsApi
-public class GtfsDb(public val path: Path) {
-  private val database = Database.connect("jdbc:sqlite:$path")
+public class GtfsDb private constructor(public val path: Path?) {
+  private val database = Database.connect("jdbc:sqlite:${path ?: ""}")
 
   @ExperimentalKgtfsApi
   @GtfsDsl
@@ -19,7 +18,7 @@ public class GtfsDb(public val path: Path) {
     GtfsDbScope().statement()
   }
 
-  override fun toString(): String = "GtfsDb($path)"
+  override fun toString(): String = "GtfsDb(${path ?: "IN MEMORY"})"
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
@@ -38,10 +37,10 @@ public class GtfsDb(public val path: Path) {
     /**
      * Create a SQLite GTFS database from a [GtfsReader].
      *
-     * @param into The path to save the database to.
+     * @param into The path to save the database to, or `null` to create an in-memory database.
      */
     @OptIn(ExperimentalKgtfsApi::class)
-    public fun fromReader(reader: GtfsReader, into: Path): GtfsDb {
+    public fun fromReader(reader: GtfsReader, into: Path?): GtfsDb {
       val db = GtfsDb(into)
       db.query {
         SchemaUtils.create(Agencies, Stops, Calendars, CalendarDates, Routes, Shapes, Trips, StopTimes)
@@ -56,5 +55,10 @@ public class GtfsDb(public val path: Path) {
       }
       return db
     }
+
+    /**
+     * Open an existing database located at [path].
+     */
+    public fun open(path: Path): GtfsDb = GtfsDb(path)
   }
 }

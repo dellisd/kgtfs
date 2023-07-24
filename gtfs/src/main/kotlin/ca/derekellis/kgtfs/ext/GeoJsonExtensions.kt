@@ -21,4 +21,4 @@ public fun List<Shape>.lineStringBetween(a: Stop, b: Stop): LineString {
 public val Stop.point: Position
     get() =
         if (longitude == null || latitude == null) throw IllegalArgumentException("Stop longitude and latitude can not be null")
-        else lngLat(longitude!!, latitude!!)
+        else lngLat(longitude, latitude)

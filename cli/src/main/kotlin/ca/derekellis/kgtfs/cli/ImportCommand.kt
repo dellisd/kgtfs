@@ -34,7 +34,6 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
     .path(canBeDir = false)
     .default(Path("gtfs.db"))
 
-  @OptIn(ExperimentalKgtfsApi::class)
   override fun run(): Unit = runBlocking {
     if (output.exists()) {
       confirm("The output target $output already exists. Overwrite?", abort = true)
