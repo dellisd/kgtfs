@@ -29,7 +29,7 @@ public object StopTimes : Table() {
       it[stopId].let(::StopId),
       it[stopSequence],
       pickupType = it[pickupType],
-      dropOffType = it[dropOffType]
+      dropOffType = it[dropOffType],
     )
   }
 

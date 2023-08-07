@@ -29,7 +29,7 @@ public object Routes : Table(name = "Route") {
       it[type].let(Route.Type.valueMap::getValue),
       it[url],
       it[color],
-      it[textColor]
+      it[textColor],
     )
   }
 

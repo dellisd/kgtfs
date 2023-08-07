@@ -12,7 +12,7 @@ import java.time.LocalDate
 @JvmInline
 @Serializable
 public value class ServiceId(public val value: String) {
-    override fun toString(): String = value
+  override fun toString(): String = value
 }
 
 @Serializable
@@ -26,5 +26,5 @@ public data class Calendar(
   @Serializable(with = IntBooleanSerializer::class) val saturday: Boolean,
   @Serializable(with = IntBooleanSerializer::class) val sunday: Boolean,
   @SerialName("start_date") val startDate: LocalDate,
-  @SerialName("end_date") val endDate: LocalDate
+  @SerialName("end_date") val endDate: LocalDate,
 ) : Gtfs

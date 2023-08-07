@@ -41,13 +41,15 @@ val versionInfo = tasks.register("versionInfo") {
   doLast {
     val versionFile = file("$outputDir/ca/derekellis/kgtfs/cli/Version.kt")
     versionFile.parentFile.mkdirs()
-    versionFile.writeText("""
+    versionFile.writeText(
+      """
       |// Generated file. Do not edit!
       |package ca.derekellis.kgtfs.cli
       |
       |const val VERSION = "${project.version}"
       |
-    """.trimMargin())
+      """.trimMargin(),
+    )
   }
 }
 

@@ -9,5 +9,5 @@ import java.time.LocalDate
 public data class CalendarDate(
   @SerialName("service_id") val serviceId: ServiceId,
   @Serializable(with = DateSerializer::class) val date: LocalDate,
-  @SerialName("exception_type") val exceptionType: Int
+  @SerialName("exception_type") val exceptionType: Int,
 ) : Gtfs

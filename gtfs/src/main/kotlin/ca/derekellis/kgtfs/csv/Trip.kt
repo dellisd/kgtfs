@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @JvmInline
 @Serializable
 public value class TripId(public val value: String) {
-    override fun toString(): String = value
+  override fun toString(): String = value
 }
 
 @Serializable
@@ -20,5 +20,5 @@ public data class Trip(
   @SerialName("block_id") val blockId: String? = null,
   @SerialName("shape_id") val shapeId: ShapeId? = null,
   @SerialName("wheelchair_accessible") val wheelchairAccessible: Int? = null,
-  @SerialName("bikes_allowed") val bikesAllowed: Boolean? = null
+  @SerialName("bikes_allowed") val bikesAllowed: Boolean? = null,
 ) : Gtfs

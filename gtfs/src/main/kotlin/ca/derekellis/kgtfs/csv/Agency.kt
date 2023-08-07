@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @JvmInline
 @Serializable
 public value class AgencyId(public val value: String) {
-    override fun toString(): String = value
+  override fun toString(): String = value
 }
 
 @Serializable
@@ -18,5 +18,5 @@ public data class Agency(
   @SerialName("agency_lang") val lang: String? = null,
   @SerialName("agency_phone") val phone: String? = null,
   @SerialName("agency_fare_url") val fareUrl: String? = null,
-  @SerialName("agency_email") val email: String? = null
+  @SerialName("agency_email") val email: String? = null,
 ) : Gtfs

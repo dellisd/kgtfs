@@ -48,7 +48,6 @@ public fun Calendars.onDate(date: LocalDate): Set<Calendar> {
     else -> Calendar::sunday
   }
 
-
   return calendars
     .filter { predicate(it) || calendarDates[it.serviceId]?.exceptionType == 1 }
     .filter { calendarDates[it.serviceId]?.exceptionType != 2 }

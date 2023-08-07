@@ -30,7 +30,7 @@ public object Trips : Table() {
       it[headsign],
       directionId = it[directionId],
       blockId = it[blockId],
-      shapeId = it[shapeId]?.let(::ShapeId)
+      shapeId = it[shapeId]?.let(::ShapeId),
     )
   }
 

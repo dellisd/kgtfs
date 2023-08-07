@@ -35,7 +35,7 @@ public object Calendars : Table(name = "Calendar") {
       it[saturday],
       it[sunday],
       it[startDate],
-      it[endDate]
+      it[endDate],
     )
   }
 

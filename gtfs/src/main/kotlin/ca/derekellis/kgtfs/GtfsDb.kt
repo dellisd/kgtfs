@@ -32,7 +32,6 @@ public class GtfsDb private constructor(public val path: Path?) {
     return path.hashCode()
   }
 
-
   public companion object {
     /**
      * Create a SQLite GTFS database from a [GtfsReader].

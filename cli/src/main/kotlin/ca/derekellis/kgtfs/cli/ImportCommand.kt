@@ -1,6 +1,5 @@
 package ca.derekellis.kgtfs.cli
 
-import ca.derekellis.kgtfs.ExperimentalKgtfsApi
 import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.io.GtfsReader
 import com.github.ajalt.clikt.completion.CompletionCandidates
@@ -9,12 +8,13 @@ import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.path
-import io.ktor.client.*
-import io.ktor.client.plugins.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.utils.io.jvm.javaio.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.onDownload
+import io.ktor.client.request.get
+import io.ktor.client.statement.bodyAsChannel
+import io.ktor.http.URLParserException
+import io.ktor.http.Url
+import io.ktor.utils.io.jvm.javaio.copyTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -27,7 +27,7 @@ import kotlin.io.path.outputStream
 class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-compatible SQLite database.") {
   private val uri by argument(
     help = "A URI to a zip or directory containing GTFS data. Can be a local zip file, directory, or URL.",
-    completionCandidates = CompletionCandidates.Path
+    completionCandidates = CompletionCandidates.Path,
   )
 
   private val output by option("--output", "-o")
@@ -45,7 +45,9 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
       } catch (_: URLParserException) {
         null
       }
-    } else null
+    } else {
+      null
+    }
 
     GtfsDb.fromReader(GtfsReader(remoteZipPath ?: Path(uri)), output)
   }

@@ -24,11 +24,13 @@ fun buildGraph(trips: Map<TripId, List<StopId>>): DirectedAcyclicGraph<StopVerte
     stops.zipWithNext().forEach { (first, second) ->
       val visit = when (val visit = visits[second]) {
         null -> {
-          visits[second] = 0; 0
+          visits[second] = 0
+          0
         }
 
         else -> {
-          visits[second] = visit + 1; visit + 1
+          visits[second] = visit + 1
+          visit + 1
         }
       }
 
@@ -50,7 +52,7 @@ fun buildGraph(trips: Map<TripId, List<StopId>>): DirectedAcyclicGraph<StopVerte
 
     graph.addEdge(
       StopVertex(source.id, source.visit, vertexTrips.getValue(source)),
-      StopVertex(target.id, target.visit, vertexTrips.getValue(target))
+      StopVertex(target.id, target.visit, vertexTrips.getValue(target)),
     )
   }
 

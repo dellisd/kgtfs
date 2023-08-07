@@ -27,28 +27,28 @@ import kotlin.script.experimental.jvm.jvm
 abstract class GtfsScript
 
 object GtfsScriptConfiguration : ScriptCompilationConfiguration({
-    defaultImports("ca.derekellis.kgtfs.dsl.gtfs", "kotlinx.coroutines.runBlocking")
-    defaultImports(DependsOn::class, Repository::class)
+  defaultImports("ca.derekellis.kgtfs.dsl.gtfs", "kotlinx.coroutines.runBlocking")
+  defaultImports(DependsOn::class, Repository::class)
 
-    jvm {
-        dependenciesFromCurrentContext(wholeClasspath = true)
-    }
+  jvm {
+    dependenciesFromCurrentContext(wholeClasspath = true)
+  }
 
-    refineConfiguration {
-        onAnnotations(DependsOn::class, Repository::class, handler = ::configureMavenDepsOnAnnotations)
-    }
+  refineConfiguration {
+    onAnnotations(DependsOn::class, Repository::class, handler = ::configureMavenDepsOnAnnotations)
+  }
 })
 
 fun configureMavenDepsOnAnnotations(context: ScriptConfigurationRefinementContext): ResultWithDiagnostics<ScriptCompilationConfiguration> {
-    val annotations = context.collectedData?.get(ScriptCollectedData.collectedAnnotations)?.takeIf { it.isNotEmpty() }
-        ?: return context.compilationConfiguration.asSuccess()
-    return runBlocking {
-        resolver.resolveFromScriptSourceAnnotations(annotations)
-    }.onSuccess {
-        context.compilationConfiguration.with {
-            dependencies.append(JvmDependency(it))
-        }.asSuccess()
-    }
+  val annotations = context.collectedData?.get(ScriptCollectedData.collectedAnnotations)?.takeIf { it.isNotEmpty() }
+    ?: return context.compilationConfiguration.asSuccess()
+  return runBlocking {
+    resolver.resolveFromScriptSourceAnnotations(annotations)
+  }.onSuccess {
+    context.compilationConfiguration.with {
+      dependencies.append(JvmDependency(it))
+    }.asSuccess()
+  }
 }
 
 private val resolver = CompoundDependenciesResolver(FileSystemDependenciesResolver(), MavenDependenciesResolver())

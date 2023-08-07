@@ -42,14 +42,14 @@ public fun GtfsDbScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<Tri
     val trip = tripMap.getValue(tripId)
 
     // Create a new id to represent this sequence
-    val newId = "${trip.routeId}-${trip.directionId}#${hash}"
+    val newId = "${trip.routeId}-${trip.directionId}#$hash"
     unique.getOrPut(newId) {
       TripSequence(
         RouteId(newId),
         trip.routeId,
         times.map { it.stopId },
         mutableMapOf(),
-        hash
+        hash,
       )
     }
       ._trips[tripId] = times.toList()

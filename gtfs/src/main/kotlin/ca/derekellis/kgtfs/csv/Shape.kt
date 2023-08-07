@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @JvmInline
 @Serializable
 public value class ShapeId(public val value: String) {
-    override fun toString(): String = value
+  override fun toString(): String = value
 }
 
 @Serializable

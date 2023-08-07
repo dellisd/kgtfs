@@ -3,6 +3,7 @@ exposed = "0.41.1"
 jgrapht = "1.5.2"
 kotlin = "1.9.0"
 ktor = "2.3.2"
+ktlint = "0.50.0"
 sqldelight = "2.0.0-rc02"
 
 [libraries]
@@ -48,6 +49,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 publishing = { id = "com.vanniktech.maven.publish", version = "0.19.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.20.0" }
 
 [bundles]
 kotlin-scripting = ["kotlin-scripting-common", "kotlin-scripting-jvm", "kotlin-scripting-jvmHost", "kotlin-scripting-dependencies-core", "kotlin-scripting-dependencies-maven"]

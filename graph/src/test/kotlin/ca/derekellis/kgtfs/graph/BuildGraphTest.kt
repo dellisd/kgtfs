@@ -16,8 +16,8 @@ class BuildGraphTest {
   fun `basic graph`() {
     val result = buildGraph(
       mapOf(
-        TripId("Trip-1") to listOf(StopId("A"), StopId("B"), StopId("C"))
-      )
+        TripId("Trip-1") to listOf(StopId("A"), StopId("B"), StopId("C")),
+      ),
     )
 
     assertThat(result.dot()).isEqualTo(
@@ -29,7 +29,7 @@ class BuildGraphTest {
       |  A_0 -> B_0;
       |  B_0 -> C_0;
       |}
-      """.trimMargin()
+      """.trimMargin(),
     )
   }
 
@@ -38,8 +38,8 @@ class BuildGraphTest {
     val result = buildGraph(
       mapOf(
         TripId("Trip-1") to listOf(StopId("A"), StopId("B"), StopId("C"), StopId("D")),
-        TripId("Trip-2") to listOf(StopId("A"), StopId("B"), StopId("E"), StopId("F"))
-      )
+        TripId("Trip-2") to listOf(StopId("A"), StopId("B"), StopId("E"), StopId("F")),
+      ),
     )
 
     assertThat(result.dot()).isEqualTo(
@@ -57,7 +57,7 @@ class BuildGraphTest {
       |  B_0 -> E_0;
       |  E_0 -> F_0;
       |}
-      """.trimMargin()
+      """.trimMargin(),
     )
   }
 
@@ -66,8 +66,8 @@ class BuildGraphTest {
     val result = buildGraph(
       mapOf(
         TripId("Trip-1") to listOf(StopId("A"), StopId("B"), StopId("C"), StopId("D")),
-        TripId("Trip-2") to listOf(StopId("E"), StopId("F"), StopId("C"), StopId("D"))
-      )
+        TripId("Trip-2") to listOf(StopId("E"), StopId("F"), StopId("C"), StopId("D")),
+      ),
     )
 
     assertThat(result.dot()).isEqualTo(
@@ -85,7 +85,7 @@ class BuildGraphTest {
       |  E_0 -> F_0;
       |  F_0 -> C_0;
       |}
-      """.trimMargin()
+      """.trimMargin(),
     )
   }
 
@@ -94,7 +94,7 @@ class BuildGraphTest {
     val result = buildGraph(
       mapOf(
         TripId("Trip-1") to listOf(StopId("A"), StopId("B"), StopId("C"), StopId("B"), StopId("D")),
-      )
+      ),
     )
 
     assertThat(result.dot()).isEqualTo(
@@ -110,7 +110,7 @@ class BuildGraphTest {
       |  C_0 -> B_1;
       |  B_1 -> D_0;
       |}
-      """.trimMargin()
+      """.trimMargin(),
     )
   }
 
@@ -119,8 +119,8 @@ class BuildGraphTest {
     val result = buildGraph(
       mapOf(
         TripId("Trip-1") to listOf(StopId("A"), StopId("B"), StopId("C"), StopId("D"), StopId("G")),
-        TripId("Trip-2") to listOf(StopId("A"), StopId("B"), StopId("E"), StopId("F"), StopId("G"))
-      )
+        TripId("Trip-2") to listOf(StopId("A"), StopId("B"), StopId("E"), StopId("F"), StopId("G")),
+      ),
     )
 
     assertThat(result.dot()).isEqualTo(
@@ -141,7 +141,7 @@ class BuildGraphTest {
       |  E_0 -> F_0;
       |  F_0 -> G_0;
       |}
-      """.trimMargin()
+      """.trimMargin(),
     )
   }
 
@@ -150,8 +150,8 @@ class BuildGraphTest {
     val result = buildGraph(
       mapOf(
         TripId("Trip-1") to listOf(StopId("A"), StopId("B")),
-        TripId("Trip-2") to listOf(StopId("C"), StopId("D"))
-      )
+        TripId("Trip-2") to listOf(StopId("C"), StopId("D")),
+      ),
     )
 
     assertThat(result.dot()).isEqualTo(
@@ -164,7 +164,7 @@ class BuildGraphTest {
       |  A_0 -> B_0;
       |  C_0 -> D_0;
       |}
-      """.trimMargin()
+      """.trimMargin(),
     )
   }
 

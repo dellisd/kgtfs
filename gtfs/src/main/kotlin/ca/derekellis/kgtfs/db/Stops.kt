@@ -33,7 +33,7 @@ public object Stops : Table(name = "Stop") {
       it[zoneId],
       it[url],
       it[locationType]?.let(locationTypes::get),
-      it[parentStation]?.let(::StopId)
+      it[parentStation]?.let(::StopId),
     )
   }
 

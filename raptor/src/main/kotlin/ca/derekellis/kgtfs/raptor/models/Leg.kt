@@ -10,7 +10,7 @@ public sealed class Leg(
   public open val from: StopId,
   public open val to: StopId,
   public open val start: GtfsTime,
-  public open val end: GtfsTime
+  public open val end: GtfsTime,
 )
 
 public data class TransferLeg(

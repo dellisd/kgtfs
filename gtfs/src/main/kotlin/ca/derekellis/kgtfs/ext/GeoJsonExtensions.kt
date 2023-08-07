@@ -10,15 +10,18 @@ import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
 import io.github.dellisd.spatialk.turf.lineSlice
 
 public fun List<Shape>.lineString(): LineString = lineString {
-    forEach { point(it.longitude, it.latitude) }
+  forEach { point(it.longitude, it.latitude) }
 }
 
 @OptIn(ExperimentalTurfApi::class)
 public fun List<Shape>.lineStringBetween(a: Stop, b: Stop): LineString {
-    return lineSlice(a.point, b.point, lineString())
+  return lineSlice(a.point, b.point, lineString())
 }
 
 public val Stop.point: Position
-    get() =
-        if (longitude == null || latitude == null) throw IllegalArgumentException("Stop longitude and latitude can not be null")
-        else lngLat(longitude, latitude)
+  get() =
+    if (longitude == null || latitude == null) {
+      throw IllegalArgumentException("Stop longitude and latitude can not be null")
+    } else {
+      lngLat(longitude, latitude)
+    }
