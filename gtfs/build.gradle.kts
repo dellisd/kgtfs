@@ -22,7 +22,8 @@ dependencies {
 
   api(libs.spatialk.turf)
 
-  testImplementation(kotlin("test"))
+  testImplementation(libs.junit)
+  testImplementation(libs.truth)
   testImplementation(libs.kotlinx.coroutines.test)
 }
 

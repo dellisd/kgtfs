@@ -5,14 +5,13 @@ import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.GtfsZipRule
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.io.GtfsReader
+import com.google.common.truth.Truth.assertThat
+import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
 import java.nio.file.Files
 import java.time.Duration
 import java.time.LocalDate
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
 
 @OptIn(ExperimentalKgtfsApi::class)
 class TripAlgorithmsTest {
@@ -21,7 +20,7 @@ class TripAlgorithmsTest {
 
   private lateinit var db: GtfsDb
 
-  @BeforeTest
+  @Before
   fun setup() {
     db = GtfsDb.fromReader(GtfsReader(gtfsRule.zip), Files.createTempFile("gtfs-reader", null))
   }
@@ -31,12 +30,12 @@ class TripAlgorithmsTest {
     db.query {
       val sequences = uniqueTripSequences(date = TEST_DATE)
 
-      assertEquals(2, sequences.size)
+      assertThat(sequences.size).isEqualTo(2)
       sequences.forEach {
         if (it.sequence.first().value == "DDDD") {
-          assertEquals(1, it._trips.size)
+          assertThat(it._trips.size).isEqualTo(1)
         } else {
-          assertEquals(5, it._trips.size)
+          assertThat(it._trips.size).isEqualTo(5)
         }
       }
     }
@@ -49,7 +48,7 @@ class TripAlgorithmsTest {
         .first { it.sequence.first().value == "AAAA" }
 
       val frequency = sequence.frequency(GtfsTime("10:00:00"), GtfsTime("11:30:00"))
-      assertEquals(Duration.ofMinutes(20), frequency)
+      assertThat(frequency).isEqualTo(Duration.ofMinutes(20))
     }
   }
 
@@ -60,7 +59,7 @@ class TripAlgorithmsTest {
         .first { it.sequence.first().value == "DDDD" }
 
       val frequency = sequence.frequency(GtfsTime("10:00:00"), GtfsTime("11:30:00"))
-      assertNull(frequency)
+      assertThat(frequency).isNull()
     }
   }
 

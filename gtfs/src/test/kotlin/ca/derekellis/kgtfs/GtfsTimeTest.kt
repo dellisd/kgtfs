@@ -1,11 +1,9 @@
 package ca.derekellis.kgtfs
 
 import ca.derekellis.kgtfs.csv.GtfsTime
+import com.google.common.truth.Truth.assertThat
+import org.junit.Test
 import java.time.Duration
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class GtfsTimeTest {
   @Test
@@ -15,27 +13,26 @@ class GtfsTimeTest {
     val c = GtfsTime("24:59:00")
     val d = GtfsTime(10, 0, 0)
 
-    assertTrue { a < b }
-    assertFalse { b < a }
+    assertThat(a).isLessThan(b)
 
-    assertTrue { c > a }
-    assertTrue { c > b }
+    assertThat(c).isGreaterThan(a)
+    assertThat(c).isGreaterThan(b)
 
-    assertTrue { a < GtfsTime.MAX }
-    assertTrue { b < GtfsTime.MAX }
-    assertTrue { c < GtfsTime.MAX }
+    assertThat(a).isLessThan(GtfsTime.MAX)
+    assertThat(b).isLessThan(GtfsTime.MAX)
+    assertThat(c).isLessThan(GtfsTime.MAX)
 
-    assertFalse { a < d }
+    assertThat(a).isEquivalentAccordingToCompareTo(d)
   }
 
   @Test
   fun `time addition is correct`() {
     val t = GtfsTime("18:30:45")
 
-    assertEquals(GtfsTime("19:00:45"), t + Duration.ofMinutes(30))
-    assertEquals(GtfsTime("18:31:15"), t + Duration.ofSeconds(30))
-    assertEquals(GtfsTime("19:30:45"), t + Duration.ofHours(1))
-    assertEquals(GtfsTime("19:01:15"), t + (Duration.ofMinutes(30) + Duration.ofSeconds(30)))
+    assertThat(t + Duration.ofMinutes(30)).isEqualTo(GtfsTime("19:00:45"))
+    assertThat(t + Duration.ofSeconds(30)).isEqualTo(GtfsTime("18:31:15"))
+    assertThat(t + Duration.ofHours(1)).isEqualTo(GtfsTime("19:30:45"))
+    assertThat(t + (Duration.ofMinutes(30) + Duration.ofSeconds(30))).isEqualTo(GtfsTime("19:01:15"))
   }
 
   @Test
@@ -45,8 +42,8 @@ class GtfsTimeTest {
     val b = GtfsTime("12:30:00")
     val c = GtfsTime("12:59:30")
 
-    assertEquals(Duration.ofHours(1), t - a)
-    assertEquals(Duration.ofMinutes(30), t - b)
-    assertEquals(Duration.ofSeconds(30), t - c)
+    assertThat(t - a).isEqualTo(Duration.ofHours(1))
+    assertThat(t - b).isEqualTo(Duration.ofMinutes(30))
+    assertThat(t - c).isEqualTo(Duration.ofSeconds(30))
   }
 }
