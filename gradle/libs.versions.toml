@@ -28,7 +28,7 @@ sqldelight-adapters = { module = "app.cash.sqldelight:primitive-adapters", versi
 logback = "ch.qos.logback:logback-classic:1.4.8"
 
 clikt = "com.github.ajalt.clikt:clikt:3.5.4"
-csv = { module = "com.github.doyaaaaaken:kotlin-csv", version = "1.9.1" }
+csv = { module = "com.github.doyaaaaaken:kotlin-csv", version = "1.9.2" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.11.0" }
 spatialk-turf = "io.github.dellisd.spatialk:turf:0.2.1"
 rtree = "com.github.davidmoten:rtree2:0.9.3"
