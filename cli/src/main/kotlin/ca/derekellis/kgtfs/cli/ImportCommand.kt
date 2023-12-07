@@ -49,7 +49,7 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
       null
     }
 
-    GtfsDb.fromReader(GtfsReader(remoteZipPath ?: Path(uri)), output)
+    GtfsDb.fromReader(GtfsReader.newZipReader(remoteZipPath ?: Path(uri)), output)
   }
 
   private suspend fun downloadZip(url: Url, onProgress: (Int) -> Unit = {}): Path = withContext(Dispatchers.IO) {
