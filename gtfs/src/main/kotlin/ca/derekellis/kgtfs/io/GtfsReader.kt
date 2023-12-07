@@ -21,6 +21,7 @@ import ca.derekellis.kgtfs.csv.Trip
 import ca.derekellis.kgtfs.csv.TripFactory
 import ca.derekellis.kgtfs.isZipFile
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import java.io.Closeable
 import java.nio.file.FileSystems
 import java.nio.file.Path
 import kotlin.io.path.div
@@ -29,20 +30,14 @@ import kotlin.io.path.inputStream
 import kotlin.io.path.isDirectory
 
 /**
- * Reader for a GTFS dataset.
+ * Reader for a GTFS dataset from a CSV dataset.
  *
  * @property path Path to the GTFS data, either a directory or a compressed zip file of CSV files.
  */
 @OptIn(InternalKgtfsApi::class)
-public class GtfsReader(
-  public val path: Path,
-) {
-  private fun root(): Path {
-    if (path.isDirectory()) return path
-    if (path.isZipFile()) return FileSystems.newFileSystem(path, this::class.java.classLoader).getPath("/")
+public abstract class GtfsReader(public val path: Path) : Closeable {
 
-    throw IllegalStateException("$path does not point to a valid zip file or directory.")
-  }
+  protected abstract fun root(): Path
 
   private fun <T : Gtfs> read(path: String, factory: CsvFactory<T>, block: (Sequence<T>) -> Unit) {
     val file = root() / path
@@ -99,5 +94,39 @@ public class GtfsReader(
       StopTime::class -> readStopTimes(block as (Sequence<StopTime>) -> Unit)
       Trip::class -> readTrips(block as (Sequence<Trip>) -> Unit)
     }
+  }
+
+  public companion object {
+    public fun newZipReader(path: Path): GtfsReader {
+      check(path.isZipFile()) { "$path is not a zip file!" }
+      return GtfsZipReader(path)
+    }
+
+    public fun newDirectoryReader(path: Path): GtfsReader {
+      check(path.isDirectory()) { "$path is not a directory!" }
+      return GtfsDirectoryReader(path)
+    }
+  }
+}
+
+private class GtfsZipReader(path: Path) : GtfsReader(path) {
+  private val zipFs by lazy { FileSystems.newFileSystem(path, this::class.java.classLoader) }
+
+  override fun root(): Path {
+    return zipFs.getPath("/")
+  }
+
+  override fun close() {
+    zipFs.close()
+  }
+}
+
+private class GtfsDirectoryReader(path: Path) : GtfsReader(path) {
+  override fun root(): Path {
+    return path
+  }
+
+  override fun close() {
+    /* No-op */
   }
 }

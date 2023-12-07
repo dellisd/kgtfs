@@ -17,8 +17,8 @@ class GtfsReaderTest {
 
   @Test
   fun `gtfs is read correctly`() {
-    val reader = GtfsReader(gtfs.zip)
-    GtfsDb.fromReader(reader, into = Files.createTempFile("gtfs-reader", null)).query {
+    val reader = GtfsReader.newZipReader(gtfs.zip)
+    GtfsDb.fromReader(reader, path = Files.createTempFile("gtfs-reader", null)).query {
       assertThat(Stops.selectAll().map(Stops.Mapper).size).isEqualTo(6)
       assertThat(Trips.selectAll().map(Trips.Mapper).size).isEqualTo(6)
     }
@@ -26,9 +26,9 @@ class GtfsReaderTest {
 
   @Test
   fun `gtfs is read correctly from directory`() {
-    val reader = GtfsReader(Path("src/test/resources/gtfs"))
+    val reader = GtfsReader.newDirectoryReader(Path("src/test/resources/gtfs"))
 
-    GtfsDb.fromReader(reader, into = Files.createTempFile("gtfs-reader", null)).query {
+    GtfsDb.fromReader(reader, path = Files.createTempFile("gtfs-reader", null)).query {
       assertThat(Stops.selectAll().map(Stops.Mapper).size).isEqualTo(6)
       assertThat(Trips.selectAll().map(Trips.Mapper).size).isEqualTo(6)
     }

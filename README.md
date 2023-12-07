@@ -11,10 +11,10 @@ This will read the GTFS data into the database and save it into the specified pa
 by passing `null` into the second parameter. A pre-existing database can be opened using the `open()` method.
 
 ```kotlin
-val gtfs = GtfsDb.fromReader(GtfsReader(Path("path/to/gtfs")), into = Path("gtfs.db"))
+val gtfs = GtfsDb.fromReader(GtfsReader.newDirectoryReader(Path("path/to/gtfs")), path = Path("gtfs.db"))
 
 // in-memory database
-val gtfs = GtfsDb.fromReader(GtfsReader(Path("path/to/gtfs")), into = null)
+val gtfs = GtfsDb.fromReader(GtfsReadernewDirectoryReader(Path("path/to/gtfs")), path = ":memory:")
 
 // pre-existing database
 val gtfs = GtfsDb.open(Path("gtfs.db"))
@@ -58,4 +58,27 @@ val dataRange: ClosedRange<LocalDate> = gtfs.query { serviceRange() }
 
 // List of Calendars for the current date
 val calendarsToday: Set<Calendar> = gtfs.query { Calendars.today() }
+```
+
+## Writing GTFS Data
+
+You can create a writer to output the CSV files that make up a GTFS dataset.
+A `GtfsDb` can be written into a `GtfsWriter`.
+
+**Writers must be closed to ensure that the CSV files are correctly written to the ZIP archive!!**
+
+```kotlin
+val gtfs = GtfsDb.open(Path("gtfs.db"))
+
+val writer = GtfsWriter.newZipWriter(Path("output.zip"))
+gtfs.intoWriter(writer)
+// Remember to close the writer!
+writer.close()
+```
+
+You can also make use of the `use` extension to ensure the writer is closed:
+```kotlin
+GtfsWriter.newZipWriter(Path("output.zip")).use { writer ->
+  gtfs.intoWriter(writer)
+} // Writer is automatically closed after being used
 ```

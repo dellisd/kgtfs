@@ -20,7 +20,7 @@ public object Routes : Table(name = "Route") {
 
   override val primaryKey: PrimaryKey = PrimaryKey(id)
 
-  public val mapper: (ResultRow) -> Route = {
+  public val Mapper: (ResultRow) -> Route = {
     Route(
       it[id].let(::RouteId),
       it[shortName],

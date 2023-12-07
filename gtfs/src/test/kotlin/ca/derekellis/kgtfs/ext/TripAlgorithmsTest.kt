@@ -22,7 +22,7 @@ class TripAlgorithmsTest {
 
   @Before
   fun setup() {
-    db = GtfsDb.fromReader(GtfsReader(gtfsRule.zip), Files.createTempFile("gtfs-reader", null))
+    db = GtfsDb.fromReader(GtfsReader.newZipReader(gtfsRule.zip), Files.createTempFile("gtfs-reader", null))
   }
 
   @Test
