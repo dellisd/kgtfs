@@ -2,7 +2,7 @@
 exposed = "0.41.1"
 jgrapht = "1.5.2"
 kotlin = "1.9.0"
-ktor = "2.3.2"
+ktor = "2.3.11"
 ktlint = "0.50.0"
 sqldelight = "2.0.0-rc02"
 
