@@ -50,7 +50,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 publishing = { id = "com.vanniktech.maven.publish", version = "0.19.0" }
 spotless = { id = "com.diffplug.spotless", version = "6.20.0" }
-wire = { id = "com.squareup.wire", version = "4.9.7" }
+wire = { id = "com.squareup.wire", version = "4.9.11" }
 
 [bundles]
 kotlin-scripting = ["kotlin-scripting-common", "kotlin-scripting-jvm", "kotlin-scripting-jvmHost", "kotlin-scripting-dependencies-core", "kotlin-scripting-dependencies-maven"]
