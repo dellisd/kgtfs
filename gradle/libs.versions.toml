@@ -48,7 +48,7 @@ exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "e
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
-publishing = { id = "com.vanniktech.maven.publish", version = "0.19.0" }
+publishing = { id = "com.vanniktech.maven.publish", version = "0.35.0" }
 spotless = { id = "com.diffplug.spotless", version = "6.20.0" }
 wire = { id = "com.squareup.wire", version = "4.9.7" }
 
