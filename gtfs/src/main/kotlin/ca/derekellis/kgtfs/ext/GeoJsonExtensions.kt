@@ -2,20 +2,17 @@ package ca.derekellis.kgtfs.ext
 
 import ca.derekellis.kgtfs.csv.Shape
 import ca.derekellis.kgtfs.csv.Stop
-import io.github.dellisd.spatialk.geojson.LineString
-import io.github.dellisd.spatialk.geojson.Position
-import io.github.dellisd.spatialk.geojson.dsl.lineString
-import io.github.dellisd.spatialk.geojson.dsl.lngLat
-import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
-import io.github.dellisd.spatialk.turf.lineSlice
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.geojson.dsl.buildLineString
+import org.maplibre.spatialk.turf.misc.slice
 
-public fun List<Shape>.lineString(): LineString = lineString {
-  forEach { point(it.longitude, it.latitude) }
+public fun List<Shape>.lineString(): LineString = buildLineString {
+  forEach { add(it.longitude, it.latitude) }
 }
 
-@OptIn(ExperimentalTurfApi::class)
 public fun List<Shape>.lineStringBetween(a: Stop, b: Stop): LineString {
-  return lineSlice(a.point, b.point, lineString())
+  return lineString().slice(a.point, b.point)
 }
 
 public val Stop.point: Position
@@ -23,5 +20,5 @@ public val Stop.point: Position
     if (longitude == null || latitude == null) {
       throw IllegalArgumentException("Stop longitude and latitude can not be null")
     } else {
-      lngLat(longitude, latitude)
+      Position(longitude, latitude)
     }

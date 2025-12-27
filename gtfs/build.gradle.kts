@@ -6,6 +6,10 @@ plugins {
 
 kotlin {
   explicitApi()
+
+  compilerOptions {
+    freeCompilerArgs.add("-opt-in=kotlin.contracts.ExperimentalContracts")
+  }
 }
 
 dependencies {
@@ -25,10 +29,4 @@ dependencies {
   testImplementation(libs.junit)
   testImplementation(libs.truth)
   testImplementation(libs.kotlinx.coroutines.test)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-  kotlinOptions.freeCompilerArgs += listOf(
-    "-opt-in=kotlin.contracts.ExperimentalContracts",
-  )
 }

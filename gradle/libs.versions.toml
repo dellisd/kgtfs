@@ -1,10 +1,12 @@
 [versions]
+coroutines = "1.10.2"
 exposed = "0.41.1"
 jgrapht = "1.5.2"
-kotlin = "1.9.0"
+kotlin = "2.3.0"
 ktor = "2.3.2"
 ktlint = "0.50.0"
-sqldelight = "2.0.0-rc02"
+sqldelight = "2.2.1"
+serialization = "1.9.0"
 
 [libraries]
 kotlin-scripting-common = { module = "org.jetbrains.kotlin:kotlin-scripting-common", version.ref = "kotlin" }
@@ -13,10 +15,10 @@ kotlin-scripting-jvmHost = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm
 kotlin-scripting-dependencies-core = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies", version.ref = "kotlin" }
 kotlin-scripting-dependencies-maven = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies-maven", version.ref = "kotlin" }
 
-kotlinx-coroutines-core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2"
-kotlinx-coroutines-test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2"
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-serialization-csv = "de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:2.0.0"
-kotlinx-serialization-core = "org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.1"
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
@@ -30,7 +32,7 @@ logback = "ch.qos.logback:logback-classic:1.4.8"
 clikt = "com.github.ajalt.clikt:clikt:3.5.4"
 csv = { module = "com.github.doyaaaaaken:kotlin-csv", version = "1.9.1" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version = "4.11.0" }
-spatialk-turf = "io.github.dellisd.spatialk:turf:0.2.1"
+spatialk-turf = { module = "org.maplibre.spatialk:turf", version = "0.6.1" }
 rtree = "com.github.davidmoten:rtree2:0.9.3"
 jgrapht-core = { module = "org.jgrapht:jgrapht-core", version.ref = "jgrapht" }
 jgrapht-io = { module = "org.jgrapht:jgrapht-io", version.ref = "jgrapht" }

@@ -12,6 +12,10 @@ repositories {
 
 kotlin {
   explicitApi()
+
+  compilerOptions {
+    freeCompilerArgs.addAll("-opt-in=kotlin.RequiresOptIn", "-opt-in=io.github.dellisd.spatialk.turf.ExperimentalTurfApi")
+  }
 }
 
 dependencies {
@@ -24,10 +28,6 @@ dependencies {
   implementation(libs.logback)
   implementation(libs.bundles.sqldelight)
   implementation(libs.bundles.ktor.client)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-  kotlinOptions.freeCompilerArgs += listOf("-opt-in=kotlin.RequiresOptIn", "-opt-in=io.github.dellisd.spatialk.turf.ExperimentalTurfApi")
 }
 
 sqldelight {
