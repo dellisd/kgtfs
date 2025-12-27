@@ -80,7 +80,7 @@ public val StopFactory: CsvFactory<Stop> = {
     locationType = Stop.LocationType.entries[getValue("location_type").toInt()],
     parentStation = get("parent_station")?.let(::StopId),
     timezone = get("stop_timezone"),
-    wheelchairBoarding = get("wheelchair_boarding")?.toInt(),
+    wheelchairBoarding = get("wheelchair_boarding")?.takeIf { it.isNotEmpty() }?.toInt(),
     levelId = get("level_id"),
     platformCode = get("platform_code"),
   )
