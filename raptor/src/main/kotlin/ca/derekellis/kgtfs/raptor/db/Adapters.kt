@@ -5,7 +5,10 @@ import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.TripId
-import io.github.dellisd.spatialk.geojson.Feature
+import kotlinx.serialization.json.JsonObject
+import org.maplibre.spatialk.geojson.Feature
+import org.maplibre.spatialk.geojson.LineString
+import org.maplibre.spatialk.geojson.toJson
 
 internal object RouteIdAdapter : ColumnAdapter<RouteId, String> {
   override fun decode(databaseValue: String): RouteId = RouteId(databaseValue)
@@ -31,8 +34,8 @@ internal object GtfsTimeAdapter : ColumnAdapter<GtfsTime, String> {
   override fun encode(value: GtfsTime): String = value.toString()
 }
 
-internal object FeatureAdapter : ColumnAdapter<Feature, String> {
-  override fun decode(databaseValue: String): Feature = Feature.fromJson(databaseValue)
+internal object LineStringFeatureAdapter : ColumnAdapter<Feature<LineString, JsonObject>, String> {
+  override fun decode(databaseValue: String): Feature<LineString, JsonObject> = Feature.fromJson(databaseValue)
 
-  override fun encode(value: Feature): String = value.json()
+  override fun encode(value: Feature<LineString, JsonObject>): String = value.toJson()
 }

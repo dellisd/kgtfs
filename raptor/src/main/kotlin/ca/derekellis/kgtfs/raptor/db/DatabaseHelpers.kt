@@ -26,7 +26,7 @@ internal fun getDatabase(path: String, readOnly: Boolean = false): RaptorDatabas
       ),
       TripAdapter = Trip.Adapter(TripIdAdapter, RouteIdAdapter),
       RouteAtStopAdapter = RouteAtStop.Adapter(StopIdAdapter, RouteIdAdapter, IntColumnAdapter),
-      TransferAdapter = Transfer.Adapter(StopIdAdapter, StopIdAdapter, FeatureAdapter),
+      TransferAdapter = Transfer.Adapter(StopIdAdapter, StopIdAdapter, LineStringFeatureAdapter),
     )
   }
 

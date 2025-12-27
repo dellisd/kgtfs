@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalTurfApi::class)
-
 package ca.derekellis.kgtfs.raptor.providers
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
@@ -17,15 +15,15 @@ import ca.derekellis.kgtfs.raptor.models.Transfer
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
-import io.github.dellisd.spatialk.geojson.dsl.lngLat
-import io.github.dellisd.spatialk.turf.ExperimentalTurfApi
-import io.github.dellisd.spatialk.turf.Units
-import io.github.dellisd.spatialk.turf.convertLength
-import io.github.dellisd.spatialk.turf.distance
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.jetbrains.exposed.sql.selectAll
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.extensions.inEarthDegrees
+import org.maplibre.spatialk.units.extensions.inMeters
+import org.maplibre.spatialk.units.extensions.meters
 import java.time.LocalDate
 
 public class InMemoryProvider private constructor(
@@ -76,13 +74,13 @@ public class InMemoryProvider private constructor(
         Geometries.circle(
           stop.longitude!!,
           stop.latitude!!,
-          convertLength(500.0, to = Units.Degrees),
+          500.0.meters.inEarthDegrees,
         ),
       )
-      val stopPosition = lngLat(stop.longitude!!, stop.latitude!!)
+      val stopPosition = Position(stop.longitude!!, stop.latitude!!)
       stop.id to results.asSequence().filter { it.value() != stop.id }.map { entry ->
-        val point = lngLat(entry.geometry().x(), entry.geometry().y())
-        Transfer(stop.id, entry.value(), distance(stopPosition, point, Units.Meters), null)
+        val point = Position(entry.geometry().x(), entry.geometry().y())
+        Transfer(stop.id, entry.value(), distance(stopPosition, point).inMeters, null)
       }.toSet()
     }
   }

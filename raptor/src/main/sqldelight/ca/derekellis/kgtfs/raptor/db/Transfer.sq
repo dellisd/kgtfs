@@ -1,11 +1,13 @@
 import ca.derekellis.kgtfs.csv.StopId;
-import io.github.dellisd.spatialk.geojson.Feature;
+import org.maplibre.spatialk.geojson.Feature;
+import org.maplibre.spatialk.geojson.LineString;
+import kotlinx.serialization.json.JsonObject;
 
 CREATE TABLE Transfer (
     origin TEXT AS StopId NOT NULL,
     destination TEXT AS StopId NOT NULL,
     distance REAL NOT NULL,
-    geometry TEXT AS Feature,
+    geometry TEXT AS Feature<LineString, JsonObject>,
     FOREIGN KEY (origin) REFERENCES Stop(id),
     FOREIGN KEY (destination) REFERENCES Stop(id)
 );

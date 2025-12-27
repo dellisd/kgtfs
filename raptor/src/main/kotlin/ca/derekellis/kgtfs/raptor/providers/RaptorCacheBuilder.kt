@@ -10,33 +10,35 @@ import ca.derekellis.kgtfs.raptor.models.Transfer
 import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
-import io.github.dellisd.spatialk.geojson.Position
-import io.github.dellisd.spatialk.geojson.dsl.feature
-import io.github.dellisd.spatialk.geojson.dsl.lineString
-import io.github.dellisd.spatialk.geojson.dsl.lngLat
-import io.github.dellisd.spatialk.turf.Units
-import io.github.dellisd.spatialk.turf.convertLength
-import io.github.dellisd.spatialk.turf.distance
+import kotlinx.serialization.json.JsonObject
 import org.jetbrains.exposed.sql.selectAll
+import org.maplibre.spatialk.geojson.Feature
+import org.maplibre.spatialk.geojson.Position
+import org.maplibre.spatialk.geojson.dsl.buildLineString
+import org.maplibre.spatialk.turf.measurement.distance
+import org.maplibre.spatialk.units.extensions.inEarthDegrees
+import org.maplibre.spatialk.units.extensions.inMeters
+import org.maplibre.spatialk.units.extensions.meters
 
 public val DefaultTransferMapper: (Stop, List<Stop>) -> List<Transfer> = { origin: Stop, destinations: List<Stop> ->
   destinations.map { dest ->
     Transfer(
       origin.id,
       dest.id,
-      distance(origin.position, dest.position, Units.Meters),
-      feature(
-        geometry = lineString {
-          +origin.position
-          +dest.position
+      distance(origin.position, dest.position).inMeters,
+      Feature(
+        geometry = buildLineString {
+          add(origin.position)
+          add(dest.position)
         },
+        properties = JsonObject(emptyMap()),
       ),
     )
   }
 }
 
 private val Stop.position: Position
-  get() = lngLat(longitude!!, latitude!!)
+  get() = Position(longitude!!, latitude!!)
 
 @DslMarker
 public annotation class RaptorCacheDsl
@@ -97,7 +99,7 @@ public fun RaptorCacheBuilder(
       Geometries.circle(
         stop.longitude!!,
         stop.latitude!!,
-        convertLength(transferSearchDistance, to = Units.Degrees),
+        transferSearchDistance.meters.inEarthDegrees,
       ),
     )
     val nearbyStops = results.asSequence().filter { it.value() != stop.id }.map { entry ->

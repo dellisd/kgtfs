@@ -3,7 +3,9 @@ package ca.derekellis.kgtfs.raptor.models
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.TripId
-import io.github.dellisd.spatialk.geojson.Feature
+import kotlinx.serialization.json.JsonObject
+import org.maplibre.spatialk.geojson.Feature
+import org.maplibre.spatialk.geojson.LineString
 import java.time.Duration
 
 public sealed class Leg(
@@ -20,7 +22,7 @@ public data class TransferLeg(
   override val end: GtfsTime,
   val duration: Duration,
   val distance: Double,
-  val geometry: Feature?,
+  val geometry: Feature<LineString, JsonObject>?,
 ) : Leg(from, to, start, end)
 
 public data class RouteLeg(
