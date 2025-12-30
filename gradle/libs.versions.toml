@@ -38,7 +38,7 @@ jgrapht-core = { module = "org.jgrapht:jgrapht-core", version.ref = "jgrapht" }
 jgrapht-io = { module = "org.jgrapht:jgrapht-io", version.ref = "jgrapht" }
 
 junit = { module = "junit:junit", version = "4.13.1" }
-truth = { module = "com.google.truth:truth", version = "1.1.4" }
+truth = { module = "com.google.truth:truth", version = "1.4.5" }
 
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
