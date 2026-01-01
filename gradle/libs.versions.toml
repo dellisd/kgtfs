@@ -51,7 +51,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 publishing = { id = "com.vanniktech.maven.publish", version = "0.35.0" }
-spotless = { id = "com.diffplug.spotless", version = "6.20.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.25.0" }
 wire = { id = "com.squareup.wire", version = "5.4.0" }
 
 [bundles]
