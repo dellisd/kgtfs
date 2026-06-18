@@ -1,7 +1,7 @@
 [versions]
 coroutines = "1.10.2"
 exposed = "0.41.1"
-jgrapht = "1.5.2"
+jgrapht = "1.5.3"
 kotlin = "2.3.0"
 ktor = "2.3.2"
 ktlint = "0.50.0"
