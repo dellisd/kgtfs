@@ -37,7 +37,7 @@ rtree = "com.github.davidmoten:rtree2:0.9.3"
 jgrapht-core = { module = "org.jgrapht:jgrapht-core", version.ref = "jgrapht" }
 jgrapht-io = { module = "org.jgrapht:jgrapht-io", version.ref = "jgrapht" }
 
-junit = { module = "junit:junit", version = "4.13.1" }
+junit = { module = "junit:junit", version = "4.13.2" }
 truth = { module = "com.google.truth:truth", version = "1.1.4" }
 
 exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
