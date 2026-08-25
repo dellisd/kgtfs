@@ -6,7 +6,7 @@ kotlin = "2.3.0"
 ktor = "2.3.2"
 ktlint = "0.50.0"
 sqldelight = "2.2.1"
-serialization = "1.9.0"
+serialization = "1.11.0"
 
 [libraries]
 kotlin-scripting-common = { module = "org.jetbrains.kotlin:kotlin-scripting-common", version.ref = "kotlin" }
