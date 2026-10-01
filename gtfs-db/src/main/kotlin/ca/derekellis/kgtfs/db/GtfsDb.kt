@@ -1,5 +1,7 @@
-package ca.derekellis.kgtfs
+package ca.derekellis.kgtfs.db
 
+import ca.derekellis.kgtfs.ExperimentalKgtfsApi
+import ca.derekellis.kgtfs.GtfsDsl
 import ca.derekellis.kgtfs.io.GtfsReader
 import ca.derekellis.kgtfs.io.GtfsWriter
 import org.jetbrains.exposed.sql.Database

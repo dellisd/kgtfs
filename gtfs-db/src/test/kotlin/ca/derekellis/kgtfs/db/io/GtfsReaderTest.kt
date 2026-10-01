@@ -1,8 +1,9 @@
-package ca.derekellis.kgtfs.io
+package ca.derekellis.kgtfs.db.io
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
-import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.GtfsZipRule
+import ca.derekellis.kgtfs.db.GtfsDb
+import ca.derekellis.kgtfs.io.GtfsReader
 import com.google.common.truth.Truth.assertThat
 import org.jetbrains.exposed.sql.selectAll
 import org.junit.Rule
@@ -31,6 +32,14 @@ class GtfsReaderTest {
     GtfsDb.fromReader(reader, path = Files.createTempFile("gtfs-reader", null)).query {
       assertThat(Stops.selectAll().map(Stops.Mapper).size).isEqualTo(6)
       assertThat(Trips.selectAll().map(Trips.Mapper).size).isEqualTo(6)
+    }
+  }
+
+  @Test
+  fun `new gtfs zip is read correctly`() {
+    val reader = GtfsReader.newZipReader(Path("src/test/resources/gtfs.zip"))
+    GtfsDb.fromReader(reader, path = Files.createTempFile("gtfs-reader", null)).query {
+      println(Stops.selectAll().map(Stops.Mapper).size)
     }
   }
 }

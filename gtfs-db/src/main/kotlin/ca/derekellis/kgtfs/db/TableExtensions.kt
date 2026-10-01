@@ -1,13 +1,11 @@
-package ca.derekellis.kgtfs.ext
+package ca.derekellis.kgtfs.db
 
-import ca.derekellis.kgtfs.GtfsDbScope
 import ca.derekellis.kgtfs.csv.Calendar
-import ca.derekellis.kgtfs.db.CalendarDates
-import ca.derekellis.kgtfs.db.Calendars
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import java.time.LocalDate
+import kotlin.compareTo
 
 /**
  * Compute the range of dates that this GTFS dataset covers.

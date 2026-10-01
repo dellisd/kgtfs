@@ -2,6 +2,7 @@ plugins {
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.publishing)
+  `java-test-fixtures`
 }
 
 kotlin {
@@ -29,4 +30,6 @@ dependencies {
   testImplementation(libs.junit)
   testImplementation(libs.truth)
   testImplementation(libs.kotlinx.coroutines.test)
+
+  testFixturesApi(libs.junit)
 }

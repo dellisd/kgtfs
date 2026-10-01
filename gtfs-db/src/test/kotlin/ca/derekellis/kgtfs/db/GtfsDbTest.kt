@@ -1,5 +1,7 @@
-package ca.derekellis.kgtfs
+package ca.derekellis.kgtfs.db
 
+import ca.derekellis.kgtfs.ExperimentalKgtfsApi
+import ca.derekellis.kgtfs.GtfsZipRule
 import ca.derekellis.kgtfs.io.GtfsReader
 import com.google.common.truth.Truth.assertThat
 import org.jetbrains.exposed.sql.selectAll

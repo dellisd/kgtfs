@@ -1,6 +1,5 @@
-package ca.derekellis.kgtfs.ext
+package ca.derekellis.kgtfs.db
 
-import ca.derekellis.kgtfs.GtfsDbScope
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.ServiceId

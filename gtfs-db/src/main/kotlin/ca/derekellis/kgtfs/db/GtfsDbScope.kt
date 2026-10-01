@@ -1,5 +1,6 @@
-package ca.derekellis.kgtfs
+package ca.derekellis.kgtfs.db
 
+import ca.derekellis.kgtfs.GtfsDsl
 import ca.derekellis.kgtfs.db.Agencies as AgenciesTable
 import ca.derekellis.kgtfs.db.CalendarDates as CalendarDatesTable
 import ca.derekellis.kgtfs.db.Calendars as CalendarsTable

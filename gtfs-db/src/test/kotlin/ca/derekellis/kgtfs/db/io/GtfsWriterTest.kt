@@ -1,10 +1,12 @@
-package ca.derekellis.kgtfs.io
+package ca.derekellis.kgtfs.db.io
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
-import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.GtfsZipRule
 import ca.derekellis.kgtfs.csv.Agency
 import ca.derekellis.kgtfs.csv.AgencyId
+import ca.derekellis.kgtfs.db.GtfsDb
+import ca.derekellis.kgtfs.io.GtfsReader
+import ca.derekellis.kgtfs.io.GtfsWriter
 import com.google.common.truth.Truth.assertThat
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.junit.Rule
