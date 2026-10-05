@@ -10,7 +10,8 @@ import ca.derekellis.kgtfs.csv.Stop
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.Trip
 import ca.derekellis.kgtfs.isZipFile
-import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
+import com.jsoizo.kotlincsv.csvWriter
+import com.jsoizo.kotlincsv.writer.write
 import java.io.Closeable
 import java.nio.file.FileSystems
 import java.nio.file.Path
@@ -44,10 +45,14 @@ public abstract class GtfsWriter(public val path: Path) : Closeable {
   ) {
     val file = root() / path
 
-    csvWriter().open(file.outputStream()) {
-      writeRow(headerRow)
-      writeRows(rows.map(rowFactory))
-    }
+    csvWriter().write(
+      sequence {
+        yield(headerRow)
+        val rows = rows.map({ it.rowFactory().map(String?::orEmpty) })
+        yieldAll(rows)
+      },
+      file.outputStream(),
+    )
   }
 
   public fun writeAgencies(rows: Sequence<Agency>) {

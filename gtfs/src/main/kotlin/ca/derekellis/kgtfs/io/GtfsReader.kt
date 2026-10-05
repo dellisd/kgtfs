@@ -20,7 +20,9 @@ import ca.derekellis.kgtfs.csv.StopTimeFactory
 import ca.derekellis.kgtfs.csv.Trip
 import ca.derekellis.kgtfs.csv.TripFactory
 import ca.derekellis.kgtfs.isZipFile
-import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.jsoizo.kotlincsv.csvReader
+import com.jsoizo.kotlincsv.reader.read
+import com.jsoizo.kotlincsv.reader.withHeader
 import java.io.Closeable
 import java.nio.file.FileSystems
 import java.nio.file.Path
@@ -43,10 +45,10 @@ public abstract class GtfsReader(public val path: Path) : Closeable {
     val file = root() / path
     if (!file.exists()) return
 
-    csvReader().open(file.inputStream()) {
-      readAllWithHeaderAsSequence()
-        .map { it.factory() }
-        .also(block)
+    csvReader().read(file.inputStream()) { rows ->
+      rows.withHeader().map {
+        it.factory()
+      }.also(block)
     }
   }
 
