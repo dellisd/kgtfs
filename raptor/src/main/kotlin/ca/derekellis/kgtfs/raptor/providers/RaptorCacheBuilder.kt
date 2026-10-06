@@ -11,7 +11,7 @@ import com.github.davidmoten.rtree2.RTree
 import com.github.davidmoten.rtree2.geometry.Geometries
 import com.github.davidmoten.rtree2.internal.EntryDefault
 import kotlinx.serialization.json.JsonObject
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.maplibre.spatialk.geojson.Feature
 import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.geojson.dsl.buildLineString

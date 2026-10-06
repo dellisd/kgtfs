@@ -2,12 +2,12 @@ package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.csv.CalendarDate
 import ca.derekellis.kgtfs.csv.ServiceId
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.javatime.date
-import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.statements.InsertStatement
+import org.jetbrains.exposed.v1.javatime.date
+import org.jetbrains.exposed.v1.jdbc.insert
 import java.time.LocalDate
 
 public object CalendarDates : Table() {

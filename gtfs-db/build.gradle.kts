@@ -10,9 +10,9 @@ kotlin {
 dependencies {
   api(project(":gtfs"))
   api(libs.exposed.core)
+  api(libs.exposed.javaTime)
+  api(libs.exposed.jdbc)
 
-  implementation(libs.exposed.javaTime)
-  implementation(libs.exposed.jdbc)
   implementation(libs.sqlite)
 
   testImplementation(testFixtures(project(":gtfs")))

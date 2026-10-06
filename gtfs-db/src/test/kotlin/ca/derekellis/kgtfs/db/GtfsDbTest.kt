@@ -4,7 +4,7 @@ import ca.derekellis.kgtfs.ExperimentalKgtfsApi
 import ca.derekellis.kgtfs.GtfsFileSystem
 import ca.derekellis.kgtfs.openAsGtfs
 import com.google.common.truth.Truth.assertThat
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.junit.Test
 import java.nio.file.Files
 import kotlin.io.path.pathString

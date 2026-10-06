@@ -2,11 +2,10 @@ package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
 import ca.derekellis.kgtfs.GtfsDsl
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.SqlLogger
-import org.jetbrains.exposed.sql.addLogger
-import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.v1.core.SqlLogger
+import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 
 public class GtfsDb private constructor(public val path: String) {
   private val database = Database.connect("jdbc:sqlite:$path")

@@ -1,11 +1,13 @@
 package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.csv.Calendar
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.greaterEq
+import org.jetbrains.exposed.v1.core.lessEq
+import org.jetbrains.exposed.v1.jdbc.select
+import org.jetbrains.exposed.v1.jdbc.selectAll
 import java.time.LocalDate
-import kotlin.compareTo
 
 /**
  * Compute the range of dates that this GTFS dataset covers.
@@ -33,8 +35,8 @@ public fun GtfsDbScope.serviceRange(): ClosedRange<LocalDate> {
  * @see today
  */
 public fun Calendars.onDate(date: LocalDate): Set<Calendar> {
-  val calendarDates = CalendarDates.select { CalendarDates.date eq date }.map(CalendarDates.Mapper).associateBy { it.serviceId }
-  val calendars = Calendars.select { (Calendars.startDate lessEq date) and (Calendars.endDate greaterEq date) }.map(Mapper)
+  val calendarDates = CalendarDates.select(CalendarDates.columns).where { CalendarDates.date eq date }.map(CalendarDates.Mapper).associateBy { it.serviceId }
+  val calendars = Calendars.select(Calendars.columns).where { (Calendars.startDate lessEq date) and (Calendars.endDate greaterEq date) }.map(Mapper)
 
   val predicate = when (date.dayOfWeek.value) {
     1 -> Calendar::monday

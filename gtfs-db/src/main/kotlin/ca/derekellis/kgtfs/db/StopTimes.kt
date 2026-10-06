@@ -4,11 +4,11 @@ import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.TripId
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.statements.InsertStatement
+import org.jetbrains.exposed.v1.core.Column
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.statements.InsertStatement
+import org.jetbrains.exposed.v1.jdbc.insert
 
 public object StopTimes : Table() {
   public val tripId: Column<String> = text("trip_id")

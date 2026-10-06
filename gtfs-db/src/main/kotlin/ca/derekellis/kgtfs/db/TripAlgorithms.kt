@@ -6,8 +6,10 @@ import ca.derekellis.kgtfs.csv.ServiceId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.TripId
-import org.jetbrains.exposed.sql.JoinType
-import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.v1.core.JoinType
+import org.jetbrains.exposed.v1.core.eq
+import org.jetbrains.exposed.v1.core.inList
+import org.jetbrains.exposed.v1.jdbc.select
 import java.security.MessageDigest
 import java.time.Duration
 import java.time.LocalDate
@@ -22,9 +24,9 @@ public fun GtfsDbScope.uniqueTripSequences(date: LocalDate = LocalDate.now()): L
 @GtfsAlgorithmsDsl
 public fun GtfsDbScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<TripSequence> {
   val times = StopTimes.join(Trips, JoinType.LEFT, onColumn = StopTimes.tripId, otherColumn = Trips.id)
-    .select { Trips.serviceId inList serviceIds.map { it.value } }.map(StopTimes.Mapper)
+    .select(StopTimes.columns).where { Trips.serviceId inList serviceIds.map { it.value } }.map(StopTimes.Mapper)
   val tripMap =
-    Trips.select { Trips.serviceId inList serviceIds.map { it.value } }.map(Trips.Mapper).associateBy { it.id }
+    Trips.select(Trips.columns).where { Trips.serviceId inList serviceIds.map { it.value } }.map(Trips.Mapper).associateBy { it.id }
 
   // Make sure each trip's stop times are ordered by stop sequence
   val orderedTimes = mutableMapOf<TripId, PriorityQueue<StopTime>>()
@@ -60,7 +62,8 @@ public fun GtfsDbScope.uniqueTripSequences(serviceIds: Set<ServiceId>): List<Tri
 public fun GtfsDbScope.sequenceHashOf(trip: TripId): String {
   val digest = MessageDigest.getInstance("SHA-256")
   val bytes = Trips.join(StopTimes, JoinType.LEFT, onColumn = Trips.id, otherColumn = StopTimes.tripId)
-    .select { Trips.id eq trip.value }
+    .select(StopTimes.columns)
+    .where { Trips.id eq trip.value }
     .map(StopTimes.Mapper)
     .joinToString("") { it.stopId.value }
     .encodeToByteArray()
