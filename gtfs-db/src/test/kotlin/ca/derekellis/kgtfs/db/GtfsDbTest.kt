@@ -1,29 +1,26 @@
 package ca.derekellis.kgtfs.db
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
-import ca.derekellis.kgtfs.GtfsZipRule
-import ca.derekellis.kgtfs.io.GtfsReader
+import ca.derekellis.kgtfs.GtfsFileSystem
+import ca.derekellis.kgtfs.openAsGtfs
 import com.google.common.truth.Truth.assertThat
 import org.jetbrains.exposed.sql.selectAll
-import org.junit.Rule
 import org.junit.Test
 import java.nio.file.Files
+import kotlin.io.path.pathString
 
 @OptIn(ExperimentalKgtfsApi::class)
 class GtfsDbTest {
-  @get:Rule
-  val gtfs: GtfsZipRule = GtfsZipRule()
-
   @Test
   fun `open existing database works`() {
     val dbPath = Files.createTempFile("gtfs-reader", null)
-    val reader = GtfsReader.newZipReader(gtfs.zip)
+    val reader = GtfsFileSystem.openAsGtfs()
 
     // Create a database
-    GtfsDb.fromReader(reader, path = dbPath)
+    GtfsDb.fromReader(reader, path = dbPath.pathString)
 
     // Open the same database
-    val db = GtfsDb.open(path = dbPath)
+    val db = GtfsDb.open(path = dbPath.pathString)
     db.query {
       assertThat(Stops.selectAll().count()).isEqualTo(6L)
     }
@@ -34,7 +31,7 @@ class GtfsDbTest {
     val dbPath = Files.createTempFile("gtfs-reader", null)
 
     // Open the same database
-    val db = GtfsDb.open(path = dbPath)
+    val db = GtfsDb.open(path = dbPath.pathString)
     db.query {
       assertThat(Stops.selectAll().count()).isEqualTo(0L)
     }

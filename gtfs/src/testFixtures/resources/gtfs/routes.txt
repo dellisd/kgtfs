@@ -1,0 +1,5 @@
+route_id,route_short_name,route_long_name,route_desc,route_type,route_url,route_color,route_text_color
+1-333,1,,,2,,DA291C,FFFFFF
+2-333,2,,,3,,D74100,FFFFFF
+161-333,161,,,3,,6E6E70,FFFFFF
+263-333,263,,,3,,A85B8C,FFFFFF

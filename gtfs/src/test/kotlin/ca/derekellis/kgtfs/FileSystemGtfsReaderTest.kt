@@ -22,8 +22,6 @@ import ca.derekellis.kgtfs.csv.StopTime
 import ca.derekellis.kgtfs.csv.Trip
 import ca.derekellis.kgtfs.csv.TripId
 import okio.FileSystem
-import okio.ForwardingFileSystem
-import okio.Path
 import okio.Path.Companion.toPath
 import okio.openZip
 import org.junit.Test
@@ -54,7 +52,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read stops`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.stops().use { stopsReader ->
       assertThat(stopsReader.next()).isEqualTo(
@@ -81,7 +79,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read calendar`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.calendar().use { calendarReader ->
       assertThat(calendarReader.next()).isEqualTo(
@@ -109,7 +107,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read calendar dates`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.calendarDates().use { calendarDatesReader ->
       assertThat(calendarDatesReader.next()).isEqualTo(
@@ -134,7 +132,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read routes`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.routes().use { routesReader ->
       assertThat(routesReader.next()).isEqualTo(
@@ -163,7 +161,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read shapes`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.shapes().use { shapesReader ->
       val shapes = shapesReader.asSequence().groupBy { it.id }
@@ -179,7 +177,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read stop times`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.stopTimes().use { stopTimesReader ->
       val stopTimes = stopTimesReader.asSequence().groupBy { it.tripId }
@@ -209,7 +207,7 @@ class FileSystemGtfsReaderTest {
 
   @Test
   fun `read trips`() {
-    val reader = TestFileSystem.openAsGtfs()
+    val reader = GtfsFileSystem.openAsGtfs()
 
     reader.trips().use { tripsReader ->
       assertThat(tripsReader.next()).isEqualTo(
@@ -225,12 +223,6 @@ class FileSystemGtfsReaderTest {
       )
 
       assertThat(tripsReader.asSequence().count()).isEqualTo(5)
-    }
-  }
-
-  private object TestFileSystem : ForwardingFileSystem(FileSystem.SYSTEM) {
-    override fun onPathParameter(path: Path, functionName: String, parameterName: String): Path {
-      return "src/test/resources/gtfs".toPath() / path
     }
   }
 }

@@ -218,6 +218,7 @@ private class FileSystemGtfsReader(
         val line = source.readUtf8Line() ?: break
         yield(line)
       }
+      source.close()
     }
 
     private val csvReader = csvReader()

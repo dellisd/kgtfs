@@ -1,0 +1,3 @@
+service_id,date,exception_type
+WeekdayServiceA,20220207,2
+SaturdayService,20220207,1
