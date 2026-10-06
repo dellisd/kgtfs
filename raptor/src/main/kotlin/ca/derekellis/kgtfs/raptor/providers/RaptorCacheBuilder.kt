@@ -1,10 +1,10 @@
 package ca.derekellis.kgtfs.raptor.providers
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
-import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.csv.Stop
-import ca.derekellis.kgtfs.ext.today
-import ca.derekellis.kgtfs.ext.uniqueTripSequences
+import ca.derekellis.kgtfs.db.GtfsDb
+import ca.derekellis.kgtfs.db.today
+import ca.derekellis.kgtfs.db.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.Transfer
 import com.github.davidmoten.rtree2.RTree
