@@ -34,7 +34,7 @@ rtree = "com.github.davidmoten:rtree2:0.9.3"
 jgrapht-core = { module = "org.jgrapht:jgrapht-core", version.ref = "jgrapht" }
 jgrapht-io = { module = "org.jgrapht:jgrapht-io", version.ref = "jgrapht" }
 
-junit = { module = "junit:junit", version = "4.13.1" }
+junit = { module = "junit:junit", version = "4.13.2" }
 truth = { module = "com.google.truth:truth", version = "1.1.4" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version = "0.28.1" }
 
