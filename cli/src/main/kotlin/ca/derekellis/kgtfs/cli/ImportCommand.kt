@@ -1,7 +1,7 @@
 package ca.derekellis.kgtfs.cli
 
-import ca.derekellis.kgtfs.GtfsDb
-import ca.derekellis.kgtfs.io.GtfsReader
+import ca.derekellis.kgtfs.db.GtfsDb
+import ca.derekellis.kgtfs.openAsGtfs
 import com.github.ajalt.clikt.completion.CompletionCandidates
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
@@ -18,11 +18,16 @@ import io.ktor.utils.io.jvm.javaio.copyTo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import okio.FileSystem
+import okio.Path.Companion.toOkioPath
+import okio.Path.Companion.toPath
+import okio.openZip
 import java.nio.file.Files
 import java.nio.file.Path
 import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.outputStream
+import kotlin.io.path.pathString
 
 class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-compatible SQLite database.") {
   private val uri by argument(
@@ -49,7 +54,10 @@ class ImportCommand : CliktCommand(help = "Import a GTFS dataset to a kgtfs-comp
       null
     }
 
-    GtfsDb.fromReader(GtfsReader.newZipReader(remoteZipPath ?: Path(uri)), output)
+    val zipPath = remoteZipPath?.toOkioPath() ?: uri.toPath()
+    val gtfsReader = FileSystem.SYSTEM.openZip(zipPath).openAsGtfs()
+
+    GtfsDb.fromReader(gtfsReader, output.pathString)
   }
 
   private suspend fun downloadZip(url: Url, onProgress: (Int) -> Unit = {}): Path = withContext(Dispatchers.IO) {

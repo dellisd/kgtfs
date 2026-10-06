@@ -18,6 +18,7 @@ dependencies {
   implementation(libs.clikt)
   implementation(libs.logback)
   implementation(project(":gtfs"))
+  implementation(project(":gtfs-db"))
   implementation(project(":raptor"))
 }
 
