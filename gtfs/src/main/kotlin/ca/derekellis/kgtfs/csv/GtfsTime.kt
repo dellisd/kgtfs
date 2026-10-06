@@ -1,13 +1,10 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.csv.serializers.GtfsTimeSerializer
-import kotlinx.serialization.Serializable
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-@Serializable(with = GtfsTimeSerializer::class)
 public data class GtfsTime(val hour: Int, val minute: Int, val second: Int) : Comparable<GtfsTime> {
   public constructor(time: String) : this(
     time.slice(0..1).toInt(),

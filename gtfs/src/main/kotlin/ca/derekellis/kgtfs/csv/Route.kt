@@ -1,27 +1,20 @@
 package ca.derekellis.kgtfs.csv
 
-import ca.derekellis.kgtfs.csv.serializers.RouteTypeSerializer
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 @JvmInline
-@Serializable
 public value class RouteId(public val value: String) {
   override fun toString(): String = value
 }
 
-@Serializable
 public data class Route(
-  @SerialName("route_id") val id: RouteId,
-  @SerialName("route_short_name") val shortName: String?,
-  @SerialName("route_long_name") val longName: String?,
-  @SerialName("route_desc") val desc: String?,
-  @SerialName("route_type") val type: Type,
-  @SerialName("route_url") val url: String? = null,
-  @SerialName("route_color") val color: String? = null,
-  @SerialName("route_text_color") val textColor: String? = null,
+  val id: RouteId,
+  val shortName: String?,
+  val longName: String?,
+  val desc: String?,
+  val type: Type,
+  val url: String? = null,
+  val color: String? = null,
+  val textColor: String? = null,
 ) : Gtfs {
-  @Serializable(with = RouteTypeSerializer::class)
   public enum class Type(public val value: Int) {
     Tram(0),
     Subway(1),
