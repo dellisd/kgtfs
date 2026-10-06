@@ -1,13 +1,13 @@
 package ca.derekellis.kgtfs.raptor.providers
 
 import ca.derekellis.kgtfs.ExperimentalKgtfsApi
-import ca.derekellis.kgtfs.GtfsDb
 import ca.derekellis.kgtfs.csv.GtfsTime
 import ca.derekellis.kgtfs.csv.RouteId
 import ca.derekellis.kgtfs.csv.StopId
 import ca.derekellis.kgtfs.csv.TripId
-import ca.derekellis.kgtfs.ext.onDate
-import ca.derekellis.kgtfs.ext.uniqueTripSequences
+import ca.derekellis.kgtfs.db.GtfsDb
+import ca.derekellis.kgtfs.db.onDate
+import ca.derekellis.kgtfs.db.uniqueTripSequences
 import ca.derekellis.kgtfs.raptor.RaptorDataProvider
 import ca.derekellis.kgtfs.raptor.db.getDatabase
 import ca.derekellis.kgtfs.raptor.models.StopTime
