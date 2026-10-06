@@ -10,12 +10,6 @@ serialization = "1.9.0"
 okio = "3.18.2"
 
 [libraries]
-kotlin-scripting-common = { module = "org.jetbrains.kotlin:kotlin-scripting-common", version.ref = "kotlin" }
-kotlin-scripting-jvm = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm", version.ref = "kotlin" }
-kotlin-scripting-jvmHost = { module = "org.jetbrains.kotlin:kotlin-scripting-jvm-host", version.ref = "kotlin" }
-kotlin-scripting-dependencies-core = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies", version.ref = "kotlin" }
-kotlin-scripting-dependencies-maven = { module = "org.jetbrains.kotlin:kotlin-scripting-dependencies-maven", version.ref = "kotlin" }
-
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-serialization-csv = "de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:3.2.1"
@@ -60,6 +54,5 @@ spotless = { id = "com.diffplug.spotless", version = "6.20.0" }
 wire = { id = "com.squareup.wire", version = "5.4.0" }
 
 [bundles]
-kotlin-scripting = ["kotlin-scripting-common", "kotlin-scripting-jvm", "kotlin-scripting-jvmHost", "kotlin-scripting-dependencies-core", "kotlin-scripting-dependencies-maven"]
 ktor-client = ["ktor-client-core", "ktor-client-cio", "ktor-client-okhttp"]
 sqldelight = ["sqldelight-driver-sqlite", "sqldelight-adapters"]

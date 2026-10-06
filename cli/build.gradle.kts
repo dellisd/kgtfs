@@ -12,7 +12,6 @@ repositories {
 }
 
 dependencies {
-  implementation(libs.bundles.kotlin.scripting)
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.bundles.ktor.client)
   implementation(libs.clikt)
