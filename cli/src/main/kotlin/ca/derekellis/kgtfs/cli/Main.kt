@@ -11,5 +11,5 @@ class MainCommand : NoOpCliktCommand() {
 }
 
 fun main(vararg args: String) {
-  MainCommand().subcommands(ImportCommand()).main(args)
+  MainCommand().subcommands(ImportCommand(), SummaryCommand()).main(args)
 }
