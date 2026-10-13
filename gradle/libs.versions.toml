@@ -12,7 +12,7 @@ okio = "3.18.2"
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
-kotlinx-serialization-csv = "de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:3.2.1"
+kotlinx-serialization-csv = "de.brudaswen.kotlinx.serialization:kotlinx-serialization-csv:3.2.2"
 kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "serialization" }
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
